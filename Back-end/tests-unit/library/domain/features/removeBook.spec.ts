@@ -4,13 +4,13 @@ import { InMemoryBooksRepository } from "../../../../src/library/infrastructure/
 import { FakeUUIDGenerator } from "../../../../src/library/infrastructure/secondary/FakeUUIDGenerator";
 import {Book} from "../../../../src/library/domain/model/Book";
 import {BorrowStatus} from "../../../../src/library/domain/model/BorrowStatus";
-import {DeleteBook} from "../../../../src/library/domain/features/DeleteBook";
+import {RemoveBook} from "../../../../src/library/domain/features/RemoveBook";
 
-describe("deleteBook", () => {
-  it("should delete a book from my Library", async () => {
+describe("removeBook", () => {
+  it("should remove a book from my Library", async () => {
     const repository = new InMemoryBooksRepository();
     const uuidGenerator = new FakeUUIDGenerator();
-    const deleteBook = new DeleteBook(repository);
+    const removeBook = new RemoveBook(repository);
     const bookId = uuidGenerator.generate();
 
     const book = new Book(
@@ -21,7 +21,7 @@ describe("deleteBook", () => {
         BorrowStatus.Available
     );
     await repository.save(book);
-    await deleteBook.execute(bookId);
+    await removeBook.execute(bookId);
 
     expect(await repository.findById(bookId)).toBeUndefined();
   });

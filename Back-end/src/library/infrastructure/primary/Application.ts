@@ -1,17 +1,19 @@
 import express, { Response, Request } from "express";
 import { AddBook, AddBookInput } from "../../domain/features/AddBook";
-import { InMemoryBooksRepository } from "../secondary/InMemoryBooksRepository";
-import { FakeUUIDGenerator } from "../secondary/FakeUUIDGenerator";
 import { BookCategory } from "../../domain/model/BookCategory";
 import { BorrowStatus } from "../../domain/model/BorrowStatus";
 import { Book } from "../../domain/model/Book";
+import {RemoveBook} from "../../domain/features/RemoveBook";
+import {BooksRepository} from "../../domain/ports/BooksRepository";
+import {UUIDGenerator} from "../../domain/ports/UUIDGenerator";
 
 export class Application {
   public expressApp = express();
-  private bookRepository = new InMemoryBooksRepository();
-  private uuidGenerator = new FakeUUIDGenerator();
 
-  constructor() {
+  constructor(
+  private readonly bookRepository: BooksRepository,
+  private readonly uuidGenerator: UUIDGenerator
+  ) {
     this.expressApp.use(express.json());
 
     this.expressApp.post(
@@ -26,6 +28,30 @@ export class Application {
         response.send(jsonResponse);
       }
     );
+
+    this.expressApp.delete("/books/:id",
+        async (request: Request, response: Response) => {
+      const removeBook = new RemoveBook(this.bookRepository);
+      const bookId = request.params.id;
+
+      try {
+        await removeBook.execute(bookId);
+        response.status(204).send(); // No content
+      } catch (error) {
+        if (error instanceof Error) {
+          response.status(404).send({ error: error.message });
+        } else {
+          response.status(500).send({ error: 'An unexpected error occurred' });
+        }
+      }
+    });
+
+  }
+
+  start(port: number) {
+    this.expressApp.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
   }
 
   private toResponse(addedBook: Book): any {
@@ -35,7 +61,7 @@ export class Application {
         title: addedBook.title,
         authors: addedBook.authors,
         categories: addedBook.categories.map(this.fromDomainCategory),
-        borrowStatus: this.fromDomaintoBorrowedStatus(addedBook.borrowStatus),
+        borrowStatus: this.fromDomainToBorrowedStatus(addedBook.borrowStatus),
       },
     };
   }
@@ -70,7 +96,7 @@ export class Application {
     return "ChildrenStory";
   }
 
-  private fromDomaintoBorrowedStatus(borrowStatus: BorrowStatus): string {
-    return borrowStatus === BorrowStatus.Availaible ? "Available" : "Borrowed";
+  private fromDomainToBorrowedStatus(borrowStatus: BorrowStatus): string {
+    return borrowStatus === BorrowStatus.Available ? "Available" : "Borrowed";
   }
 }

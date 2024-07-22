@@ -8,6 +8,6 @@ export function book() {
     "Harry Potter",
     ["J.K Rowling"],
     [BookCategory.Fiction, BookCategory.Fantasy, BookCategory.ChildrenStory],
-    BorrowStatus.Availaible
+    BorrowStatus.Available
   );
 }

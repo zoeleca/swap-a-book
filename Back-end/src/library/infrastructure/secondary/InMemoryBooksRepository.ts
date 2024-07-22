@@ -7,4 +7,10 @@ export class InMemoryBooksRepository implements BooksRepository {
   async save(book: Book): Promise<void> {
     this.books.set(book.id, book);
   }
+  async delete(book: Book): Promise<void> {
+    this.books.delete(book.id);
+  }
+  async findById(id: string): Promise<Book | undefined> {
+    return this.books.get(id);
+  }
 }

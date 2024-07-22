@@ -1,4 +1,4 @@
 export enum BorrowStatus {
-  Availaible,
+  Available,
   Borrowed,
 }

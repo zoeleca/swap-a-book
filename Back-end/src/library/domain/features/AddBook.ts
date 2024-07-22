@@ -22,7 +22,7 @@ export class AddBook {
       input.title,
       input.authors,
       input.categories,
-      BorrowStatus.Availaible
+      BorrowStatus.Available
     );
 
     this.repository.save(book);

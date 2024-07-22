@@ -1,6 +1,6 @@
 import {BooksRepository} from "../ports/BooksRepository";
 
-export class DeleteBook {
+export class RemoveBook {
     constructor(
         private readonly repository: BooksRepository
     ) {
