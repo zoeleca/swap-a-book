@@ -6,7 +6,8 @@
     "test": "vitest --ui --project unit",
     "test:e2e": "vitest --ui --project e2e",
     "test:all": "vitest --ui",
-    "dev": "nodemon ./src/library/infrastructure/primary/main.ts"
+    "dev": "nodemon ./src/library/infrastructure/primary/main.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
