@@ -63,7 +63,7 @@ describe("library", () => {
             .set("Content-Type", "application/json")
             .send({
                 libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
-                title: "sherlock Holmes",
+                title: "Sherlock Holmes",
                 authors: ["Conan Doyle"],
                 categories: ["Fiction", "Mystery", "Crime", "Detective"],
                 borrowStatus: "Available"
@@ -71,7 +71,7 @@ describe("library", () => {
         expect(sherlockResponse.status).toBe(200);
         expect(sherlockResponse.body.book).toEqual({
             id: expect.any(String),
-            title: "sherlock Holmes",
+            title: "Sherlock Holmes",
             authors: [ "Conan Doyle",],
             categories: ["Fiction", "Mystery", "Crime", "Detective"],
             borrowStatus: "Available",
@@ -134,7 +134,7 @@ describe("library", () => {
             },
             {
                 book: {
-                    id: expect.any(String), // Should expect a different id for Harry Potter 2
+                    id: expect.any(String),
                     title: "Harry Potter 2",
                     authors: ["J.K Rowling"],
                     categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
