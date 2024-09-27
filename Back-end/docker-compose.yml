@@ -4,15 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: book-exchange-backend
+    container_name: swap-a-book-backend
     ports:
       - "${PORT}:3000"
     environment:
-      - DB_HOST=${DB_HOST_ENV}
-      - DB_PORT=${DB_PORT_ENV}
-      - DB_USER=${DB_USER_ENV}
-      - DB_PASS=${DB_PASS_ENV}
-      - DB_NAME=${DB_NAME_ENV}
+      DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
     depends_on:
       - postgres
     volumes:
@@ -21,8 +17,8 @@ services:
       - app-network
 
   postgres:
-    image: postgres:14
-    container_name: book-exchange-db
+    image: postgres:15
+    container_name: swap-a-book-db
     ports:
       - "${DB_PORT_ENV}:5432"
     environment:
