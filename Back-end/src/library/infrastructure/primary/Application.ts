@@ -8,6 +8,9 @@ import {BooksRepository} from "../../domain/ports/BooksRepository";
 import {UUIDGenerator} from "../../domain/ports/UUIDGenerator";
 import {ListAllBooks} from "../../domain/features/ListAllBooks";
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 export class Application {
   public expressApp = express();
 
