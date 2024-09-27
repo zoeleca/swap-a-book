@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { library } from "./library.fixture";
-import { book } from "./book.fixture";
+import { harryPotter, lesMemoires} from "./book.fixture";
 
 describe("library", () => {
   it("should add a book", () => {
     const aLibrary = library();
-    const aBook = book();
+    const aBook = harryPotter();
 
     aLibrary.add(aBook);
 
@@ -13,16 +13,18 @@ describe("library", () => {
   });
   it("should remove a book", () => {
     const aLibrary = library();
-    const aBook = book();
+    const aBook = harryPotter();
+    const aSecondBook = lesMemoires();
 
     aLibrary.add(aBook);
+    aLibrary.add(aSecondBook);
     aLibrary.remove(aBook);
 
     expect(aLibrary.books()).not.toContain(aBook);
   });
   it("should find a book by its title", () => {
     const aLibrary = library();
-    const aBook = book(); // Assuming `book` can take a title parameter
+    const aBook = harryPotter(); // Assuming `book` can take a title parameter
 
     aLibrary.add(aBook);
     const foundBook = aLibrary.findBookByTitle("Harry Potter");

@@ -25,7 +25,7 @@ export class AddBook {
       BorrowStatus.Available
     );
 
-    this.repository.save(book);
+    await this.repository.save(book);
 
     return book;
   }

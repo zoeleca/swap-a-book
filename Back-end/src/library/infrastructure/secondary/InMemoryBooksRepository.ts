@@ -13,4 +13,10 @@ export class InMemoryBooksRepository implements BooksRepository {
   async findById(id: string): Promise<Book | undefined> {
     return this.books.get(id);
   }
+  async listAllBooks(): Promise<Book[]> {
+    return Array.from(this.books.values());
+  }
+  async deleteAll(): Promise<void> {
+    this.books.clear();
+  }
 }

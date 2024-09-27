@@ -6,6 +6,7 @@ import { Book } from "../../domain/model/Book";
 import {RemoveBook} from "../../domain/features/RemoveBook";
 import {BooksRepository} from "../../domain/ports/BooksRepository";
 import {UUIDGenerator} from "../../domain/ports/UUIDGenerator";
+import {ListAllBooks} from "../../domain/features/ListAllBooks";
 
 export class Application {
   public expressApp = express();
@@ -29,6 +30,14 @@ export class Application {
       }
     );
 
+    this.expressApp.get("/library", async (request: Request, response: Response) => {
+      const library = new ListAllBooks(this.bookRepository);
+      const books = await library.execute();
+
+      const jsonResponse = books.map(book => this.toResponse(book)); // Ensure proper formatting
+      response.status(200).send(jsonResponse);
+    });
+
     this.expressApp.delete("/books/:id",
         async (request: Request, response: Response) => {
       const removeBook = new RemoveBook(this.bookRepository);
@@ -46,6 +55,17 @@ export class Application {
       }
     });
 
+    this.expressApp.get("/books/:id", async (request: Request, response: Response) => {
+      const bookId = request.params.id;
+      const book = await this.bookRepository.findById(bookId);
+
+      if (!book) {
+        response.status(404).send({ error: "Book not found" });
+      } else {
+        const jsonResponse = this.toResponse(book);
+        response.status(200).send(jsonResponse);
+      }
+    });
   }
 
   start(port: number) {
@@ -66,6 +86,20 @@ export class Application {
     };
   }
 
+  private async listAllBooks(): Promise<any> {
+    const library = new ListAllBooks(this.bookRepository);
+    const books = await library.execute();
+    if (books.length === 0) {
+    return books.map((book) => ({
+      id: book.id,
+      title: book.title,
+      authors: book.authors,
+      categories: book.categories.map(this.fromDomainCategory),
+      borrowStatus: this.fromDomainToBorrowedStatus(book.borrowStatus),
+    }))
+    } else return [];
+  }
+
   private toAddBookInput(request: Request): AddBookInput {
     return {
       libraryId: request.body.libraryId,
@@ -76,24 +110,33 @@ export class Application {
   }
 
   private toDomainCategory(category: string): BookCategory {
-    if (category === "Fiction") {
-      return BookCategory.Fiction;
-    }
-    if (category === "Fantasy") {
-      return BookCategory.Fantasy;
-    }
-    return BookCategory.ChildrenStory;
+    const domainMap: Record<string, BookCategory> = {
+      "Fantasy": BookCategory.Fantasy,
+      "Fiction": BookCategory.Fiction,
+      "ChildrenStory": BookCategory.ChildrenStory,
+      "Adventure": BookCategory.Adventure,
+      "Novel": BookCategory.Novel,
+      "Mystery": BookCategory.Mystery,
+      "Crime": BookCategory.Crime,
+      "Detective": BookCategory.Detective,
+    };
+    const mappedCategory = domainMap[category];
+    return mappedCategory || BookCategory.Unknown;
   }
 
   private fromDomainCategory(category: BookCategory): string {
-    if (category === BookCategory.Fiction) {
-      return "Fiction";
+    const categoryMap : Record<BookCategory, string> = {
+      [BookCategory.Fiction]: "Fiction",
+      [BookCategory.Fantasy]: "Fantasy",
+      [BookCategory.ChildrenStory]: "ChildrenStory",
+      [BookCategory.Adventure]: "Adventure",
+      [BookCategory.Novel]: "Novel",
+      [BookCategory.Mystery]: "Mystery",
+      [BookCategory.Crime]: "Crime",
+      [BookCategory.Detective]: "Detective",
+      [BookCategory.Unknown]: "Unknown",
     }
-    if (category === BookCategory.Fantasy) {
-      return "Fantasy";
-    }
-
-    return "ChildrenStory";
+    return categoryMap[category] ;
   }
 
   private fromDomainToBorrowedStatus(borrowStatus: BorrowStatus): string {
