@@ -28,6 +28,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
+    "@changesets/cli": "^2.27.9",
     "@prisma/client": "^5.20.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
