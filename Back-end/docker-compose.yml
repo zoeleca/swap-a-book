@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: swap-a-book-backend
+    ports:
+      - "${PORT}:3000"
+    environment:
+      DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:15
+    container_name: swap-a-book-db
+    ports:
+      - "${DB_PORT_ENV}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER_ENV}
+      POSTGRES_PASSWORD: ${DB_PASS_ENV}
+      POSTGRES_DB: ${DB_NAME_ENV}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+    driver: bridge
