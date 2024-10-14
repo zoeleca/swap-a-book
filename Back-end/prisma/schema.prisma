@@ -29,7 +29,7 @@ model Library {
 model Book {
   id           String   @id @default(uuid())
   title        String
-  authors      String
+  authors      String[]
   categories   BookCategory[]
   borrowStatus BorrowStatus
   libraryId    String   @db.Uuid

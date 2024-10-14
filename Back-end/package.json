@@ -7,7 +7,8 @@
     "test:e2e": "vitest --ui --project e2e",
     "test:all": "vitest --ui",
     "dev": "nodemon ./src/library/infrastructure/primary/main.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "seed": "ts-node prisma/seed/seed.ts"
   },
   "author": "",
   "license": "ISC",

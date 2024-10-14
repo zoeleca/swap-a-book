@@ -30,7 +30,7 @@ CREATE TABLE "Library" (
 CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "authors" TEXT NOT NULL,
+    "authors" TEXT[],
     "categories" "BookCategory"[],
     "borrowStatus" "BorrowStatus" NOT NULL,
     "libraryId" UUID NOT NULL,
