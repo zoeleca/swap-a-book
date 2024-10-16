@@ -1,7 +1,7 @@
-import { Application } from "./Application";
-import { InMemoryBooksRepository } from "../secondary/InMemoryBooksRepository";
-import { UUIDGenerator } from "../../domain/ports/UUIDGenerator";
 import dotenv from 'dotenv';
+import {InMemoryBooksRepository} from "../secondary/InMemoryBooksRepository";
+import {UUIDGenerator} from "../../domain/library/ports/UUIDGenerator";
+import {Application} from "./Application";
 dotenv.config();
 
 const bookRepository = new InMemoryBooksRepository();

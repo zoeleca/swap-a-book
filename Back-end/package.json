@@ -8,7 +8,8 @@
     "test:all": "vitest --ui",
     "dev": "nodemon ./src/library/infrastructure/primary/main.ts",
     "build": "tsc",
-    "seed": "ts-node prisma/seed/seed.ts"
+    "seed": "ts-node prisma/seed/seed.ts",
+    "start": "ts-node src/infrastructure/primary/main.ts"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +22,7 @@
     "@types/uuid": "^10.0.0",
     "@vitest/coverage-istanbul": "^1.6.0",
     "@vitest/ui": "^1.6.0",
-    "nodemon": "^3.1.3",
+    "nodemon": "^3.1.0",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",

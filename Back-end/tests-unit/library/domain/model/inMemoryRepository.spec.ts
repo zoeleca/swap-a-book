@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { InMemoryBooksRepository } from "../../../../src/library/infrastructure/secondary/InMemoryBooksRepository";
-import { Book } from "../../../../src/library/domain/model/Book";
-import { BookCategory } from "../../../../src/library/domain/model/BookCategory";
-import { BorrowStatus } from "../../../../src/library/domain/model/BorrowStatus";
 import {randomUUID} from "node:crypto";
+import {InMemoryBooksRepository} from "../../../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {Book} from "../../../../src/domain/library/model/Book";
+import {BookCategory} from "../../../../src/domain/library/model/BookCategory";
+import { BorrowStatus } from "../../../../src/domain/library/model/BorrowStatus";
 
 describe("InMemoryBooksRepository", () => {
     it("should store multiple books without overwriting", async () => {
