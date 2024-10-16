@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "BookCategory" AS ENUM ('UNKNOWN', 'FICTION', 'FANTASY', 'CHILDREN_STORY', 'ADVENTURE', 'NOVEL', 'MYSTERY', 'CRIME', 'DETECTIVE');
+
+-- CreateEnum
 CREATE TYPE "BorrowStatus" AS ENUM ('BORROWED', 'AVAILABLE');
 
 -- CreateTable
@@ -28,19 +31,11 @@ CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "authors" TEXT[],
+    "categories" "BookCategory"[],
     "borrowStatus" "BorrowStatus" NOT NULL,
     "libraryId" UUID NOT NULL,
 
     CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "BookCategory" (
-    "id" TEXT NOT NULL,
-    "category" TEXT NOT NULL,
-    "booksId" TEXT NOT NULL,
-
-    CONSTRAINT "BookCategory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -54,6 +49,3 @@ ALTER TABLE "Library" ADD CONSTRAINT "Library_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Book" ADD CONSTRAINT "Book_libraryId_fkey" FOREIGN KEY ("libraryId") REFERENCES "Library"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "BookCategory" ADD CONSTRAINT "BookCategory_booksId_fkey" FOREIGN KEY ("booksId") REFERENCES "Book"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
