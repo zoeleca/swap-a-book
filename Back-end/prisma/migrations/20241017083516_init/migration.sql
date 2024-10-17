@@ -2,7 +2,7 @@
 CREATE TYPE "BookCategory" AS ENUM ('UNKNOWN', 'FICTION', 'FANTASY', 'CHILDREN_STORY', 'ADVENTURE', 'NOVEL', 'MYSTERY', 'CRIME', 'DETECTIVE');
 
 -- CreateEnum
-CREATE TYPE "BorrowStatus" AS ENUM ('AVAILABLE', 'BORROWED');
+CREATE TYPE "BorrowStatus" AS ENUM ('BORROWED', 'AVAILABLE');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -30,7 +30,7 @@ CREATE TABLE "Library" (
 CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "authors" TEXT NOT NULL,
+    "authors" TEXT[],
     "categories" "BookCategory"[],
     "borrowStatus" "BorrowStatus" NOT NULL,
     "libraryId" UUID NOT NULL,

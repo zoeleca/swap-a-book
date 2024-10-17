@@ -1,14 +1,14 @@
 import express, { Response, Request } from "express";
-import { AddBook, AddBookInput } from "../../domain/features/AddBook";
-import { BookCategory } from "../../domain/model/BookCategory";
-import { BorrowStatus } from "../../domain/model/BorrowStatus";
-import { Book } from "../../domain/model/Book";
-import {RemoveBook} from "../../domain/features/RemoveBook";
-import {BooksRepository} from "../../domain/ports/BooksRepository";
-import {UUIDGenerator} from "../../domain/ports/UUIDGenerator";
-import {ListAllBooks} from "../../domain/features/ListAllBooks";
 
 import dotenv from 'dotenv';
+import {BooksRepository} from "../../domain/library/ports/BooksRepository";
+import {UUIDGenerator} from "../../domain/library/ports/UUIDGenerator";
+import {AddBook, AddBookInput} from "../../domain/library/features/AddBook";
+import {ListAllBooks} from "../../domain/library/features/ListAllBooks";
+import {RemoveBook} from "../../domain/library/features/RemoveBook";
+import {Book} from "../../domain/library/model/Book";
+import {BookCategory} from "../../domain/library/model/BookCategory";
+import {BorrowStatus} from "../../domain/library/model/BorrowStatus";
 dotenv.config();
 
 export class Application {
@@ -37,7 +37,7 @@ export class Application {
       const library = new ListAllBooks(this.bookRepository);
       const books = await library.execute();
 
-      const jsonResponse = books.map(book => this.toResponse(book)); // Ensure proper formatting
+      const jsonResponse = books.map(book => this.toResponse(book));
       response.status(200).send(jsonResponse);
     });
 

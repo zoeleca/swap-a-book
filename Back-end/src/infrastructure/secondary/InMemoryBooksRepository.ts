@@ -1,5 +1,5 @@
-import { Book } from "../../domain/model/Book";
-import { BooksRepository } from "../../domain/ports/BooksRepository";
+import {Book} from "../../domain/library/model/Book";
+import {BooksRepository} from "../../domain/library/ports/BooksRepository";
 
 export class InMemoryBooksRepository implements BooksRepository {
   public books = new Map<string, Book>();

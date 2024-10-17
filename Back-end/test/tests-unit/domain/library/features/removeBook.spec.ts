@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { BookCategory } from "../../../../src/library/domain/model/BookCategory";
-import { InMemoryBooksRepository } from "../../../../src/library/infrastructure/secondary/InMemoryBooksRepository";
-import { FakeUUIDGenerator } from "../../../../src/library/infrastructure/secondary/FakeUUIDGenerator";
-import {Book} from "../../../../src/library/domain/model/Book";
-import {BorrowStatus} from "../../../../src/library/domain/model/BorrowStatus";
-import {RemoveBook} from "../../../../src/library/domain/features/RemoveBook";
+import { BorrowStatus } from "../../../../../src/domain/library/model/BorrowStatus";
+import { BookCategory } from "../../../../../src/domain/library/model/BookCategory";
+import {RemoveBook} from "../../../../../src/domain/library/features/RemoveBook";
+import {FakeUUIDGenerator} from "../../../../../src/infrastructure/secondary/FakeUUIDGenerator";
+import {InMemoryBooksRepository} from "../../../../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {Book} from "../../../../../src/domain/library/model/Book";
 
 describe("removeBook", () => {
   it("should remove a book from my Library", async () => {
@@ -18,7 +18,7 @@ describe("removeBook", () => {
         "Harry Potter",
         ["J.K. Rowling"],
         [BookCategory.Fiction, BookCategory.Fantasy, BookCategory.ChildrenStory],
-        BorrowStatus.Available
+      BorrowStatus.Available
     );
     await repository.save(book);
     await removeBook.execute(bookId);

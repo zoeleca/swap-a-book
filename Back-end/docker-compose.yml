@@ -3,12 +3,13 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: swap-a-book-backend
+      dockerfile: dockerfile
+    container_name: backend
     ports:
-      - "${PORT}:3000"
+      - "${PORT}:8000"
     environment:
       DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
+      PRISMA_DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
     depends_on:
       - postgres
     volumes:
@@ -18,6 +19,7 @@ services:
 
   postgres:
     image: postgres:15
+    restart: always
     container_name: swap-a-book-db
     ports:
       - "${DB_PORT_ENV}:5432"
@@ -29,7 +31,6 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
-
 volumes:
   postgres-data:
 
