@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import {InMemoryBooksRepository} from "../../../../src/infrastructure/secondary/InMemoryBooksRepository";
-import {FakeUUIDGenerator} from "../../../../src/infrastructure/secondary/FakeUUIDGenerator";
-import {AddBook} from "../../../../src/domain/library/features/AddBook";
-import {BookCategory} from "../../../../src/domain/library/model/BookCategory";
 import {harryPotter} from "../model/book.fixture";
+import {InMemoryBooksRepository} from "../../../../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {FakeUUIDGenerator} from "../../../../../src/infrastructure/secondary/FakeUUIDGenerator";
+import {AddBook} from "../../../../../src/domain/library/features/AddBook";
+import { BookCategory } from "../../../../../src/domain/library/model/BookCategory";
 
 describe("addBook", () => {
   it("should add a book to my Library", async () => {

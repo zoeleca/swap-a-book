@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import {InMemoryBooksRepository} from "../../../../src/infrastructure/secondary/InMemoryBooksRepository";
-import {FakeUUIDGenerator} from "../../../../src/infrastructure/secondary/FakeUUIDGenerator";
-import {RemoveBook} from "../../../../src/domain/library/features/RemoveBook";
-import {Book} from "../../../../src/domain/library/model/Book";
-import {BookCategory} from "../../../../src/domain/library/model/BookCategory";
-import {BorrowStatus} from "../../../../src/domain/library/model/BorrowStatus";
+import { BorrowStatus } from "../../../../../src/domain/library/model/BorrowStatus";
+import { BookCategory } from "../../../../../src/domain/library/model/BookCategory";
+import {RemoveBook} from "../../../../../src/domain/library/features/RemoveBook";
+import {FakeUUIDGenerator} from "../../../../../src/infrastructure/secondary/FakeUUIDGenerator";
+import {InMemoryBooksRepository} from "../../../../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {Book} from "../../../../../src/domain/library/model/Book";
 
 describe("removeBook", () => {
   it("should remove a book from my Library", async () => {

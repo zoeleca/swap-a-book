@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import {beforeEach, describe, expect, it} from "vitest";
-import {FakeUUIDGenerator} from "../src/infrastructure/secondary/FakeUUIDGenerator";
-import {InMemoryBooksRepository} from "../src/infrastructure/secondary/InMemoryBooksRepository";
-import {Application} from "../src/infrastructure/primary/Application";
+import {FakeUUIDGenerator} from "../../src/infrastructure/secondary/FakeUUIDGenerator";
+import {InMemoryBooksRepository} from "../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {Application} from "../../src/infrastructure/primary/Application";
 
 describe("library", () => {
         const uuidGenerator = new FakeUUIDGenerator();

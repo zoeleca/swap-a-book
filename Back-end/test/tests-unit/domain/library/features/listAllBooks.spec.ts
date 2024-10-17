@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import {InMemoryBooksRepository} from "../../../../src/infrastructure/secondary/InMemoryBooksRepository";
-import {FakeUUIDGenerator} from "../../../../src/infrastructure/secondary/FakeUUIDGenerator";
-import {AddBook} from "../../../../src/domain/library/features/AddBook";
-import {BookCategory} from "../../../../src/domain/library/model/BookCategory";
+import {InMemoryBooksRepository} from "../../../../../src/infrastructure/secondary/InMemoryBooksRepository";
+import {FakeUUIDGenerator} from "../../../../../src/infrastructure/secondary/FakeUUIDGenerator";
+import {AddBook} from "../../../../../src/domain/library/features/AddBook";
+import { BookCategory } from "../../../../../src/domain/library/model/BookCategory";
 
 describe("listAllBooks", () => {
   it("should display all books of my Library", async () => {

@@ -37,7 +37,7 @@ export class Application {
       const library = new ListAllBooks(this.bookRepository);
       const books = await library.execute();
 
-      const jsonResponse = books.map(book => this.toResponse(book)); // Ensure proper formatting
+      const jsonResponse = books.map(book => this.toResponse(book));
       response.status(200).send(jsonResponse);
     });
 
