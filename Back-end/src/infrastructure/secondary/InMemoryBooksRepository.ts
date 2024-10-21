@@ -16,7 +16,4 @@ export class InMemoryBooksRepository implements BooksRepository {
   async listAllBooks(): Promise<Book[]> {
     return Array.from(this.books.values());
   }
-  async deleteAll(): Promise<void> {
-    this.books.clear();
-  }
 }

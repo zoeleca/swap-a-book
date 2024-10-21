@@ -22,7 +22,8 @@ export class AddBook {
       input.title,
       input.authors,
       input.categories,
-      BorrowStatus.Available
+      BorrowStatus.AVAILABLE,
+      input.libraryId,
     );
 
     await this.repository.save(book);
