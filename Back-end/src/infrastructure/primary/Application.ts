@@ -9,13 +9,14 @@ import {RemoveBook} from "../../domain/library/features/RemoveBook";
 import {Book} from "../../domain/library/model/Book";
 import {BookCategory} from "../../domain/library/model/BookCategory";
 import {BorrowStatus} from "../../domain/library/model/BorrowStatus";
+import {PrismaBooksRepository} from "../adapters/BookRepository";
 dotenv.config();
 
 export class Application {
   public expressApp = express();
 
   constructor(
-  private readonly bookRepository: BooksRepository,
+  private readonly bookRepository: PrismaBooksRepository,
   private readonly uuidGenerator: UUIDGenerator
   ) {
     this.expressApp.use(express.json());
@@ -114,35 +115,35 @@ export class Application {
 
   private toDomainCategory(category: string): BookCategory {
     const domainMap: Record<string, BookCategory> = {
-      "Fantasy": BookCategory.Fantasy,
-      "Fiction": BookCategory.Fiction,
-      "ChildrenStory": BookCategory.ChildrenStory,
-      "Adventure": BookCategory.Adventure,
-      "Novel": BookCategory.Novel,
-      "Mystery": BookCategory.Mystery,
-      "Crime": BookCategory.Crime,
-      "Detective": BookCategory.Detective,
+      "FANTASY": BookCategory.FANTASY,
+      "FICTION": BookCategory.FICTION,
+      "CHILDREN_STORY": BookCategory.CHILDREN_STORY,
+      "ADVENTURE": BookCategory.ADVENTURE,
+      "NOVEL": BookCategory.NOVEL,
+      "MYSTERY": BookCategory.MYSTERY,
+      "CRIME": BookCategory.CRIME,
+      "DETECTIVE": BookCategory.DETECTIVE,
     };
     const mappedCategory = domainMap[category];
-    return mappedCategory || BookCategory.Unknown;
+    return mappedCategory || BookCategory.UNKNOWN;
   }
 
   private fromDomainCategory(category: BookCategory): string {
     const categoryMap : Record<BookCategory, string> = {
-      [BookCategory.Fiction]: "Fiction",
-      [BookCategory.Fantasy]: "Fantasy",
-      [BookCategory.ChildrenStory]: "ChildrenStory",
-      [BookCategory.Adventure]: "Adventure",
-      [BookCategory.Novel]: "Novel",
-      [BookCategory.Mystery]: "Mystery",
-      [BookCategory.Crime]: "Crime",
-      [BookCategory.Detective]: "Detective",
-      [BookCategory.Unknown]: "Unknown",
+      [BookCategory.FICTION]: "FICTION",
+      [BookCategory.FANTASY]: "FANTASY",
+      [BookCategory.CHILDREN_STORY]: "CHILDREN_STORY",
+      [BookCategory.ADVENTURE]: "ADVENTURE",
+      [BookCategory.NOVEL]: "NOVEL",
+      [BookCategory.MYSTERY]: "MYSTERY",
+      [BookCategory.CRIME]: "CRIME",
+      [BookCategory.DETECTIVE]: "DETECTIVE",
+      [BookCategory.UNKNOWN]: "UNKNOWN",
     }
     return categoryMap[category] ;
   }
 
   private fromDomainToBorrowedStatus(borrowStatus: BorrowStatus): string {
-    return borrowStatus === BorrowStatus.Available ? "Available" : "Borrowed";
+    return borrowStatus === BorrowStatus.AVAILABLE ? "Available" : "Borrowed";
   }
 }

@@ -16,9 +16,9 @@ describe("addBook", () => {
       title: "Harry Potter",
       authors: ["J.K Rowling"],
       categories: [
-        BookCategory.Fiction,
-        BookCategory.Fantasy,
-        BookCategory.ChildrenStory,
+        BookCategory.FICTION,
+        BookCategory.FANTASY,
+        BookCategory.CHILDREN_STORY,
       ],
     });
     expect(repository.books.get(addedBook.id)).toEqual(harryPotter());

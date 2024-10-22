@@ -17,8 +17,8 @@ describe("removeBook", () => {
         bookId,
         "Harry Potter",
         ["J.K. Rowling"],
-        [BookCategory.Fiction, BookCategory.Fantasy, BookCategory.ChildrenStory],
-      BorrowStatus.Available
+        [BookCategory.FICTION, BookCategory.FANTASY, BookCategory.CHILDREN_STORY],
+      BorrowStatus.AVAILABLE
     );
     await repository.save(book);
     await removeBook.execute(bookId);
