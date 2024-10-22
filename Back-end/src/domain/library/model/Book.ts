@@ -13,11 +13,7 @@ export class Book {
     public readonly categories: BookCategory[],
     public readonly borrowStatus: BorrowStatus,
     public readonly libraryId: string
-  ) {
-    if (!title || title.trim().length === 0) {
-      throw new Error("Title cannot be empty");
-    }
-  }
+  ) {}
 
 }
 
