@@ -27,7 +27,6 @@ export class PrismaBooksRepository implements BooksRepository {
   }
 
   async findById(id: string): Promise<Book | undefined> {
-    console.log("Searching for book with ID:", id);
     const book = await prisma.book.findUnique({
       where: { id : id },
     });

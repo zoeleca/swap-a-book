@@ -61,7 +61,6 @@ export class Application {
 
     this.expressApp.get("/books/:id", async (request: Request, response: Response) => {
       const bookId = request.params.id;
-      console.log("bookId : ", bookId);
       const book = await this.bookRepository.findById(bookId);
 
       if (!book) {
