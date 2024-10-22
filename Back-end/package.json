@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "main": "src/main.ts",
   "scripts": {
-    "test": "vitest --ui --project unit",
-    "test:e2e": "vitest --ui --project e2e",
-    "test:all": "vitest --ui",
     "dev": "nodemon src/main.ts",
     "build": "tsc",
     "seed": "ts-node prisma/seed/*",
-    "start": "ts-node src/main.ts"
+    "start": "ts-node src/main.ts",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:reset": "prisma migrate reset --force --skip-seed",
+    "test": "vitest --ui --project unit",
+    "test:e2e": "vitest --ui --project e2e",
+    "test:all": "vitest --ui",
+    "test:setup": "dotenv -e .env.test -- npx prisma migrate reset --force --skip-seed && yarn seed",
+    "test:integration": "yarn test:setup && vitest --run"
   },
   "author": "",
   "license": "ISC",
