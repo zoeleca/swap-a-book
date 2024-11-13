@@ -1,7 +1,6 @@
-import express, { Response, Request } from "express";
+import express, {Request, Response} from "express";
 
 import dotenv from 'dotenv';
-import {BooksRepository} from "../../domain/library/ports/BooksRepository";
 import {UUIDGenerator} from "../../domain/library/ports/UUIDGenerator";
 import {AddBook, AddBookInput} from "../../domain/library/features/AddBook";
 import {ListAllBooks} from "../../domain/library/features/ListAllBooks";
@@ -10,14 +9,15 @@ import {Book} from "../../domain/library/model/Book";
 import {BookCategory} from "../../domain/library/model/BookCategory";
 import {BorrowStatus} from "../../domain/library/model/BorrowStatus";
 import {PrismaBooksRepository} from "../adapters/BookRepository";
+
 dotenv.config();
 
 export class Application {
   public expressApp = express();
 
   constructor(
-  private readonly bookRepository: PrismaBooksRepository,
-  private readonly uuidGenerator: UUIDGenerator
+    private readonly bookRepository: PrismaBooksRepository,
+    private readonly uuidGenerator: UUIDGenerator
   ) {
     this.expressApp.use(express.json());
 
@@ -34,37 +34,43 @@ export class Application {
       }
     );
 
-    this.expressApp.get("/library", async (request: Request, response: Response) => {
-      const library = new ListAllBooks(this.bookRepository);
-      const books = await library.execute();
+    this.expressApp.get("/library/:libraryId/books", async (request: Request, response: Response) => {
+      const libraryId = request.params.libraryId;
 
-      const jsonResponse = books.map(book => this.toResponse(book));
-      response.status(200).send(jsonResponse);
+      // Use the new repository method to get books for the given libraryId
+      const books = await this.bookRepository.listAllBooks(libraryId);
+
+      if (!books || books.length === 0) {
+        response.status(404).send({error: "No books found for this library"});
+      } else {
+        const jsonResponse = books.map(book => this.toResponse(book)); // Format the response
+        response.status(200).send(jsonResponse);
+      }
     });
 
     this.expressApp.delete("/books/:id",
-        async (request: Request, response: Response) => {
-      const removeBook = new RemoveBook(this.bookRepository);
-      const bookId = request.params.id;
+      async (request: Request, response: Response) => {
+        const removeBook = new RemoveBook(this.bookRepository);
+        const bookId = request.params.id;
 
-      try {
-        await removeBook.execute(bookId);
-        response.status(204).send(); // No content
-      } catch (error) {
-        if (error instanceof Error) {
-          response.status(404).send({ error: error.message });
-        } else {
-          response.status(500).send({ error: 'An unexpected error occurred' });
+        try {
+          await removeBook.execute(bookId);
+          response.status(204).send(); // No content
+        } catch (error) {
+          if (error instanceof Error) {
+            response.status(404).send({error: error.message});
+          } else {
+            response.status(500).send({error: 'An unexpected error occurred'});
+          }
         }
-      }
-    });
+      });
 
     this.expressApp.get("/books/:id", async (request: Request, response: Response) => {
       const bookId = request.params.id;
       const book = await this.bookRepository.findById(bookId);
 
       if (!book) {
-        response.status(404).send({ error: "Book not found" });
+        response.status(404).send({error: "Book not found"});
       } else {
         const jsonResponse = this.toResponse(book);
         response.status(200).send(jsonResponse);
@@ -90,17 +96,17 @@ export class Application {
     };
   }
 
-  private async listAllBooks(): Promise<any> {
+  private async listAllBooks(libraryId: string): Promise<any> {
     const library = new ListAllBooks(this.bookRepository);
-    const books = await library.execute();
+    const books = await library.execute(libraryId);
     if (books.length === 0) {
-    return books.map((book) => ({
-      id: book.id,
-      title: book.title,
-      authors: book.authors,
-      categories: book.categories.map(this.fromDomainCategory),
-      borrowStatus: this.fromDomainToBorrowedStatus(book.borrowStatus),
-    }))
+      return books.map((book) => ({
+        id: book.id,
+        title: book.title,
+        authors: book.authors,
+        categories: book.categories.map(this.fromDomainCategory),
+        borrowStatus: this.fromDomainToBorrowedStatus(book.borrowStatus),
+      }))
     } else return [];
   }
 
@@ -129,7 +135,7 @@ export class Application {
   }
 
   private fromDomainCategory(category: BookCategory): string {
-    const categoryMap : Record<BookCategory, string> = {
+    const categoryMap: Record<BookCategory, string> = {
       [BookCategory.FICTION]: "FICTION",
       [BookCategory.FANTASY]: "FANTASY",
       [BookCategory.CHILDREN_STORY]: "CHILDREN_STORY",
@@ -140,7 +146,7 @@ export class Application {
       [BookCategory.DETECTIVE]: "DETECTIVE",
       [BookCategory.UNKNOWN]: "UNKNOWN",
     }
-    return categoryMap[category] ;
+    return categoryMap[category];
   }
 
   private fromDomainToBorrowedStatus(borrowStatus: BorrowStatus): string {

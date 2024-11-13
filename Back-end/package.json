@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon src/main.ts",
     "build": "tsc",
-    "seed": "ts-node prisma/seed/*",
+    "seed": "ts-node prisma/seed/*.ts",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:reset": "prisma migrate reset --force --skip-seed",
     "test": "vitest --ui --project unit",

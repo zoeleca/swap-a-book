@@ -25,4 +25,4 @@ EXPOSE 8000
 USER node
 
 # Start the application
-CMD ["yarn", "start"]
+CMD ["yarn", "dev", "--host", "0.0.0.0"]
