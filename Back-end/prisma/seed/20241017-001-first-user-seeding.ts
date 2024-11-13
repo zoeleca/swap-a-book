@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 async function main() {
   const user = await prisma.user.create({
     data: {
-      email: `johndoe@email.com`,
+      email: `johnDDoe@email.com`,
       name: 'John Doe',
       library: {
         create: {
           name: "John's Library",
           books: {
-            create:[
+            create: [
               {
                 title: 'The Hobbit',
                 authors: ['J.R.R. Tolkien'],
@@ -40,7 +40,7 @@ async function main() {
 }
 
 main()
-  .catch((e)=>{
+  .catch((e) => {
     console.error(e);
     process.exit(1);
   })
