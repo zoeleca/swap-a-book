@@ -6,6 +6,7 @@
     "dev": "nodemon src/main.ts",
     "build": "tsc",
     "seed": "ts-node prisma/seed/*",
+<<<<<<< Updated upstream
     "start": "ts-node src/main.ts",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:reset": "prisma migrate reset --force --skip-seed",
@@ -14,6 +15,9 @@
     "test:all": "vitest --ui",
     "test:setup": "dotenv -e .env.test -- npx prisma migrate reset --force --skip-seed && yarn seed",
     "test:integration": "yarn test:setup && vitest --run"
+=======
+    "start": "prisma migrate deploy  && yarn ts-node src/main.ts"
+>>>>>>> Stashed changes
   },
   "author": "",
   "license": "ISC",

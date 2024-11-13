@@ -38,7 +38,11 @@ services:
     restart: always
     container_name: swap-a-book-db-test
     ports:
+<<<<<<< Updated upstream
       - "${DB_TEST__PORT_ENV}:5433"
+=======
+      - "${DB_TEST_PORT_ENV}:5433"
+>>>>>>> Stashed changes
     environment:
       POSTGRES_USER: ${DB_TEST_USER_ENV}
       POSTGRES_PASSWORD: ${DB_TEST_PASS_ENV}
@@ -47,7 +51,10 @@ services:
       - postgres-test-data:/var/lib/postgresql/data
     networks:
       - app-network
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 volumes:
   postgres-data:
   postgres-test-data:
