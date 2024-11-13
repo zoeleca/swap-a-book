@@ -7,13 +7,16 @@ export class InMemoryBooksRepository implements BooksRepository {
   async save(book: Book): Promise<void> {
     this.books.set(book.id, book);
   }
+
   async delete(book: Book): Promise<void> {
     this.books.delete(book.id);
   }
+
   async findById(id: string): Promise<Book | undefined> {
     return this.books.get(id);
   }
-  async listAllBooks(): Promise<Book[]> {
-    return Array.from(this.books.values());
+
+  async listAllBooks(libraryId: string): Promise<Book[]> {
+    return Array.from(this.books.values()).filter(book => book.libraryId === libraryId);
   }
 }

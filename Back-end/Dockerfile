@@ -16,7 +16,7 @@ COPY prisma ./prisma/
 COPY . .
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN yarn prisma generate
 
 # Expose the application port
 EXPOSE 8000

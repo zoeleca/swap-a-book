@@ -2,8 +2,8 @@ version: "3.9"
 services:
   backend:
     build:
-      context: .
-      dockerfile: dockerfile
+      context: ./Back-end
+      dockerfile: Dockerfile
     container_name: backend
     ports:
       - "${PORT}:8000"
@@ -15,7 +15,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - .:/app
+      - ./Back-end:/app
     networks:
       - app-network
 
@@ -47,6 +47,22 @@ services:
     command: postgres -p 5433
     volumes:
       - postgres-test-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./Front-end
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_URL: "http://localhost:8000"
+    depends_on:
+      - backend
+    volumes:
+      - ./Front-end:/app
     networks:
       - app-network
 
