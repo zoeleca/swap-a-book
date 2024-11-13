@@ -10,7 +10,8 @@ services:
     environment:
       DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
       PRISMA_DATABASE_URL: postgres://${DB_USER_ENV}:${DB_PASS_ENV}@postgres:${DB_PORT_ENV}/${DB_NAME_ENV}
-      TEST_DATABASE_URL: postgres://${DB_TEST_USER_ENV}:${DB_TEST_PASS_ENV}@postgres:${DB_TEST_PORT_ENV}/${DB_TEST_NAME_ENV}
+      DATABASE_TEST_URL: postgres://${DB_TEST_USER_ENV}:${DB_TEST_PASS_ENV}@postgres:${DB_TEST_PORT_ENV}/${DB_TEST_NAME_ENV}
+      PRISMA_DATABASE_TEST_URL: postgres://${DB_TEST_USER_ENV}:${DB_TEST_PASS_ENV}@postgres:${DB_TEST_PORT_ENV}/${DB_TEST_NAME_ENV}
     depends_on:
       - postgres
     volumes:
@@ -38,23 +39,17 @@ services:
     restart: always
     container_name: swap-a-book-db-test
     ports:
-<<<<<<< Updated upstream
-      - "${DB_TEST__PORT_ENV}:5433"
-=======
       - "${DB_TEST_PORT_ENV}:5433"
->>>>>>> Stashed changes
     environment:
       POSTGRES_USER: ${DB_TEST_USER_ENV}
       POSTGRES_PASSWORD: ${DB_TEST_PASS_ENV}
       POSTGRES_DB: ${DB_TEST_NAME_ENV}
+    command: postgres -p 5433
     volumes:
       - postgres-test-data:/var/lib/postgresql/data
     networks:
       - app-network
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 volumes:
   postgres-data:
   postgres-test-data:
