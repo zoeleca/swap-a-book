@@ -25,4 +25,4 @@ EXPOSE 8000
 USER node
 
 # Start the application
-CMD ["yarn", "dev", "--host", "0.0.0.0"]
+CMD ["sh", "-c", "yarn prisma migrate deploy && yarn prisma db seed && yarn dev --host 0.0.0.0"]

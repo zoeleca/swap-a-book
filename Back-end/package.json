@@ -44,5 +44,8 @@
     "pg": "8.13.0",
     "prisma": "5.20.0",
     "unplugin-swc": "1.5.1"
+  },
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
   }
 }
