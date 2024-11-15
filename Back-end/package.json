@@ -11,7 +11,7 @@
     "test": "vitest --ui --project unit",
     "test:e2e": "vitest --ui --project e2e",
     "test:all": "vitest --ui",
-    "test:setup": "dotenv -e .env.test -- npx prisma migrate reset --force --skip-seed && prisma migrate dev",
+    "test:setup": "dotenv -e .env.test npx prisma migrate reset --force --skip-seed && prisma migrate dev",
     "test:integration": "yarn test:setup && vitest --run",
     "start": "prisma migrate deploy  && yarn ts-node src/main.ts"
   },
