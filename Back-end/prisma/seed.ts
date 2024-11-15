@@ -8,7 +8,7 @@ const libraryId = randomUUID();
 async function main() {
   const user = await prisma.user.create({
     data: {
-      email: `example@email.com`,
+      email: `test@email.com`,
       name: 'John Doe Lee',
       library: {
         create: {

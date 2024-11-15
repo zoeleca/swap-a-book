@@ -3,14 +3,13 @@ import {useState} from "react";
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const libraryId = "3f430849-46ce-47d9-9aee-8b599427c986";
 
   const handleClick = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8000/library/${libraryId}/books`);
+      const response = await fetch(`http://localhost:8000/library/2b3a774a-178d-404c-95d2-b2bc68970608/books`);
       if (!response.ok) {
         throw new Error("Failed to fetch library");
       }
