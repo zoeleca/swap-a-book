@@ -9,6 +9,7 @@ import {Book} from "../../domain/library/model/Book";
 import {BookCategory} from "../../domain/library/model/BookCategory";
 import {BorrowStatus} from "../../domain/library/model/BorrowStatus";
 import {PrismaBooksRepository} from "../adapters/BookRepository";
+import cors from "cors"
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ export class Application {
     private readonly uuidGenerator: UUIDGenerator
   ) {
     this.expressApp.use(express.json());
+    this.expressApp.use(cors({
+      origin: ['http://localhost', 'http://localhost:80'],
+    }));
 
     this.expressApp.post(
       "/books",

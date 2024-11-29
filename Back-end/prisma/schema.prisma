@@ -12,19 +12,19 @@ model User {
   id        String   @id @default(uuid()) @db.Uuid
   email     String   @unique
   name      String
-  library   Library?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  library   Library?
 }
 
 model Library {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
   userId    String   @unique @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  books     Book[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  books     Book[]
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Book {
