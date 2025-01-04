@@ -4,25 +4,25 @@ export default defineWorkspace([
   "packages/*",
   {
     test: {
-      include: ["test/e2e/**/*.spec.ts"],
+      include: ["tests/e2e/**/*.spec.ts"],
       name: "e2e",
     },
   },
   {
     test: {
-      include: ["test/integration/**/*.spec.ts"],
+      include: ["tests/integration/**/*.spec.ts"],
       name: "integration",
     },
   },
   {
     test: {
-      include: ["test/tests-component/**/*.spec.ts"],
+      include: ["tests/tests-component/**/*.spec.ts"],
       name: "component",
     },
   },
   {
     test: {
-      include: ["test/unit/**/**/**/*.spec.ts"],
+      include: ["tests/unit/**/**/**/*.spec.ts"],
       name: "unit",
     },
   },

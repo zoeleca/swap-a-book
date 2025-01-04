@@ -1,20 +1,23 @@
 // src/presentation/controllers/BookController.ts
 import { Request, Response } from "express";
-import { AddBook } from "../../domain/library/features/AddBook";
-import { RemoveBook } from "../../domain/library/features/RemoveBook";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/PrismaBooksRepository";
-import { UUIDGenerator } from "../../domain/library/interfaces/UUIDGenerator";
+import { AddBookUseCase } from "../../domain/library/features/add-book.use-case";
+import { RemoveBookUseCase } from "../../domain/library/features/remove-book.use-case";
+import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
 
 export class BookController {
-  private addBookUseCase: AddBook;
-  private removeBookUseCase: RemoveBook;
+  private addBookUseCase: AddBookUseCase;
+  private removeBookUseCase: RemoveBookUseCase;
 
   constructor(
     private readonly bookRepository: PrismaBooksRepository,
-    private readonly uuidGenerator: UUIDGenerator
+    private readonly uuidGenerator: UuidGenerator
   ) {
-    this.addBookUseCase = new AddBook(this.bookRepository, this.uuidGenerator);
-    this.removeBookUseCase = new RemoveBook(this.bookRepository);
+    this.addBookUseCase = new AddBookUseCase(
+      this.bookRepository,
+      this.uuidGenerator
+    );
+    this.removeBookUseCase = new RemoveBookUseCase(this.bookRepository);
   }
 
   // Add a new book
@@ -22,7 +25,7 @@ export class BookController {
     try {
       const { libraryId, title, authors, categories } = req.body;
 
-      // Execute the AddBook use case
+      // Execute the AddBookUseCase use case
       const addedBook = await this.addBookUseCase.execute({
         libraryId,
         title,
@@ -43,7 +46,7 @@ export class BookController {
       const book = await this.bookRepository.getById(bookId);
 
       if (!book) {
-        return res.status(404).send({ error: "Book not found" });
+        return res.status(404).send({ error: "BookModel not found" });
       }
 
       res.status(200).json(this.toResponse(book));

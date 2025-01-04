@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/PrismaBooksRepository";
-import { ListAllBooks } from "../../domain/library/features/ListAllBooks";
+import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import { ListAllBooksUseCase } from "../../domain/library/features/list-all-books.use-case";
 
 export class LibraryController {
-  private listLibraryBooks: ListAllBooks;
+  private listLibraryBooks: ListAllBooksUseCase;
 
   constructor(private readonly bookRepository: PrismaBooksRepository) {
-    this.listLibraryBooks = new ListAllBooks(this.bookRepository);
+    this.listLibraryBooks = new ListAllBooksUseCase(this.bookRepository);
   }
 
   public listBooks = async (req: Request, res: Response) => {

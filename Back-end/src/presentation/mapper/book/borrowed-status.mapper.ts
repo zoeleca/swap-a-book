@@ -1,5 +1,9 @@
-import { BorrowStatus } from "../../../domain/library/models/BorrowStatus";
+import { BorrowStatusModel } from "../../../domain/library/models/borrow-status.model";
 
-export function fromDomainToBorrowedStatus(borrowStatus: BorrowStatus): string {
-  return borrowStatus === BorrowStatus.Available ? "Available" : "Borrowed";
+export function fromDomainToBorrowedStatus(
+  borrowStatus: BorrowStatusModel
+): string {
+  return borrowStatus === BorrowStatusModel.Available
+    ? "Available"
+    : "Borrowed";
 }

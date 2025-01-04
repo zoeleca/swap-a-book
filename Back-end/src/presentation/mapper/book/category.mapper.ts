@@ -1,31 +1,31 @@
-import { BookCategory } from "../../../domain/library/models/BookCategory";
+import { BookCategoryModel } from "../../../domain/library/models/book-category.model";
 
-export function toDomainCategory(category: string): BookCategory {
-  const domainMap: Record<string, BookCategory> = {
-    Fiction: BookCategory.Fiction,
-    Fantasy: BookCategory.Fantasy,
-    ChildrenStory: BookCategory.ChildrenStory,
-    Adventure: BookCategory.Adventure,
-    Novel: BookCategory.Novel,
-    Mystery: BookCategory.Mystery,
-    Crime: BookCategory.Crime,
-    Detective: BookCategory.Detective,
+export function toDomainCategory(category: string): BookCategoryModel {
+  const domainMap: Record<string, BookCategoryModel> = {
+    Fiction: BookCategoryModel.Fiction,
+    Fantasy: BookCategoryModel.Fantasy,
+    ChildrenStory: BookCategoryModel.ChildrenStory,
+    Adventure: BookCategoryModel.Adventure,
+    Novel: BookCategoryModel.Novel,
+    Mystery: BookCategoryModel.Mystery,
+    Crime: BookCategoryModel.Crime,
+    Detective: BookCategoryModel.Detective,
   };
   const mappedCategory = domainMap[category];
-  return mappedCategory || BookCategory.Unknown;
+  return mappedCategory || BookCategoryModel.Unknown;
 }
 
-export function fromDomainCategory(category: BookCategory): string {
-  const categoryMap: Record<BookCategory, string> = {
-    [BookCategory.Fiction]: "Fiction",
-    [BookCategory.Fantasy]: "Fantasy",
-    [BookCategory.ChildrenStory]: "ChildrenStory",
-    [BookCategory.Adventure]: "Adventure",
-    [BookCategory.Novel]: "Novel",
-    [BookCategory.Mystery]: "Mystery",
-    [BookCategory.Crime]: "Crime",
-    [BookCategory.Detective]: "Detective",
-    [BookCategory.Unknown]: "Unknown",
+export function fromDomainCategory(category: BookCategoryModel): string {
+  const categoryMap: Record<BookCategoryModel, string> = {
+    [BookCategoryModel.Fiction]: "Fiction",
+    [BookCategoryModel.Fantasy]: "Fantasy",
+    [BookCategoryModel.ChildrenStory]: "ChildrenStory",
+    [BookCategoryModel.Adventure]: "Adventure",
+    [BookCategoryModel.Novel]: "Novel",
+    [BookCategoryModel.Mystery]: "Mystery",
+    [BookCategoryModel.Crime]: "Crime",
+    [BookCategoryModel.Detective]: "Detective",
+    [BookCategoryModel.Unknown]: "Unknown",
   };
   return categoryMap[category];
 }
