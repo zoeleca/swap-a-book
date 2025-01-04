@@ -38,18 +38,18 @@ model Book {
 }
 
 enum BookCategory {
-  UNKNOWN
-  FICTION
-  FANTASY
-  CHILDREN_STORY
-  ADVENTURE
-  NOVEL
-  MYSTERY
-  CRIME
-  DETECTIVE
+  Unknown
+  Fiction
+  Fantasy
+  ChildrenStory
+  Adventure
+  Novel
+  Mystery
+  Crime
+  Detective
 }
 
 enum BorrowStatus {
-  BORROWED
-  AVAILABLE
+  Borrowed
+  Available
 }

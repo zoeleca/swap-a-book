@@ -40,8 +40,8 @@ describe("PrismaBooksRepository", () => {
         id: randomUUID(),
         title: "Harry Potter 2",
         authors: ["J.K Rowling"],
-        categories: [BookCategory.FICTION, BookCategory.NOVEL, BookCategory.FANTASY],
-        borrowStatus: BorrowStatus.AVAILABLE,
+        categories: [BookCategory.Fiction, BookCategory.Novel, BookCategory.Fantasy],
+        borrowStatus: BorrowStatus.Available,
         libraryId
       };
 

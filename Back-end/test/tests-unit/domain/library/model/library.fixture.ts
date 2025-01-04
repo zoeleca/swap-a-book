@@ -1,5 +1,5 @@
-import {Library} from "../../../../src/domain/library/model/Library";
-import {LibraryId} from "../../../../src/domain/library/model/LibraryId";
+import {Library} from "../../../../../src/domain/library/model/Library";
+import {LibraryId} from "../../../../../src/domain/library/model/LibraryId";
 
 
 export function library() {

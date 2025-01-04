@@ -20,7 +20,7 @@ describe("library", () => {
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
         title: "Lord of the Rings",
         authors: ["Tolkien"],
-        categories: ["FICTION", "MYSTERY", "ADVENTURE"],
+        categories: ["Fiction", "Mystery", "Adventure"],
       });
 
     const lesMemoiresResponse = await supertestApp
@@ -31,7 +31,7 @@ describe("library", () => {
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
         title: "les Memoires d'un chat",
         authors: ["Hiro Arikawa"],
-        categories: ["FICTION", "NOVEL", "ADVENTURE"],
+        categories: ["Fiction", "Novel", "Adventure"],
       });
   });
 
@@ -44,14 +44,14 @@ describe("library", () => {
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
         title: "Harry Potter 2",
         authors: ["J.K Rowling"],
-        categories: ["FICTION", "NOVEL", "CHILDREN_STORY", "FANTASY"],
+        categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       });
     expect(response.status).toBe(200);
     expect(response.body.book).toEqual({
       id: expect.any(String),
       title: "Harry Potter 2",
       authors: ["J.K Rowling"],
-      categories: ["FICTION", "NOVEL", "CHILDREN_STORY", "FANTASY"],
+      categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       borrowStatus: "Available",
     });
   });
@@ -65,7 +65,7 @@ describe("library", () => {
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
         title: "Sherlock Holmes",
         authors: ["Conan Doyle"],
-        categories: ["FICTION", "MYSTERY", "CRIME", "DETECTIVE"],
+        categories: ["Fiction", "Mystery", "Crime", "Detective"],
         borrowStatus: "Available"
       });
     expect(sherlockResponse.status).toBe(200);
@@ -73,7 +73,7 @@ describe("library", () => {
       id: expect.any(String),
       title: "Sherlock Holmes",
       authors: ["Conan Doyle",],
-      categories: ["FICTION", "MYSTERY", "CRIME", "DETECTIVE"],
+      categories: ["Fiction", "Mystery", "Crime", "Detective"],
       borrowStatus: "Available",
     });
 
@@ -105,7 +105,7 @@ describe("library", () => {
           id: expect.any(String),
           title: "Lord of the Rings",
           authors: ["Tolkien"],
-          categories: expect.arrayContaining(["FICTION", "MYSTERY", "ADVENTURE"]),
+          categories: expect.arrayContaining(["Fiction", "Mystery", "Adventure"]),
           borrowStatus: "Available",
         }
       },
@@ -114,7 +114,7 @@ describe("library", () => {
           id: expect.any(String),
           title: "les Memoires d'un chat",
           authors: ["Hiro Arikawa"],
-          categories: expect.arrayContaining(["FICTION", "NOVEL", "ADVENTURE"]),
+          categories: expect.arrayContaining(["Fiction", "Novel", "Adventure"]),
           borrowStatus: "Available",
         }
       },
@@ -123,7 +123,7 @@ describe("library", () => {
           id: expect.any(String),
           title: "les Memoires d'un chat",
           authors: ["Hiro Arikawa"],
-          categories: expect.arrayContaining(["FICTION", "NOVEL", "ADVENTURE"]),
+          categories: expect.arrayContaining(["Fiction", "Novel", "Adventure"]),
           borrowStatus: "Available",
         }
       },
@@ -132,7 +132,7 @@ describe("library", () => {
           id: expect.any(String),
           title: "Harry Potter 2",
           authors: ["J.K Rowling"],
-          categories: ["FICTION", "NOVEL", "CHILDREN_STORY", "FANTASY"],
+          categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
           borrowStatus: "Available",
         }
       },
@@ -141,7 +141,7 @@ describe("library", () => {
           id: expect.any(String),
           title: "les Memoires d'un chat",
           authors: ["Hiro Arikawa"],
-          categories: expect.arrayContaining(["FICTION", "NOVEL", "ADVENTURE"]),
+          categories: expect.arrayContaining(["Fiction", "Novel", "Adventure"]),
           borrowStatus: "Available",
         }
       },

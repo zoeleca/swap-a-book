@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { library } from "./library.fixture";
-import { harryPotter, lesMemoires} from "./book.fixture";
+import {describe, expect, it} from "vitest";
+import {library} from "./library.fixture";
+import {harryPotter, lesMemoires} from "./book.fixture";
 
 describe("library", () => {
   it("should add a book", () => {

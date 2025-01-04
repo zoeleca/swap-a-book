@@ -1,7 +1,5 @@
-import { BookCategory } from "./BookCategory";
-import { BorrowStatus } from "./BorrowStatus";
-import {LibraryId} from "./LibraryId";
-import {Library} from "./Library";
+import {BookCategory} from "./BookCategory";
+import {BorrowStatus} from "./BorrowStatus";
 
 export class Book {
   //todo : builder
@@ -13,8 +11,7 @@ export class Book {
     public readonly categories: BookCategory[],
     public readonly borrowStatus: BorrowStatus,
     public readonly libraryId: string
-  ) {}
+  ) {
+  }
 
 }
-
-//test

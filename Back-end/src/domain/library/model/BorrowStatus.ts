@@ -1,4 +1,4 @@
 export enum BorrowStatus {
-  BORROWED = "BORROWED",
-  AVAILABLE = "AVAILABLE",
+  Borrowed = "Borrowed",
+  Available = "Available",
 }

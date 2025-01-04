@@ -17,9 +17,9 @@ describe("listAllBooks", () => {
       title: "Harry Potter",
       authors: ["J.K Rowling"],
       categories: [
-        BookCategory.FICTION,
-        BookCategory.FANTASY,
-        BookCategory.CHILDREN_STORY,
+        BookCategory.Fiction,
+        BookCategory.Fantasy,
+        BookCategory.ChildrenStory,
       ],
     });
 
@@ -28,9 +28,9 @@ describe("listAllBooks", () => {
       title: "Lord of the Rings",
       authors: ["Tolkien"],
       categories: [
-        BookCategory.FICTION,
-        BookCategory.MYSTERY,
-        BookCategory.ADVENTURE
+        BookCategory.Fiction,
+        BookCategory.Mystery,
+        BookCategory.Adventure
       ],
     });
 

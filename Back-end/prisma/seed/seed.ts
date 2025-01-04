@@ -8,7 +8,7 @@ const libraryId = randomUUID();
 async function main() {
   const user = await prisma.user.create({
     data: {
-      email: `johnDoeLee@email.com`,
+      email: `test-example@email.com`,
       name: 'John Doe Lee',
       library: {
         create: {
@@ -18,20 +18,20 @@ async function main() {
               {
                 title: 'The Hobbit',
                 authors: ['J.R.R. Tolkien'],
-                categories: [BookCategory.FANTASY, BookCategory.ADVENTURE],
-                borrowStatus: BorrowStatus.AVAILABLE
+                categories: [BookCategory.Fantasy, BookCategory.Adventure],
+                borrowStatus: BorrowStatus.Available
               },
               {
                 title: '1984',
                 authors: ['George Orwell'],
-                categories: [BookCategory.FICTION],
-                borrowStatus: BorrowStatus.AVAILABLE
+                categories: [BookCategory.Fiction],
+                borrowStatus: BorrowStatus.Available
               },
               {
                 title: `Harry Potter and the Philosopher's Stone`,
                 authors: ['J.K. Rowling'],
-                categories: [BookCategory.FANTASY, BookCategory.MYSTERY],
-                borrowStatus: BorrowStatus.AVAILABLE
+                categories: [BookCategory.Fantasy, BookCategory.Mystery],
+                borrowStatus: BorrowStatus.Available
               },
             ],
           },
@@ -62,8 +62,8 @@ async function main() {
       {
         title: 'The Hobbit',
         authors: ['J.R.R. Tolkien'],
-        categories: [BookCategory.FANTASY, BookCategory.ADVENTURE],
-        borrowStatus: BorrowStatus.AVAILABLE,
+        categories: [BookCategory.Fantasy, BookCategory.Adventure],
+        borrowStatus: BorrowStatus.Available,
         libraryId
       }
   });
@@ -73,8 +73,8 @@ async function main() {
       {
         title: '1984',
         authors: ['George Orwell'],
-        categories: [BookCategory.FICTION],
-        borrowStatus: BorrowStatus.AVAILABLE,
+        categories: [BookCategory.Fiction],
+        borrowStatus: BorrowStatus.Available,
         libraryId
       },
   });
@@ -84,8 +84,8 @@ async function main() {
       {
         title: `Harry Potter and the Philosopher's Stone`,
         authors: ['J.K. Rowling'],
-        categories: [BookCategory.FANTASY, BookCategory.MYSTERY],
-        borrowStatus: BorrowStatus.AVAILABLE,
+        categories: [BookCategory.Fantasy, BookCategory.Mystery],
+        borrowStatus: BorrowStatus.Available,
         libraryId
       },
   });

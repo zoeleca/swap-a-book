@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "BookCategory" AS ENUM ('UNKNOWN', 'FICTION', 'FANTASY', 'CHILDREN_STORY', 'ADVENTURE', 'NOVEL', 'MYSTERY', 'CRIME', 'DETECTIVE');
+CREATE TYPE "BookCategory" AS ENUM ('Unknown', 'Fiction', 'Fantasy', 'ChildrenStory', 'Adventure', 'Novel', 'Mystery', 'Crime', 'Detective');
 
 -- CreateEnum
-CREATE TYPE "BorrowStatus" AS ENUM ('BORROWED', 'AVAILABLE');
+CREATE TYPE "BorrowStatus" AS ENUM ('Borrowed', 'Available');
 
 -- CreateTable
 CREATE TABLE "User" (
