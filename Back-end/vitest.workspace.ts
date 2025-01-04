@@ -1,16 +1,16 @@
-import {defineWorkspace} from "vitest/config";
+import { defineWorkspace } from "vitest/config";
 
 export default defineWorkspace([
   "packages/*",
   {
     test: {
-      include: ["test/tests-e2e/**/*.spec.ts"],
+      include: ["test/e2e/**/*.spec.ts"],
       name: "e2e",
     },
   },
   {
     test: {
-      include: ["test/tests-integration/**/*.spec.ts"],
+      include: ["test/integration/**/*.spec.ts"],
       name: "integration",
     },
   },
@@ -22,7 +22,7 @@ export default defineWorkspace([
   },
   {
     test: {
-      include: ["test/tests-unit/**/**/**/*.spec.ts"],
+      include: ["test/unit/**/**/**/*.spec.ts"],
       name: "unit",
     },
   },
