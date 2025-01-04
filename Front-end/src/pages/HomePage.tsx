@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
@@ -9,17 +9,19 @@ const HomePage = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8000/library/2b3a774a-178d-404c-95d2-b2bc68970608/books`);
+      const response = await fetch(
+        `http://localhost:8000/library/2b3a774a-178d-404c-95d2-b2bc68970608/books`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch library");
       }
       const data = await response.json();
-      console.log("Library data:", data); // Handle the response as needed
+      console.log("LibraryModel data:", data); // Handle the response as needed
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
       }
-      setError("An unknown error occurred.")
+      setError("An unknown error occurred.");
     } finally {
       setLoading(false);
     }
@@ -31,14 +33,16 @@ const HomePage = () => {
           <h1 className="text-5xl text-amber-50 font-bold text-center">
             Swap a Book
           </h1>
-          <br/>
+          <br />
           <h3 className="my-3 text-xl text-amber-50 font-bold text-center">
             Your neighborhood library, reimagined.
           </h3>
           <p className="text-m text-amber-50 text-center">
-            BookSwap is a web application designed to bring people together through the love of books. Whether you're a
-            casual reader or a bookworm, our platform allows you to exchange books with others in your community, making
-            it easier than ever to discover new stories and share the ones you love.
+            BookSwap is a web application designed to bring people together
+            through the love of books. Whether you're a casual reader or a
+            bookworm, our platform allows you to exchange books with others in
+            your community, making it easier than ever to discover new stories
+            and share the ones you love.
           </p>
         </div>
         <button
@@ -46,7 +50,7 @@ const HomePage = () => {
           className="mt-6 inline-block px-6 py-2 bg-red-950 text-white font-semibold rounded-lg shadow-md hover:bg-red-50 hover:text-red-500"
           disabled={loading}
         >
-          {loading ? "Loading..." : "Go to My Library"}
+          {loading ? "Loading..." : "Go to My LibraryModel"}
         </button>
 
         {error && <p className="mt-4 text-red-500">{error}</p>}
