@@ -1,8 +1,8 @@
 import { BookModel } from "../models/book.model";
 import { BorrowStatusModel } from "../models/borrow-status.model";
-import { UUIDGenerator } from "../ports/UuidGenerator";
-import { BooksRepository } from "../ports/BooksRepository";
 import { BookCategoryModel } from "../models/book-category.model";
+import { BooksRepository } from "../interfaces/books.repository";
+import { UuidGenerator } from "../interfaces/uuid-generator";
 
 export interface AddBookInput {
   libraryId: string;
@@ -14,7 +14,7 @@ export interface AddBookInput {
 export class AddBookUseCase {
   constructor(
     private readonly repository: BooksRepository,
-    private readonly uuidGenerator: UUIDGenerator
+    private readonly uuidGenerator: UuidGenerator
   ) {}
 
   async execute(input: AddBookInput): Promise<BookModel> {

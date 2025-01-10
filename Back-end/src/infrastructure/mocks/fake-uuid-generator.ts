@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { UUIDGenerator } from "../../domain/library/ports/UuidGenerator";
+import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
 
-export class FakeUuidGenerator implements UUIDGenerator {
+export class FakeUuidGenerator implements UuidGenerator {
   generate(): string {
     return randomUUID();
   }
