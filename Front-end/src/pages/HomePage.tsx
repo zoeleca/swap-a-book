@@ -1,4 +1,4 @@
-import {useFetchLibrary} from "../ui/hooks/handle-click.ts";
+import {useFetchLibrary} from "../ui/hooks/FetchLibrary.tsx";
 
 const HomePage = () => {
   const { loading, error, handleClick } = useFetchLibrary();

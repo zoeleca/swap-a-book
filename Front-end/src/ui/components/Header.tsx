@@ -1,9 +1,9 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
 import {AvatarIcon} from "@radix-ui/react-icons";
-import {useFetchLibrary} from "../hooks/handle-click.ts";
+import {useFetchLibrary} from "../hooks/FetchLibrary.tsx";
 
 const Header = () => {
-  const { loading, error, handleClick } = useFetchLibrary();
+  const { loading, error } = useFetchLibrary();
 
   return (
     <HoverCard.Root openDelay={0}>
@@ -15,10 +15,9 @@ const Header = () => {
         </div>
         <div className="flex items-center space-x-4">
             <AvatarIcon className="w-7 h-7"/>
-          <a href="/Login">
+          <a href="/src/pages/LoginPage">
             <button
-              onClick={handleClick}
-              className="ml-2 inline-block b-4 bg-amber-950 px-6 py-2 font-semibold rounded-3xl text-white shadow shadow-amber-950 hover:bg-white hover:text-amber-950 hover:font-semibold hover:border-amber-950"
+              className="ml-2 inline-block b-4 bg-white px-6 py-2 font-semibold rounded-3xl text-amber-950 shadow shadow-amber-950 hover:bg-amber-900 hover:text-white hover:font-semibold hover:border-amber-950"
               disabled={loading}
             >
               {loading ? "Loading..." : "Login / Join"}
