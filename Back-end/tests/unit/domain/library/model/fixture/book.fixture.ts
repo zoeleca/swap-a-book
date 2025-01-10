@@ -1,5 +1,5 @@
 import { BookModel } from "../../../../../../src/domain/library/models/book.model";
-import { BookCategoryModel } from "../../../../../../src/domain/library/models/book-category.model";
+import { BookCategoriesModel } from "../../../../../../src/domain/library/models/book-categories.model";
 import { BorrowStatusModel } from "../../../../../../src/domain/library/models/borrow-status.model";
 import { randomUUID } from "node:crypto";
 
@@ -9,9 +9,9 @@ export function harryPotter() {
     "Harry Potter",
     ["J.K Rowling"],
     [
-      BookCategoryModel.Fiction,
-      BookCategoryModel.Fantasy,
-      BookCategoryModel.ChildrenStory,
+      BookCategoriesModel.Fiction,
+      BookCategoriesModel.Fantasy,
+      BookCategoriesModel.ChildrenStory,
     ],
     BorrowStatusModel.Available,
     "9d7f9732-4c9b-4f97-8da3-b12859c276a"
@@ -24,9 +24,9 @@ export function lordOfTheRings() {
     "Lord of the Ring",
     ["Tolkien"],
     [
-      BookCategoryModel.Fiction,
-      BookCategoryModel.Mystery,
-      BookCategoryModel.Adventure,
+      BookCategoriesModel.Fiction,
+      BookCategoriesModel.Mystery,
+      BookCategoriesModel.Adventure,
     ],
     BorrowStatusModel.Borrowed,
     "9d7f9732-4c9b-4f97-8da3-b12859c276a"
@@ -39,10 +39,10 @@ export function sherlockHolmes() {
     "sherlock Holmes",
     ["Conan Doyle"],
     [
-      BookCategoryModel.Fiction,
-      BookCategoryModel.Mystery,
-      BookCategoryModel.Crime,
-      BookCategoryModel.Detective,
+      BookCategoriesModel.Fiction,
+      BookCategoriesModel.Mystery,
+      BookCategoriesModel.Crime,
+      BookCategoriesModel.Detective,
     ],
     BorrowStatusModel.Borrowed,
     "9d7f9732-4c9b-4f97-8da3-b12859c276a"
@@ -55,9 +55,9 @@ export function lesMemoires() {
     "les Memoires d'un chat",
     ["Hiro Arikawa"],
     [
-      BookCategoryModel.Fiction,
-      BookCategoryModel.Novel,
-      BookCategoryModel.Adventure,
+      BookCategoriesModel.Fiction,
+      BookCategoriesModel.Novel,
+      BookCategoriesModel.Adventure,
     ],
     BorrowStatusModel.Borrowed,
     "9d7f9732-4c9b-4f97-8da3-b12859c276a"

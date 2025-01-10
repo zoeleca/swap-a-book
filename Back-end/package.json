@@ -13,7 +13,7 @@
     "test:all": "vitest --ui",
     "test:setup": "dotenv -e .env.test npx prisma migrate reset --force --skip-seed && prisma migrate dev",
     "test:integration": "yarn test:setup && vitest --run",
-    "start": "prisma migrate deploy  && yarn ts-node src/main.ts"
+    "start": "prisma migrate dev  && yarn ts-node src/main.ts"
   },
   "author": "",
   "license": "ISC",
@@ -48,6 +48,5 @@
     "unplugin-swc": "1.5.1"
   },
   "prisma": {
-    "seed": "ts-node ./prisma/seed.ts"
   }
 }

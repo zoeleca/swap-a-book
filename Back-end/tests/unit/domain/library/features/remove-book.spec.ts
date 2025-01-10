@@ -1,16 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { BorrowStatusModel } from "../../../../../src/domain/library/models/borrow-status.model";
-import { BookCategoryModel } from "../../../../../src/domain/library/models/book-category.model";
+import { BookCategoriesModel } from "../../../../../src/domain/library/models/book-categories.model";
 import { RemoveBookUseCase } from "../../../../../src/domain/library/features/remove-book.use-case";
-import { FakeUUIDGenerator } from "../../../../../src/infrastructure/secondary/FakeUuidGenerator";
-import { InMemoryBooksRepository } from "../../../../../src/infrastructure/secondary/InMemoryBooksRepository";
 import { BookModel } from "../../../../../src/domain/library/models/book.model";
 import { randomUUID } from "node:crypto";
+import { BookLanguagesModel } from "../../../../../src/domain/library/models/book-languages.model";
+import { BookStatusModel } from "../../../../../src/domain/library/models/book-status.model";
+import { InMemoryBooksRepository } from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
+import { FakeUuidGenerator } from "../../../../../src/infrastructure/mocks/fake-uuid-generator";
 
 describe("removeBook", () => {
   it("should remove a book from my LibraryModel", async () => {
     const repository = new InMemoryBooksRepository();
-    const uuidGenerator = new FakeUUIDGenerator();
+    const uuidGenerator = new FakeUuidGenerator();
     const removeBook = new RemoveBookUseCase(repository);
     const bookId = uuidGenerator.generate();
     const libraryId = randomUUID();
@@ -20,16 +22,18 @@ describe("removeBook", () => {
       "Harry Potter",
       ["J.K. Rowling"],
       [
-        BookCategoryModel.Fiction,
-        BookCategoryModel.Fantasy,
-        BookCategoryModel.ChildrenStory,
+        BookCategoriesModel.Fiction,
+        BookCategoriesModel.Fantasy,
+        BookCategoriesModel.ChildrenStory,
       ],
+      [BookLanguagesModel.English],
       BorrowStatusModel.Available,
+      BookStatusModel.Visible,
       libraryId
     );
     await repository.save(book);
     await removeBook.execute(bookId);
 
-    expect(await repository.findById(bookId)).toBeUndefined();
+    expect(await repository.getById(bookId)).toBeUndefined();
   });
 });

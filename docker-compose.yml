@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   postgres:
     image: postgres:15
@@ -68,7 +67,7 @@ services:
 
 volumes:
   postgres-data:
-  postgres-test-data:
+  postgres-tests-data:
 
 networks:
   app-network:
