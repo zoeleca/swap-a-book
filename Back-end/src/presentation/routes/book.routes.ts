@@ -1,4 +1,3 @@
-// src/presentation/routes/book.routes.ts
 import { Router } from "express";
 import { BookController } from "../controllers/book.controller";
 import { BooksRepository } from "../../domain/library/interfaces/books.repository";

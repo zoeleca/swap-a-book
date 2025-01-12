@@ -18,7 +18,7 @@ services:
   postgres_tests:
     image: postgres:15
     restart: always
-    container_name: swap-a-book-db-tests
+    container_name: swap-a-book-db-test
     ports:
       - "${DB_TEST_PORT_ENV}:5433"
     environment:
@@ -27,7 +27,7 @@ services:
       POSTGRES_DB: ${DB_TEST_NAME_ENV}
     command: postgres -p 5433
     volumes:
-      - postgres-tests-data:/var/lib/postgresql/data
+      - postgres-test-data:/var/lib/postgresql/data
     networks:
       - app-network
 

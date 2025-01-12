@@ -1,55 +1,30 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
-import {AvatarIcon, CalendarIcon, CardStackPlusIcon, PersonIcon, TableIcon} from "@radix-ui/react-icons";
+import {AvatarIcon} from "@radix-ui/react-icons";
+import {useFetchLibrary} from "../hooks/FetchLibrary.tsx";
 
 const Header = () => {
+  const { loading, error } = useFetchLibrary();
+
   return (
     <HoverCard.Root openDelay={0}>
-      <nav className="bg-transparent py-4 px-6 flex items-center justify-between shadow-md">
+      <nav className="bg-amber-950 text-white py-4 px-6 flex items-center justify-between shadow-md">
         <div>
           <a href="/">
-            <h1 className="text-3xl font-bold">L'Avenir du Passé</h1>
+            <h1 className="text-3xl font-bold">Swap a Book</h1>
           </a>
         </div>
         <div className="flex items-center space-x-4">
-          <a href="/Login">
-            <PersonIcon className="w-12 h-12"/>
-          </a>
-          <HoverCard.Trigger asChild>
-            <AvatarIcon className="w-12 h-12"/>
-          </HoverCard.Trigger>
-          <HoverCard.Portal>
-            <HoverCard.Content
-              className="bg-white p-4 w-64 h-auto"
-              sideOffset={5}
+            <AvatarIcon className="w-7 h-7"/>
+          <a href="/src/pages/LoginPage">
+            <button
+              className="ml-2 inline-block b-4 bg-white px-6 py-2 font-semibold rounded-3xl text-amber-950 shadow shadow-amber-950 hover:bg-amber-900 hover:text-white hover:font-semibold hover:border-amber-950"
+              disabled={loading}
             >
-              <div>
-                <ul>
-                  <a href="/Profile">
-                    <li className="border-b border-gray-200 py-2">
-                      Mon profil
-                    </li>
-                  </a>
-                  <a href="/Cart">
-                    <li className="border-b border-gray-200 py-2">
-                      Mon panier
-                    </li>
-                  </a>
-                  <a href="">
-                    <li className="py-2">Mes annonces</li>
-                  </a>
-                </ul>
-              </div>
-            </HoverCard.Content>
-          </HoverCard.Portal>
-          <a href="/post">
-            <CardStackPlusIcon className="w-12 h-12"/>
+              {loading ? "Loading..." : "Login / Join"}
+            </button>
+            {error && <p className="mt-4 text-red-500">{error}</p>}
           </a>
-          <a href="/events">
-            <CalendarIcon className="w-12 h-12"/>
-          </a>
-          <a href="/backoffice">
-            <TableIcon className="w-12 h-12"/>
-          </a>
+
         </div>
       </nav>
     </HoverCard.Root>

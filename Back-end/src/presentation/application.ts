@@ -5,13 +5,15 @@ import { BookRoutes } from "./routes/book.routes";
 import { BooksRepository } from "../domain/library/interfaces/books.repository";
 import { UuidGenerator } from "../domain/library/interfaces/uuid-generator";
 import { LibraryRoutes } from "./routes/library.routes";
+import { UserRepository } from "../domain/user/interfaces/user.repository";
 
 export class Application {
   public expressApp = express();
 
   constructor(
     private readonly bookRepository: BooksRepository, // Make the book repository a dependency
-    private readonly uuidGenerator: UuidGenerator
+    private readonly uuidGenerator: UuidGenerator,
+    private readonly userRepository: UserRepository
   ) {
     this.initializeMiddleware();
     this.initializeControllers();
@@ -38,5 +40,8 @@ export class Application {
 
     const libraryRoutes = new LibraryRoutes(this.bookRepository);
     this.expressApp.use("/library", libraryRoutes.getRouter());
+
+    const authRoutes = new AuthRoutes();
+    this.expressApp.use("/login", authRoutes.getRouter());
   }
 }
