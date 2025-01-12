@@ -7,5 +7,7 @@ export interface BooksRepository {
 
   getById(id: string): Promise<BookModel | undefined>;
 
-  listAllBooks(libraryId: string): Promise<BookModel[]>;
+  listAllBooksByLibraryId(libraryId: string): Promise<BookModel[]>;
+
+  findAllVisibleBooks(): Promise<BookModel[]>;
 }

@@ -26,6 +26,7 @@ export class BookRoutes {
   private initializeRoutes() {
     this.router.post("/", this.bookController.addBook);
     this.router.get("/:id", this.bookController.getBookById);
+    this.router.get("/", this.bookController.findAllVisibleBooks);
     this.router.delete("/:id", this.bookController.removeBook);
   }
 }

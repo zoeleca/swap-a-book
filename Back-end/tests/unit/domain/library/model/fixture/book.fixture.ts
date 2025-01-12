@@ -2,6 +2,10 @@ import { BookModel } from "../../../../../../src/domain/library/models/book.mode
 import { BookCategoriesModel } from "../../../../../../src/domain/library/models/book-categories.model";
 import { BorrowStatusModel } from "../../../../../../src/domain/library/models/borrow-status.model";
 import { randomUUID } from "node:crypto";
+import { BookStatusModel } from "../../../../../../src/domain/library/models/book-status.model";
+import { BookLanguagesModel } from "../../../../../../src/domain/library/models/book-languages.model";
+
+const libraryId = "9d7f9732-4c9b-4f97-8da3-b12859c276a";
 
 export function harryPotter() {
   return new BookModel(
@@ -13,8 +17,10 @@ export function harryPotter() {
       BookCategoriesModel.Fantasy,
       BookCategoriesModel.ChildrenStory,
     ],
+    [BookLanguagesModel.French],
     BorrowStatusModel.Available,
-    "9d7f9732-4c9b-4f97-8da3-b12859c276a"
+    BookStatusModel.Visible,
+    randomUUID()
   );
 }
 
@@ -28,8 +34,10 @@ export function lordOfTheRings() {
       BookCategoriesModel.Mystery,
       BookCategoriesModel.Adventure,
     ],
+    [BookLanguagesModel.English],
     BorrowStatusModel.Borrowed,
-    "9d7f9732-4c9b-4f97-8da3-b12859c276a"
+    BookStatusModel.Hidden,
+    randomUUID()
   );
 }
 
@@ -44,8 +52,10 @@ export function sherlockHolmes() {
       BookCategoriesModel.Crime,
       BookCategoriesModel.Detective,
     ],
+    [BookLanguagesModel.English],
     BorrowStatusModel.Borrowed,
-    "9d7f9732-4c9b-4f97-8da3-b12859c276a"
+    BookStatusModel.Visible,
+    randomUUID()
   );
 }
 
@@ -59,7 +69,9 @@ export function lesMemoires() {
       BookCategoriesModel.Novel,
       BookCategoriesModel.Adventure,
     ],
+    [BookLanguagesModel.English],
     BorrowStatusModel.Borrowed,
-    "9d7f9732-4c9b-4f97-8da3-b12859c276a"
+    BookStatusModel.Visible,
+    randomUUID()
   );
 }

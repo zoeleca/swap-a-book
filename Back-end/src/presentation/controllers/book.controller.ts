@@ -56,6 +56,21 @@ export class BookController {
     }
   };
 
+  public findAllVisibleBooks = async (req: Request, res: Response) => {
+    try {
+      const repository = await this.bookRepository.findAllVisibleBooks();
+      const books = repository.map((book) => this.toResponse(book));
+
+      if (books.length === 0) {
+        return res.status(404).send({ error: "Books not found" });
+      }
+
+      res.status(200).json(books);
+    } catch (error) {
+      res.status(500).send({ error: "Failed to retrieve books" });
+    }
+  };
+
   // Remove a book
   public removeBook = async (req: Request, res: Response) => {
     try {
