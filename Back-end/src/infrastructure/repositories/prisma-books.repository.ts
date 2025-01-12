@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { BookModel } from "../../domain/library/models/book.model";
-import { BookCategoryModel } from "../../domain/library/models/book-category.model";
 import { BorrowStatusModel } from "../../domain/library/models/borrow-status.model";
 import { BooksRepository } from "../../domain/library/interfaces/books.repository";
+import { BookStatusModel } from "../../domain/library/models/book-status.model";
+import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
+import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
 
 const prisma = new PrismaClient();
 
@@ -16,6 +18,8 @@ export class PrismaBooksRepository implements BooksRepository {
         categories: book.categories,
         borrowStatus: book.borrowStatus,
         libraryId: book.libraryId,
+        status: book.status,
+        languages: book.languages,
       },
     });
   }
@@ -37,8 +41,10 @@ export class PrismaBooksRepository implements BooksRepository {
       id: book.id,
       title: book.title,
       authors: book.authors,
-      categories: book.categories as BookCategoryModel[],
+      categories: book.categories as BookCategoriesModel[],
       borrowStatus: book.borrowStatus as BorrowStatusModel,
+      status: book.status as BookStatusModel,
+      languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
     };
   }
@@ -54,8 +60,10 @@ export class PrismaBooksRepository implements BooksRepository {
       id: book.id,
       title: book.title,
       authors: book.authors,
-      categories: book.categories as BookCategoryModel[],
+      categories: book.categories as BookCategoriesModel[],
       borrowStatus: book.borrowStatus as BorrowStatusModel,
+      status: book.status as BookStatusModel,
+      languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
     }));
   }

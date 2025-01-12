@@ -1,27 +1,13 @@
-# Step 1: Build the frontend application
-FROM node:18 AS build
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package.json and yarn.lock to the container
-COPY package.json yarn.lock ./
+COPY package.json .
 
-RUN yarn
+RUN npm install
 
-# Copy the rest of the project files
 COPY . .
 
-# Build the app
-RUN yarn build
+EXPOSE 8080
 
-# Step 2: Serve the frontend with Nginx
-FROM nginx:alpine
-
-# Copy the build output from the first stage
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80 (Nginx default)
-EXPOSE 80
-
-# Start the Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "npm", "run", "dev" ]

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { randomUUID } from "node:crypto";
 import { BookModel } from "../../../../../src/domain/library/models/book.model";
-import { BookCategoryModel } from "../../../../../src/domain/library/models/book-category.model";
+import { BookCategoriesModel } from "../../../../../src/domain/library/models/book-categories.model";
 import { BorrowStatusModel } from "../../../../../src/domain/library/models/borrow-status.model";
 import { InMemoryBooksRepository } from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
 
@@ -14,7 +14,7 @@ describe("InMemoryBooksRepository", () => {
       randomUUID(),
       "Harry Potter",
       ["J.K Rowling"],
-      [BookCategoryModel.Fiction, BookCategoryModel.Fantasy],
+      [BookCategoriesModel.Fiction, BookCategoriesModel.Fantasy],
       BorrowStatusModel.Available,
       libraryId
     );
@@ -23,7 +23,7 @@ describe("InMemoryBooksRepository", () => {
       randomUUID(),
       "Lord of the Rings",
       ["J.R.R. Tolkien"],
-      [BookCategoryModel.Fiction, BookCategoryModel.Adventure],
+      [BookCategoriesModel.Fiction, BookCategoriesModel.Adventure],
       BorrowStatusModel.Borrowed,
       libraryId
     );

@@ -15,7 +15,7 @@ services:
     networks:
       - app-network
 
-  postgres_test:
+  postgres_tests:
     image: postgres:15
     restart: always
     container_name: swap-a-book-db-tests
@@ -56,7 +56,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "80:80"
+      - "3000:3000"
     environment:
       VITE_API_URL: "http://backend:8000"
     depends_on:
@@ -68,7 +68,7 @@ services:
 
 volumes:
   postgres-data:
-  postgres-test-data:
+  postgres-tests-data:
 
 networks:
   app-network:

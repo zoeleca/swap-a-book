@@ -1,14 +1,17 @@
 import { BookModel } from "../models/book.model";
 import { BorrowStatusModel } from "../models/borrow-status.model";
-import { BookCategoryModel } from "../models/book-category.model";
+import { BookCategoriesModel } from "../models/book-categories.model";
 import { BooksRepository } from "../interfaces/books.repository";
 import { UuidGenerator } from "../interfaces/uuid-generator";
+import { BookLanguagesModel } from "../models/book-languages.model";
+import { BookStatusModel } from "../models/book-status.model";
 
 export interface AddBookInput {
   libraryId: string;
   title: string;
   authors: string[];
-  categories: BookCategoryModel[];
+  categories: BookCategoriesModel[];
+  languages: BookLanguagesModel[];
 }
 
 export class AddBookUseCase {
@@ -23,7 +26,9 @@ export class AddBookUseCase {
       input.title,
       input.authors,
       input.categories,
+      input.languages,
       BorrowStatusModel.Available,
+      BookStatusModel.Visible,
       input.libraryId
     );
 

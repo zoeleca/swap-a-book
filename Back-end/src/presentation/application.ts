@@ -27,7 +27,7 @@ export class Application {
     this.expressApp.use(express.json());
     this.expressApp.use(
       cors({
-        origin: ["http://localhost", "http://localhost:80"],
+        origin: ["http://localhost", "http://localhost:3000"],
       })
     );
   }

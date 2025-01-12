@@ -1,4 +1,4 @@
-export enum BookCategoryModel {
+export enum BookCategoriesModel {
   Unknown = "Unknown",
   Fiction = "Fiction",
   Fantasy = "Fantasy",

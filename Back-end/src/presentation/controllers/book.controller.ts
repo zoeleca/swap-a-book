@@ -1,9 +1,9 @@
-// src/presentation/controllers/BookController.ts
 import { Request, Response } from "express";
 import { AddBookUseCase } from "../../domain/library/features/add-book.use-case";
 import { RemoveBookUseCase } from "../../domain/library/features/remove-book.use-case";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
 import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
+import { BookModel } from "../../domain/library/models/book.model";
+import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
 
 export class BookController {
   private addBookUseCase: AddBookUseCase;
@@ -23,7 +23,7 @@ export class BookController {
   // Add a new book
   public addBook = async (req: Request, res: Response) => {
     try {
-      const { libraryId, title, authors, categories } = req.body;
+      const { libraryId, title, authors, categories, languages } = req.body;
 
       // Execute the AddBookUseCase use case
       const addedBook = await this.addBookUseCase.execute({
@@ -31,6 +31,7 @@ export class BookController {
         title,
         authors,
         categories,
+        languages,
       });
 
       res.status(201).json(this.toResponse(addedBook));
@@ -67,8 +68,7 @@ export class BookController {
     }
   };
 
-  // Helper function to format the response
-  private toResponse(book: any) {
+  private toResponse(book: BookModel) {
     return {
       book: {
         id: book.id,
@@ -76,6 +76,8 @@ export class BookController {
         authors: book.authors,
         categories: book.categories,
         borrowStatus: book.borrowStatus,
+        status: book.status,
+        languages: book.languages,
       },
     };
   }

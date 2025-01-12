@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { AddBookUseCase } from "../../../../../src/domain/library/features/add-book.use-case";
-import { BookCategoryModel } from "../../../../../src/domain/library/models/book-category.model";
+import { BookCategoriesModel } from "../../../../../src/domain/library/models/book-categories.model";
 import { randomUUID } from "node:crypto";
 import { InMemoryBooksRepository } from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
 import { FakeUuidGenerator } from "../../../../../src/infrastructure/mocks/fake-uuid-generator";
+import { BookLanguagesModel } from "../../../../../src/domain/library/models/book-languages.model";
 
 describe("listAllBooks", () => {
   it("should display all books of my LibraryModel", async () => {
@@ -17,10 +18,11 @@ describe("listAllBooks", () => {
       title: "Harry Potter",
       authors: ["J.K Rowling"],
       categories: [
-        BookCategoryModel.Fiction,
-        BookCategoryModel.Fantasy,
-        BookCategoryModel.ChildrenStory,
+        BookCategoriesModel.Fiction,
+        BookCategoriesModel.Fantasy,
+        BookCategoriesModel.ChildrenStory,
       ],
+      languages: [BookLanguagesModel.English],
     });
 
     const lordOfTheRingBook = await addBook.execute({
@@ -28,10 +30,11 @@ describe("listAllBooks", () => {
       title: "Lord of the Rings",
       authors: ["Tolkien"],
       categories: [
-        BookCategoryModel.Fiction,
-        BookCategoryModel.Mystery,
-        BookCategoryModel.Adventure,
+        BookCategoriesModel.Fiction,
+        BookCategoriesModel.Mystery,
+        BookCategoriesModel.Adventure,
       ],
+      languages: [BookLanguagesModel.English],
     });
 
     const books = await repository.listAllBooks(libraryId);

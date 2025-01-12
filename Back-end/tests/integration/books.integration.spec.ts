@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { randomUUID } from "node:crypto";
-import { BookCategoryModel } from "../../src/domain/library/models/book-category.model";
-import { Book, BorrowStatus, PrismaClient } from "@prisma/client";
+import { BookCategoriesModel } from "../../src/domain/library/models/book-categories.model";
+import { Book, BookStatus, BorrowStatus, PrismaClient } from "@prisma/client";
+import { BookLanguagesModel } from "../../src/domain/library/models/book-languages.model";
 
 let prisma = new PrismaClient();
 
@@ -15,6 +16,7 @@ describe("PrismaBooksRepository", () => {
         id: userId,
         email: `testuser-${userId}@example.com`,
         name: "Test User",
+        auth0Id: "anyString",
       },
     });
 
@@ -40,11 +42,13 @@ describe("PrismaBooksRepository", () => {
         title: "Harry Potter 2",
         authors: ["J.K Rowling"],
         categories: [
-          BookCategoryModel.Fiction,
-          BookCategoryModel.Novel,
-          BookCategoryModel.Fantasy,
+          BookCategoriesModel.Fiction,
+          BookCategoriesModel.Novel,
+          BookCategoriesModel.Fantasy,
         ],
+        languages: [BookLanguagesModel.English],
         borrowStatus: BorrowStatus.Available,
+        status: BookStatus.Visible,
         libraryId,
       };
 

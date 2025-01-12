@@ -2,6 +2,12 @@
 CREATE TYPE "BookCategory" AS ENUM ('Unknown', 'Fiction', 'Fantasy', 'ChildrenStory', 'Adventure', 'Novel', 'Mystery', 'Crime', 'Detective');
 
 -- CreateEnum
+CREATE TYPE "BookLanguage" AS ENUM ('English', 'Chinese', 'Hindi', 'Spanish', 'French', 'Arabic', 'Bengali', 'Portuguese', 'Russian', 'Urdu', 'Indonesian', 'German', 'Japanese', 'Swahili', 'Marathi', 'Telugu', 'Turkish', 'Korean', 'Tamil', 'Vietnamese');
+
+-- CreateEnum
+CREATE TYPE "BookStatus" AS ENUM ('Visible', 'Hidden', 'Removed');
+
+-- CreateEnum
 CREATE TYPE "BorrowStatus" AS ENUM ('Borrowed', 'Available');
 
 -- CreateTable
@@ -9,6 +15,8 @@ CREATE TABLE "User" (
     "id" UUID NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "picture" TEXT,
+    "auth0Id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -32,7 +40,9 @@ CREATE TABLE "Book" (
     "title" TEXT NOT NULL,
     "authors" TEXT[],
     "categories" "BookCategory"[],
+    "languages" "BookLanguage"[],
     "borrowStatus" "BorrowStatus" NOT NULL,
+    "status" "BookStatus" NOT NULL,
     "libraryId" UUID NOT NULL,
 
     CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
@@ -40,6 +50,9 @@ CREATE TABLE "Book" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_auth0Id_key" ON "User"("auth0Id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Library_userId_key" ON "Library"("userId");
