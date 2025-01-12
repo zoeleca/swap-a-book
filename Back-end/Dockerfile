@@ -1,13 +1,14 @@
-# Stage 1: Build the application
 FROM node:20-alpine AS build
 
-# Set the working directory
+# Install OpenSSL (for Prisma compatibility)
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copy package.json and yarn.lock to install dependencies
 COPY package.json yarn.lock ./
 
-# Install all dependencies (dev dependencies included)
+# Install dependencies
 RUN yarn
 
 COPY prisma ./prisma/
