@@ -4,11 +4,13 @@ import { Application } from "../../src/presentation/application";
 import { FakeUuidGenerator } from "../../src/infrastructure/mocks/fake-uuid-generator";
 import { InMemoryBooksRepository } from "../../src/infrastructure/mocks/in-memory-books.repository";
 import { randomUUID } from "node:crypto";
+import { InMemoryUserRepository } from "../../src/infrastructure/mocks/InMemoryUserRepository";
 
 describe("library", () => {
   const uuidGenerator = new FakeUuidGenerator();
   const booksRepository = new InMemoryBooksRepository();
-  const app = new Application(booksRepository, uuidGenerator);
+  const userRepository = new InMemoryUserRepository();
+  const app = new Application(booksRepository, uuidGenerator, userRepository);
   const supertestApp = supertest(app.expressApp);
 
   beforeAll(async () => {

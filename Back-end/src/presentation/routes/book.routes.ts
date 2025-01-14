@@ -15,7 +15,7 @@ export class BookRoutes {
     this.bookController = new BookController(
       this.bookRepository,
       this.uuidGenerator
-    ); // Pass the dependencies to the controller
+    );
     this.initializeRoutes();
   }
 

@@ -5,7 +5,9 @@ import { BookRoutes } from "./routes/book.routes";
 import { BooksRepository } from "../domain/library/interfaces/books.repository";
 import { UuidGenerator } from "../domain/library/interfaces/uuid-generator";
 import { LibraryRoutes } from "./routes/library.routes";
-import { UserRepository } from "../domain/user/interfaces/user.repository";
+import { auth } from "express-openid-connect";
+import { AuthenticationRoutes } from "./routes/authentication.routes";
+import { UserRepository } from "../domain/library/interfaces/user.repository";
 
 export class Application {
   public expressApp = express();
@@ -29,9 +31,24 @@ export class Application {
     this.expressApp.use(express.json());
     this.expressApp.use(
       cors({
-        origin: ["http://localhost", "http://localhost:3000"],
+        origin: ["http://localhost:3000"],
       })
     );
+
+    const config = {
+      authRequired: false,
+      auth0Logout: true,
+      secret: "a long, randomly-generated string stored in env",
+      baseURL: "http://localhost:8000",
+      clientID: "j8saAjWhW63FZHmiqptUDS72qEHI5EeE",
+      issuerBaseURL: "https://dev-b77oxg884oraklfh.eu.auth0.com",
+    };
+
+    this.expressApp.use(auth(config));
+
+    this.expressApp.get("/", (req, res) => {
+      res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+    });
   }
 
   private initializeControllers() {
@@ -41,7 +58,7 @@ export class Application {
     const libraryRoutes = new LibraryRoutes(this.bookRepository);
     this.expressApp.use("/library", libraryRoutes.getRouter());
 
-    const authRoutes = new AuthRoutes();
-    this.expressApp.use("/login", authRoutes.getRouter());
+    const authenticationRoutes = new AuthenticationRoutes(this.userRepository);
+    this.expressApp.use("/auth", authenticationRoutes.getRouter());
   }
 }
