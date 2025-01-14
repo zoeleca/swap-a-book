@@ -9,9 +9,7 @@ export const useFetchLibrary = () => {
     setError(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:8000/library/2b3a774a-178d-404c-95d2-b2bc68970608/books`
-      );
+      const response = await fetch(`http://localhost:8000/books`);
       if (!response.ok) {
         throw new Error("Failed to fetch library");
       }
