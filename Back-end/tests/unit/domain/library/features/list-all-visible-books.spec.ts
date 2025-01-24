@@ -1,20 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { AddBookUseCase } from "../../../../../src/domain/library/features/add-book.use-case";
 import { BookCategoriesModel } from "../../../../../src/domain/library/models/book-categories.model";
-import { randomUUID } from "node:crypto";
 import { InMemoryBooksRepository } from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
 import { FakeUuidGenerator } from "../../../../../src/infrastructure/mocks/fake-uuid-generator";
 import { BookLanguagesModel } from "../../../../../src/domain/library/models/book-languages.model";
 
-describe("listAllBooks", () => {
-  it("should display all books of my LibraryModel", async () => {
+describe("listAllVisibleBooks", () => {
+  it("should display all visible books", async () => {
     const repository = new InMemoryBooksRepository();
     const uuidGenerator = new FakeUuidGenerator();
     const addBook = new AddBookUseCase(repository, uuidGenerator);
-    const libraryId = randomUUID();
 
     const harryPotterBook = await addBook.execute({
-      libraryId,
+      libraryId: uuidGenerator.generate(),
       title: "Harry Potter",
       authors: ["J.K Rowling"],
       categories: [
@@ -26,7 +24,7 @@ describe("listAllBooks", () => {
     });
 
     const lordOfTheRingBook = await addBook.execute({
-      libraryId,
+      libraryId: uuidGenerator.generate(),
       title: "Lord of the Rings",
       authors: ["Tolkien"],
       categories: [
@@ -37,10 +35,19 @@ describe("listAllBooks", () => {
       languages: [BookLanguagesModel.English],
     });
 
-    const books = await repository.listAllBooksByLibraryId(libraryId);
+    const theGrinchBook = await addBook.execute({
+      libraryId: uuidGenerator.generate(),
+      title: "The Grinch",
+      authors: ["Grinch"],
+      categories: [BookCategoriesModel.Fantasy, BookCategoriesModel.Adventure],
+      languages: [BookLanguagesModel.French],
+    });
 
-    expect(books).toHaveLength(2);
+    const books = await repository.findAllVisibleBooks();
+
+    expect(books).toHaveLength(3);
     expect(books).toContainEqual(harryPotterBook);
     expect(books).toContainEqual(lordOfTheRingBook);
+    expect(books).toContainEqual(theGrinchBook);
   });
 });

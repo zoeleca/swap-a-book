@@ -27,7 +27,7 @@ services:
       POSTGRES_DB: ${DB_TEST_NAME_ENV}
     command: postgres -p 5433
     volumes:
-      - postgres-test-data:/var/lib/postgresql/data
+      - postgres-tests-data:/var/lib/postgresql/data
     networks:
       - app-network
 
@@ -56,13 +56,13 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       VITE_API_URL: "http://backend:8000"
     depends_on:
       - backend
     volumes:
-      - ./Front-end:/app
+      - ./Front-end:/app/src
     networks:
       - app-network
 

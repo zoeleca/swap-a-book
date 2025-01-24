@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
 import { ListAllBooksUseCase } from "../../domain/library/features/list-all-books.use-case";
+import { BookModel } from "../../domain/library/models/book.model";
 
 export class LibraryController {
   private listLibraryBooks: ListAllBooksUseCase;
@@ -24,7 +25,7 @@ export class LibraryController {
     }
   };
 
-  private toResponse(book: any) {
+  private toResponse(book: BookModel) {
     return {
       book: {
         id: book.id,
@@ -32,6 +33,8 @@ export class LibraryController {
         authors: book.authors,
         categories: book.categories,
         borrowStatus: book.borrowStatus,
+        status: book.status,
+        languages: book.languages,
       },
     };
   }

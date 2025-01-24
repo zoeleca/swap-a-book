@@ -1,29 +1,13 @@
-# Stage 1: Build the application
-FROM node:18-alpine AS build
+FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and yarn.lock for installing dependencies
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+RUN npm install
 
-# Copy the rest of the app's source code
 COPY . .
 
-# Build the app
-RUN yarn build
+EXPOSE 8080
 
-# Stage 2: Serve the application
-FROM nginx:stable-alpine
-
-# Copy the built files from the previous stage
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose the default nginx port
-EXPOSE 80
-
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "npm", "run", "dev" ]

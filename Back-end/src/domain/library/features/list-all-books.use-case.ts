@@ -5,7 +5,7 @@ export class ListAllBooksUseCase {
   constructor(private readonly repository: BooksRepository) {}
 
   async execute(libraryId: string): Promise<BookModel[]> {
-    const books = this.repository.listAllBooks(libraryId);
+    const books = this.repository.listAllBooksByLibraryId(libraryId);
     return books || [];
   }
 }
