@@ -1,9 +1,8 @@
-import HomePage from "./presentation/pages/HomePage";
+import HomePage from "./pages/HomePage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./presentation/components/Header.tsx";
-import LoginPage from "./presentation/pages/LoginPage.tsx";
+import Header from "./ui/components/Header.tsx";
 
-// import Header from "./presentation/components/Header.tsx";
+// import Header from "./ui/components/Header.tsx";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Router>
     </>
