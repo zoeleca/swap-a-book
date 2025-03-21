@@ -4,10 +4,8 @@ import {BookRoutes} from "./routes/book.routes";
 import {BooksRepository} from "../domain/library/interfaces/books.repository";
 import {UuidGenerator} from "../domain/library/interfaces/uuid-generator";
 import {LibraryRoutes} from "./routes/library.routes";
-import {UserRepository} from "../domain/library/interfaces/user.repository";
 import dotenv from "dotenv";
 import {auth, requiresAuth} from "express-openid-connect";
-import {AuthenticationRoutes} from "./routes/authentication.routes";
 
 dotenv.config();
 
@@ -17,7 +15,6 @@ export class Application {
   constructor(
     private readonly bookRepository: BooksRepository,
     private readonly uuidGenerator: UuidGenerator,
-    private readonly userRepository: UserRepository
   ) {
     this.initializeMiddleware();
     this.initializeControllers();
@@ -68,7 +65,5 @@ export class Application {
     const libraryRoutes = new LibraryRoutes(this.bookRepository);
     this.expressApp.use("/library", libraryRoutes.getRouter());
 
-    const authenticationRoutes = new AuthenticationRoutes(this.userRepository);
-    this.expressApp.use("/auth", authenticationRoutes.getRouter());
   }
 }

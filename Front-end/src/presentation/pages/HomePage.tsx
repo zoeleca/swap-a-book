@@ -1,9 +1,9 @@
-import { useFetchLibrary } from "../ui/hooks/FetchLibrary.tsx";
-import SearchBar from "../ui/components/SearchBar.tsx";
-import BookList from "../ui/components/BookList.tsx";
+import BookList from "../components/BookList.tsx";
+import SearchBar from "../components/SearchBar.tsx";
+import {useFetchLibrary} from "../hooks/Login.tsx";
 
 const HomePage = () => {
-  const { loading, error, handleClick } = useFetchLibrary();
+  const {loading, error, handleClick} = useFetchLibrary();
   return (
     <>
       <div className=" p-40 flex flex-col justitify- items-center">
@@ -11,13 +11,13 @@ const HomePage = () => {
           <h3 className="my-3 text-xl text-amber-950 font-bold ">
             Find A Book
           </h3>
-          <SearchBar />
+          <SearchBar/>
         </div>
         <div className="font-helvetica border-t border-b p-20 flex flex-col">
           <h1 className="text-5xl text-amber-950 font-bold text-center">
             Swap a Book
           </h1>
-          <br />
+          <br/>
           <h3 className="my-3 text-xl text-amber-950 font-bold text-center">
             Your neighborhood library, reimagined.
           </h3>
@@ -40,19 +40,19 @@ const HomePage = () => {
         {error && <p className="mt-4 text-red-500">{error}</p>}
         <div className="w-full py-20">
           <div className="border-l border-r  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
-            <BookList />
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
+            <BookList/>
           </div>
         </div>
       </div>
