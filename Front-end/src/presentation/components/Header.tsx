@@ -1,6 +1,7 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
-import { AvatarIcon } from "@radix-ui/react-icons";
+import {AvatarIcon} from "@radix-ui/react-icons";
 import LoginButton from "./LoginButton.tsx";
+import LogoutButton from "./LogoutButton.tsx";
 
 const Header = () => {
   // const { loading, error } = useFetchLibrary();
@@ -14,8 +15,9 @@ const Header = () => {
           </a>
         </div>
         <div className="flex items-center space-x-4">
-          <AvatarIcon className="w-7 h-7" />
-          <LoginButton />
+          <AvatarIcon className="w-7 h-7"/>
+          <LoginButton/>
+          <LogoutButton/>
         </div>
       </nav>
     </HoverCard.Root>

@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { AddBookUseCase } from "../../domain/library/features/add-book.use-case";
-import { RemoveBookUseCase } from "../../domain/library/features/remove-book.use-case";
-import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
-import { BookModel } from "../../domain/library/models/book.model";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import {Request, Response} from "express";
+import {AddBookUseCase} from "../../domain/library/features/add-book.use-case";
+import {RemoveBookUseCase} from "../../domain/library/features/remove-book.use-case";
+import {UuidGenerator} from "../../domain/library/interfaces/uuid-generator";
+import {BookModel} from "../../domain/library/models/book.model";
+import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 
 export class BookController {
   private addBookUseCase: AddBookUseCase;
@@ -20,12 +20,10 @@ export class BookController {
     this.removeBookUseCase = new RemoveBookUseCase(this.bookRepository);
   }
 
-  // Add a new book
   public addBook = async (req: Request, res: Response) => {
     try {
-      const { libraryId, title, authors, categories, languages } = req.body;
+      const {libraryId, title, authors, categories, languages} = req.body;
 
-      // Execute the AddBookUseCase use case
       const addedBook = await this.addBookUseCase.execute({
         libraryId,
         title,
@@ -36,7 +34,7 @@ export class BookController {
 
       res.status(201).json(this.toResponse(addedBook));
     } catch (error) {
-      res.status(500).send({ error: "Failed to add book" });
+      res.status(500).send({error: "Failed to add book"});
     }
   };
 
@@ -47,12 +45,12 @@ export class BookController {
       const book = await this.bookRepository.getById(bookId);
 
       if (!book) {
-        return res.status(404).send({ error: "BookModel not found" });
+        return res.status(404).send({error: "BookModel not found"});
       }
 
       res.status(200).json(this.toResponse(book));
     } catch (error) {
-      res.status(500).send({ error: "Failed to retrieve book" });
+      res.status(500).send({error: "Failed to retrieve book"});
     }
   };
 
@@ -64,7 +62,7 @@ export class BookController {
 
       res.status(204).send(); // No content
     } catch (error) {
-      res.status(500).send({ error: "Failed to remove book" });
+      res.status(500).send({error: "Failed to remove book"});
     }
   };
 

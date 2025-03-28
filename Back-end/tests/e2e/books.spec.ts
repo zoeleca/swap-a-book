@@ -1,8 +1,8 @@
 import supertest from "supertest";
-import { beforeEach, describe, expect, it } from "vitest";
-import { Application } from "../../src/presentation/application";
-import { FakeUuidGenerator } from "../../src/infrastructure/mocks/fake-uuid-generator";
-import { InMemoryBooksRepository } from "../../src/infrastructure/mocks/in-memory-books.repository";
+import {beforeEach, describe, expect, it} from "vitest";
+import {Application} from "../../src/presentation/application";
+import {FakeUuidGenerator} from "../../src/infrastructure/mocks/fake-uuid-generator";
+import {InMemoryBooksRepository} from "../../src/infrastructure/mocks/in-memory-books.repository";
 
 describe("library", () => {
   const uuidGenerator = new FakeUuidGenerator();
@@ -52,6 +52,7 @@ describe("library", () => {
       authors: ["J.K Rowling"],
       categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       borrowStatus: "Available",
+      status: "Visible",
     });
   });
 
