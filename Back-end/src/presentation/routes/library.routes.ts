@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { LibraryController } from "../controllers/library.controller";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import {Router} from "express";
+import {LibraryController} from "../controllers/library.controller";
+import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 
 export class LibraryRoutes {
   private router: Router;
@@ -18,5 +18,8 @@ export class LibraryRoutes {
 
   private initializeRoutes() {
     this.router.get("/:libraryId/books", this.libraryController.listBooks);
+
+    this.router.get("/", this.libraryController.getLibrary);
+
   }
 }

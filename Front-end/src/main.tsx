@@ -1,8 +1,8 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import {StrictMode} from "react";
+import {createRoot} from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { Auth0Provider } from "@auth0/auth0-react";
+import {Auth0Provider} from "@auth0/auth0-react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -11,9 +11,11 @@ createRoot(document.getElementById("root")!).render(
       clientId="jho4nyC2weC7ZwABTc7nqFe0SPkjz6zw"
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: "jho4nyC2weC7ZwABTc7nqFe0SPkjz6zw",
+        scope: "openid profile email",
       }}
     >
-      <App />
+      <App/>
     </Auth0Provider>
   </StrictMode>
 );

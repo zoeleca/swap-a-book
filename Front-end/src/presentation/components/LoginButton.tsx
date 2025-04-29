@@ -1,29 +1,33 @@
 import {useAuth0} from "@auth0/auth0-react";
 
 const LoginButton = () => {
-  const {loginWithRedirect, logout, isAuthenticated, user} = useAuth0();
+  const {loginWithRedirect, logout, isAuthenticated, user, isLoading} = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="flex items-center space-x-3">
-      {isAuthenticated ? (
-        <>
-          <span>{user?.name}</span>
-          <button
-            onClick={() => logout({logoutParams: {returnTo: window.location.origin}})}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Logout
-          </button>
-        </>
-      ) : (
+    <>
+      {!isAuthenticated ? (
         <button
           onClick={() => loginWithRedirect()}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-white text-amber-950 font-bold py-2 px-4 rounded hover:bg-amber-100"
         >
-          Login
+          Log In
         </button>
+      ) : (
+        <div className="flex items-center space-x-2">
+          <span className="hidden sm:block">{user?.name}</span> {/* Show name only on desktop */}
+          <button
+            onClick={() => logout({logoutParams: {returnTo: window.location.origin}})}
+            className="bg-white text-amber-950 font-bold py-2 px-4 rounded hover:bg-amber-100"
+          >
+            Log Out
+          </button>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
