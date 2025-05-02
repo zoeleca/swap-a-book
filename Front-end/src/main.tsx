@@ -4,15 +4,16 @@ import App from "./App.tsx";
 import "./index.css";
 import {Auth0Provider} from "@auth0/auth0-react";
 
+console.log('Auth0 Domain:', process.env.VITE_AUTH0_DOMAIN); // This should output your correct Auth0 domain
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Auth0Provider
-      domain="https://dev-7tlf1lodcp8t8adj.eu.auth0.com"
-      clientId="jho4nyC2weC7ZwABTc7nqFe0SPkjz6zw"
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: "jho4nyC2weC7ZwABTc7nqFe0SPkjz6zw",
-        scope: "openid profile email",
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
       }}
     >
       <App/>

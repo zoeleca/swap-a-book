@@ -1,9 +1,12 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
 import {AvatarIcon} from "@radix-ui/react-icons";
 import LoginButton from "./LoginButton.tsx";
+import {useNavigate} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
 
 const Header = () => {
-  // const { loading, error } = useFetchLibrary();
+  const navigate = useNavigate();
+  const {isAuthenticated, user} = useAuth0();
 
   return (
     <HoverCard.Root openDelay={0}>
@@ -14,8 +17,21 @@ const Header = () => {
           </a>
         </div>
         <div className="flex items-center space-x-4">
-          <AvatarIcon className="w-7 h-7"/>
-          <LoginButton/>
+          {isAuthenticated ? (
+            <>
+              {/* Wrap AvatarIcon in a div to ensure clickability */}
+              <div
+                className="relative cursor-pointer"
+                onClick={() => navigate("/profile")}
+                style={{zIndex: 10}} // Ensure it's clickable and not hidden
+              >
+                <AvatarIcon className="w-10 h-10"/>
+              </div>
+              <span>{user?.name}</span> {/* Optionally show user's name */}
+            </>
+          ) : (
+            <LoginButton/>
+          )}
         </div>
       </nav>
     </HoverCard.Root>

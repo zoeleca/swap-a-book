@@ -11,7 +11,11 @@ const LoginButton = () => {
     <>
       {!isAuthenticated ? (
         <button
-          onClick={() => loginWithRedirect()}
+          onClick={() => loginWithRedirect({
+            appState: {
+              returnTo: '/profile', // or wherever you want to land after login
+            }
+          })}
           className="bg-white text-amber-950 font-bold py-2 px-4 rounded hover:bg-amber-100"
         >
           Log In
