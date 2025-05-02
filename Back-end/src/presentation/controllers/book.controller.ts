@@ -22,10 +22,23 @@ export class BookController {
 
   public addBook = async (req: Request, res: Response) => {
     try {
-      const {libraryId, title, authors, categories, languages} = req.body;
+      const auth0Id = (req as any).auth?.payload?.sub;
+
+      if (!auth0Id) {
+        return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
+      }
+
+      // Find the user by auth0Id
+      const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+
+      if (!user || !user.libraryId) {
+        return res.status(404).send({error: "User or user's library not found"});
+      }
+
+      const {title, authors, categories, languages} = req.body;
 
       const addedBook = await this.addBookUseCase.execute({
-        libraryId,
+        libraryId: user.libraryId,
         title,
         authors,
         categories,
@@ -34,6 +47,7 @@ export class BookController {
 
       res.status(201).json(this.toResponse(addedBook));
     } catch (error) {
+      console.error("Add book error:", error);
       res.status(500).send({error: "Failed to add book"});
     }
   };

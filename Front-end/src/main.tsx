@@ -9,11 +9,11 @@ console.log('Auth0 Domain:', process.env.VITE_AUTH0_DOMAIN); // This should outp
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Auth0Provider
-      domain={import.meta.env.VITE_AUTH0_DOMAIN}
-      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      domain="dev-b77oxg884oraklfh.eu.auth0.com"
+      clientId="VWwfUcSXgvdiwLuP6l3uttMckvPNbczM"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        audience: "http://localhost:8000",
       }}
     >
       <App/>

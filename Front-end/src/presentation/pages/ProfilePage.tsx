@@ -1,28 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {useAuth0} from '@auth0/auth0-react';
 import axios from 'axios';
+import AddBookForm from "../hooks/AddBook.tsx";
 
 const Profile: React.FC = () => {
-  const {user, isAuthenticated, isLoading} = useAuth0();
+  const {user, isAuthenticated, isLoading, getAccessTokenSilently} = useAuth0();
   const [books, setBooks] = useState([]);
+
+  const fetchBooks = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await axios.get('http://localhost:8000/library', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setBooks(response.data);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
-      // Fetch the books from your backend API
-      axios
-        .get('http://localhost:8000/library', {
-          headers: {
-            Authorization: `Bearer ${user?.sub}`, // Add authentication header if needed
-          },
-        })
-        .then((response) => {
-          setBooks(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching books:', error);
-        });
+      fetchBooks();
     }
-  }, [isAuthenticated, user?.sub]);
+  }, [isAuthenticated]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -33,7 +36,8 @@ const Profile: React.FC = () => {
           <h2 className="text-4xl font-semibold text-gray-800 mb-6">
             Welcome, {user?.name}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <AddBookForm onBookAdded={fetchBooks}/>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-8">
             {books.length > 0 ? (
               books.map((book: any) => (
                 <div
@@ -41,13 +45,13 @@ const Profile: React.FC = () => {
                   className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
                 >
                   <img
-                    src={book.coverImage}
+                    src={book.coverImage || 'https://via.placeholder.com/150'}
                     alt={book.title}
                     className="w-full h-56 object-cover"
                   />
                   <div className="p-4">
                     <h3 className="text-lg font-semibold text-gray-900">{book.title}</h3>
-                    <p className="text-gray-600">{book.author}</p>
+                    <p className="text-gray-600">{book.author || book.authors?.join(', ')}</p>
                   </div>
                 </div>
               ))

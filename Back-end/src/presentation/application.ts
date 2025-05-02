@@ -43,8 +43,13 @@ export class Application {
   }
 
   private initializeControllers() {
+    const jwtCheck = auth({
+      audience: process.env.AUTH0_AUDIENCE,
+      issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+      tokenSigningAlg: "RS256",
+    });
     const bookRoutes = new BookRoutes(this.bookRepository, this.uuidGenerator);
-    this.expressApp.use("/books", bookRoutes.getRouter());
+    this.expressApp.use("/books", jwtCheck, bookRoutes.getRouter());
 
     const libraryRoutes = new LibraryRoutes(this.bookRepository);
     this.expressApp.use("/library", libraryRoutes.getRouter());

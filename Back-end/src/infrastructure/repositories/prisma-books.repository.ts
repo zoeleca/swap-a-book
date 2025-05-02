@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-import { BookModel } from "../../domain/library/models/book.model";
-import { BorrowStatusModel } from "../../domain/library/models/borrow-status.model";
-import { BooksRepository } from "../../domain/library/interfaces/books.repository";
-import { BookStatusModel } from "../../domain/library/models/book-status.model";
-import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
-import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
+import {PrismaClient} from "@prisma/client";
+import {BookModel} from "../../domain/library/models/book.model";
+import {BorrowStatusModel} from "../../domain/library/models/borrow-status.model";
+import {BooksRepository} from "../../domain/library/interfaces/books.repository";
+import {BookStatusModel} from "../../domain/library/models/book-status.model";
+import {BookLanguagesModel} from "../../domain/library/models/book-languages.model";
+import {BookCategoriesModel} from "../../domain/library/models/book-categories.model";
 
 const prisma = new PrismaClient();
 
@@ -24,15 +24,27 @@ export class PrismaBooksRepository implements BooksRepository {
     });
   }
 
+  async findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null> {
+    const user = await prisma.user.findUnique({
+      where: {auth0Id},
+      include: {library: true},
+    });
+
+    if (!user || !user.library) return null;
+
+    return {libraryId: user.library.id};
+  }
+
+
   async delete(book: BookModel): Promise<void> {
     await prisma.book.delete({
-      where: { id: book.id },
+      where: {id: book.id},
     });
   }
 
   async getById(id: string): Promise<BookModel | undefined> {
     const book = await prisma.book.findUnique({
-      where: { id: id },
+      where: {id: id},
     });
 
     if (!book) return undefined;
