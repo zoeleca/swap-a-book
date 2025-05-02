@@ -5,7 +5,8 @@ import {BooksRepository} from "../domain/library/interfaces/books.repository";
 import {UuidGenerator} from "../domain/library/interfaces/uuid-generator";
 import {LibraryRoutes} from "./routes/library.routes";
 import dotenv from "dotenv";
-import {auth} from "express-oauth2-jwt-bearer"; // only this import
+import {auth} from "express-oauth2-jwt-bearer";
+import {UserRoutes} from "./routes/user.routes";
 
 dotenv.config();
 
@@ -38,7 +39,7 @@ export class Application {
       tokenSigningAlg: "RS256",
     });
 
-    this.expressApp.use(jwtCheck); // Protect all API routes
+    this.expressApp.use(jwtCheck);
   }
 
   private initializeControllers() {
@@ -50,5 +51,7 @@ export class Application {
 
     this.expressApp.use("/", libraryRoutes.getRouter());
 
+    const userRoutes = new UserRoutes();
+    this.expressApp.use("/user", userRoutes.getRouter());
   }
 }

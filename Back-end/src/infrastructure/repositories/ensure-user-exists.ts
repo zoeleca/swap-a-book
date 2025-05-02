@@ -14,9 +14,7 @@ export async function ensureUserExists(auth0Id: string) {
     user = await prisma.user.create({
       data: {
         auth0Id,
-        email: '',
         name: '',
-        picture: null,
         library: {
           create: {
             name: "My Library",

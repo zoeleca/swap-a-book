@@ -1,21 +1,14 @@
 import {Router} from "express";
-import {BookController} from "../controllers/book.controller";
-import {BooksRepository} from "../../domain/library/interfaces/books.repository";
-import {UuidGenerator} from "../../domain/library/interfaces/uuid-generator";
+import {auth} from "express-oauth2-jwt-bearer";
+import {UserController} from "../controllers/user.controller";
 
-export class BookRoutes {
+export class UserRoutes {
   private router: Router;
-  private bookController: BookController;
+  private controller: UserController;
 
-  constructor(
-    private readonly bookRepository: BooksRepository,
-    private readonly uuidGenerator: UuidGenerator
-  ) {
+  constructor() {
     this.router = Router();
-    this.bookController = new BookController(
-      this.bookRepository,
-      this.uuidGenerator
-    );
+    this.controller = new UserController();
     this.initializeRoutes();
   }
 
@@ -24,8 +17,13 @@ export class BookRoutes {
   }
 
   private initializeRoutes() {
-    this.router.post("/", this.bookController.addBook);
-    this.router.get("/:id", this.bookController.getBookById);
-    this.router.delete("/:id", this.bookController.removeBook);
+    const jwtCheck = auth({
+      audience: "http://localhost:8000",
+      issuerBaseURL: "https://dev-b77oxg884oraklfh.eu.auth0.com",
+      tokenSigningAlg: "RS256",
+    });
+
+
+    this.router.get("/profile", jwtCheck, this.controller.getProfile);
   }
 }

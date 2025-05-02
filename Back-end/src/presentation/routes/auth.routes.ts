@@ -1,10 +1,10 @@
 import {Router} from "express";
 import {auth} from "express-oauth2-jwt-bearer";
-import {UserController} from "../controllers/auth.controller";
+import {AuthController} from "../controllers/auth.controller";
 
-export class UserRoutes {
+export class AuthRoutes {
   private router = Router();
-  private controller = new UserController();
+  private controller = new AuthController();
 
   constructor() {
     this.initializeRoutes();
@@ -21,7 +21,6 @@ export class UserRoutes {
       tokenSigningAlg: "RS256",
     });
 
-    this.router.get("/profile", jwtCheck, this.controller.getProfile);
     this.router.get("/callback", jwtCheck, this.controller.callBack);
 
 
