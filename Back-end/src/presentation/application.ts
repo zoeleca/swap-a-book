@@ -1,19 +1,21 @@
-// src/presentation/application.ts
 import express from "express";
 import cors from "cors";
-import { BookRoutes } from "./routes/book.routes";
-import { BooksRepository } from "../domain/library/interfaces/books.repository";
-import { UuidGenerator } from "../domain/library/interfaces/uuid-generator";
-import { LibraryRoutes } from "./routes/library.routes";
-import { UserRepository } from "../domain/user/interfaces/user.repository";
+import {BookRoutes} from "./routes/book.routes";
+import {BooksRepository} from "../domain/library/interfaces/books.repository";
+import {UuidGenerator} from "../domain/library/interfaces/uuid-generator";
+import {LibraryRoutes} from "./routes/library.routes";
+import dotenv from "dotenv";
+import {auth} from "express-oauth2-jwt-bearer";
+import {UserRoutes} from "./routes/user.routes";
+
+dotenv.config();
 
 export class Application {
   public expressApp = express();
 
   constructor(
-    private readonly bookRepository: BooksRepository, // Make the book repository a dependency
+    private readonly bookRepository: BooksRepository,
     private readonly uuidGenerator: UuidGenerator,
-    private readonly userRepository: UserRepository
   ) {
     this.initializeMiddleware();
     this.initializeControllers();
@@ -27,21 +29,34 @@ export class Application {
 
   private initializeMiddleware() {
     this.expressApp.use(express.json());
-    this.expressApp.use(
-      cors({
-        origin: ["http://localhost", "http://localhost:3000"],
-      })
-    );
+    this.expressApp.use(cors({
+      origin: ["http://localhost:3000", "http://localhost:5173"],
+    }));
+
+    const jwtCheck = auth({
+      audience: process.env.AUTH0_AUDIENCE,
+      issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+      tokenSigningAlg: "RS256",
+    });
+
+    this.expressApp.use(jwtCheck);
   }
 
   private initializeControllers() {
+    const jwtCheck = auth({
+      audience: process.env.AUTH0_AUDIENCE,
+      issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+      tokenSigningAlg: "RS256",
+    });
     const bookRoutes = new BookRoutes(this.bookRepository, this.uuidGenerator);
-    this.expressApp.use("/books", bookRoutes.getRouter());
+    this.expressApp.use("/books", jwtCheck, bookRoutes.getRouter());
 
     const libraryRoutes = new LibraryRoutes(this.bookRepository);
     this.expressApp.use("/library", libraryRoutes.getRouter());
 
-    const authRoutes = new AuthRoutes();
-    this.expressApp.use("/login", authRoutes.getRouter());
+    this.expressApp.use("/", libraryRoutes.getRouter());
+
+    const userRoutes = new UserRoutes();
+    this.expressApp.use("/user", userRoutes.getRouter());
   }
 }

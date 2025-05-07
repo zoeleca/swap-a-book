@@ -10,9 +10,7 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid()) @db.Uuid
-  email     String   @unique
   name      String
-  picture   String? // Optional field to store user's profile picture (Auth0 or Google)
   auth0Id   String   @unique // Auth0 user ID for linking users to Auth0 account
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

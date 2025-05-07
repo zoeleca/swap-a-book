@@ -1,29 +1,39 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
-import { AvatarIcon } from "@radix-ui/react-icons";
-import { useFetchLibrary } from "../hooks/FetchLibrary.tsx";
+import {AvatarIcon} from "@radix-ui/react-icons";
+import LoginButton from "./LoginButton.tsx";
+import {useNavigate} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
+import LogoutButton from "./LogoutButton.tsx";
 
 const Header = () => {
-  const { loading, error } = useFetchLibrary();
+  const navigate = useNavigate();
+  const {isAuthenticated, user} = useAuth0();
 
   return (
     <HoverCard.Root openDelay={0}>
       <nav className="bg-amber-950 text-white py-4 px-6 flex items-center justify-between shadow-md">
         <div>
-          <a href="/swap-a-book/Front-end/public">
+          <a href="/">
             <h1 className="text-3xl font-bold">Swap a Book</h1>
           </a>
         </div>
         <div className="flex items-center space-x-4">
-          <AvatarIcon className="w-7 h-7" />
-          <a href="/src/pages/LoginPage">
-            <button
-              className="ml-2 inline-block b-4 bg-white px-6 py-2 font-semibold rounded-3xl text-amber-950 shadow shadow-amber-950 hover:bg-amber-900 hover:text-white hover:font-semibold hover:border-amber-950"
-              disabled={loading}
-            >
-              {loading ? "Loading..." : "Login / Join"}
-            </button>
-            {error && <p className="mt-4 text-red-500">{error}</p>}
-          </a>
+          {isAuthenticated ? (
+            <>
+              {/* Wrap AvatarIcon in a div to ensure clickability */}
+              <div
+                className="relative cursor-pointer"
+                onClick={() => navigate("/profile")}
+                style={{zIndex: 10}} // Ensure it's clickable and not hidden
+              >
+                <AvatarIcon className="w-10 h-10"/>
+              </div>
+              <LogoutButton/>
+              <span>{user?.name}</span> {/* Optionally show user's name */}
+            </>
+          ) : (
+            <LoginButton/>
+          )}
         </div>
       </nav>
     </HoverCard.Root>

@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { AddBookUseCase } from "../../domain/library/features/add-book.use-case";
-import { RemoveBookUseCase } from "../../domain/library/features/remove-book.use-case";
-import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
-import { BookModel } from "../../domain/library/models/book.model";
-import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import {Request, Response} from "express";
+import {AddBookUseCase} from "../../domain/library/features/add-book.use-case";
+import {RemoveBookUseCase} from "../../domain/library/features/remove-book.use-case";
+import {UuidGenerator} from "../../domain/library/interfaces/uuid-generator";
+import {BookModel} from "../../domain/library/models/book.model";
+import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 
 export class BookController {
   private addBookUseCase: AddBookUseCase;
@@ -20,14 +20,25 @@ export class BookController {
     this.removeBookUseCase = new RemoveBookUseCase(this.bookRepository);
   }
 
-  // Add a new book
   public addBook = async (req: Request, res: Response) => {
     try {
-      const { libraryId, title, authors, categories, languages } = req.body;
+      const auth0Id = (req as any).auth?.payload?.sub;
 
-      // Execute the AddBookUseCase use case
+      if (!auth0Id) {
+        return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
+      }
+
+      // Find the user by auth0Id
+      const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+
+      if (!user || !user.libraryId) {
+        return res.status(404).send({error: "User or user's library not found"});
+      }
+
+      const {title, authors, categories, languages} = req.body;
+
       const addedBook = await this.addBookUseCase.execute({
-        libraryId,
+        libraryId: user.libraryId,
         title,
         authors,
         categories,
@@ -36,7 +47,8 @@ export class BookController {
 
       res.status(201).json(this.toResponse(addedBook));
     } catch (error) {
-      res.status(500).send({ error: "Failed to add book" });
+      console.error("Add book error:", error);
+      res.status(500).send({error: "Failed to add book"});
     }
   };
 
@@ -47,12 +59,12 @@ export class BookController {
       const book = await this.bookRepository.getById(bookId);
 
       if (!book) {
-        return res.status(404).send({ error: "BookModel not found" });
+        return res.status(404).send({error: "BookModel not found"});
       }
 
       res.status(200).json(this.toResponse(book));
     } catch (error) {
-      res.status(500).send({ error: "Failed to retrieve book" });
+      res.status(500).send({error: "Failed to retrieve book"});
     }
   };
 
@@ -64,7 +76,7 @@ export class BookController {
 
       res.status(204).send(); // No content
     } catch (error) {
-      res.status(500).send({ error: "Failed to remove book" });
+      res.status(500).send({error: "Failed to remove book"});
     }
   };
 

@@ -1,30 +1,28 @@
-import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
-import { TokenService } from "../../domain/user/interfaces/token.service";
-
-import { UserRepository } from "../../domain/user/interfaces/user.repository";
+import {Router} from "express";
+import {auth} from "express-oauth2-jwt-bearer";
+import {AuthController} from "../controllers/auth.controller";
 
 export class AuthRoutes {
-  private router: Router;
-  private authController: AuthController;
+  private router = Router();
+  private controller = new AuthController();
 
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly tokenService: TokenService
-  ) {
-    this.router = Router();
-    this.authController = new AuthController(
-      this.userRepository,
-      this.tokenService
-    );
+  constructor() {
     this.initializeRoutes();
   }
 
-  public getRouter(): Router {
+  public getRouter() {
     return this.router;
   }
 
   private initializeRoutes() {
-    this.router.post("/login", this.authController.login);
+    const jwtCheck = auth({
+      audience: process.env.AUTH0_AUDIENCE!,
+      issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL!,
+      tokenSigningAlg: "RS256",
+    });
+
+    this.router.get("/callback", jwtCheck, this.controller.callBack);
+
+
   }
 }

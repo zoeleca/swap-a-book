@@ -1,10 +1,4 @@
-import {
-  BookCategory,
-  BookLanguage,
-  BookStatus,
-  BorrowStatus,
-  PrismaClient,
-} from "@prisma/client";
+import {BookCategory, BookLanguage, BookStatus, BorrowStatus, PrismaClient,} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -12,9 +6,7 @@ async function main() {
   // Create a sample user
   const user = await prisma.user.create({
     data: {
-      email: "johny.denver@example.com",
       name: "John Doe",
-      picture: "https://example.com/john-doe-profile.jpg", // Optional field
       auth0Id: "auth0|johny",
     },
   });

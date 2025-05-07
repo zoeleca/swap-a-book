@@ -1,8 +1,8 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { randomUUID } from "node:crypto";
-import { BookCategoriesModel } from "../../src/domain/library/models/book-categories.model";
-import { Book, BookStatus, BorrowStatus, PrismaClient } from "@prisma/client";
-import { BookLanguagesModel } from "../../src/domain/library/models/book-languages.model";
+import {afterAll, beforeAll, describe, expect, it} from "vitest";
+import {randomUUID} from "node:crypto";
+import {BookCategoriesModel} from "../../src/domain/library/models/book-categories.model";
+import {Book, BookStatus, BorrowStatus, PrismaClient} from "@prisma/client";
+import {BookLanguagesModel} from "../../src/domain/library/models/book-languages.model";
 
 let prisma = new PrismaClient();
 
@@ -14,7 +14,6 @@ describe("PrismaBooksRepository", () => {
     await prisma.user.create({
       data: {
         id: userId,
-        email: `testuser-${userId}@example.com`,
         name: "Test User",
         auth0Id: "anyString",
       },
@@ -35,6 +34,7 @@ describe("PrismaBooksRepository", () => {
     await prisma.user.deleteMany({});
     await prisma.$disconnect();
   });
+
   describe("When Adding a book to a library", () => {
     it("should add a book to the database", async () => {
       const bookData: Book = {
@@ -57,7 +57,7 @@ describe("PrismaBooksRepository", () => {
       });
 
       const insertedBook = await prisma.book.findUnique({
-        where: { id: bookData.id },
+        where: {id: bookData.id},
       });
 
       expect(insertedBook).toEqual(bookData);

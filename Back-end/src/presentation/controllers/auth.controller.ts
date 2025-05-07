@@ -1,35 +1,49 @@
-import { Request, Response } from "express";
-import { LoginUserUseCase } from "../../domain/user/features/login-user.use-case";
-import { UserRepository } from "../../domain/user/interfaces/user.repository";
-import { TokenService } from "../../domain/user/interfaces/token.service";
+import {Request, Response} from "express";
 
 export class AuthController {
-  private loginUserUseCase: LoginUserUseCase;
-
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly tokenService: TokenService
-  ) {
-    this.loginUserUseCase = new LoginUserUseCase(
-      this.userRepository,
-      this.tokenService
-    );
+  constructor() {
   }
 
-  public login = async (request: Request, response: Response) => {
-    const { email, password } = request.body;
+  public callBack = async (req: Request, res: Response) => {
+    const {code, state} = req.query;
 
-    if (!email || !password) {
-      return response
-        .status(400)
-        .send({ error: "Email and password are required" });
+    if (!code) {
+      return res.status(400).send("Authorization code not found in the query string");
     }
 
     try {
-      const token = await this.loginUserUseCase.execute(email, password);
-      return response.status(200).send({ token });
+      // Exchange the authorization code for tokens
+      const response = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          client_id: process.env.AUTH0_CLIENT_ID!,
+          client_secret: process.env.AUTH0_CLIENT_SECRET!,
+          code: code as string,
+          redirect_uri: `${process.env.FRONTEND_URL}/callback`, // Your frontend callback URL
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to exchange authorization code');
+      }
+
+      const data = await response.json();
+
+      const {access_token, id_token, refresh_token} = data;
+
+      // Optionally store the tokens in session or cookie (depending on your auth flow)
+      res.cookie("access_token", access_token, {httpOnly: true, secure: process.env.NODE_ENV === 'production'});
+      res.cookie("id_token", id_token, {httpOnly: true, secure: process.env.NODE_ENV === 'production'});
+
+      // Redirect to profile page or another route
+      res.redirect("/profile"); // Or wherever you want to send the user
     } catch (error) {
-      return response.status(401).send({ error: "Could not login" });
+      console.error('Error exchanging authorization code:', error);
+      res.status(500).send('Internal Server Error');
     }
   };
 }
