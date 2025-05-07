@@ -3,6 +3,7 @@ import {AvatarIcon} from "@radix-ui/react-icons";
 import LoginButton from "./LoginButton.tsx";
 import {useNavigate} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
+import LogoutButton from "./LogoutButton.tsx";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Header = () => {
               >
                 <AvatarIcon className="w-10 h-10"/>
               </div>
+              <LogoutButton/>
               <span>{user?.name}</span> {/* Optionally show user's name */}
             </>
           ) : (

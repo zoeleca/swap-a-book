@@ -1,25 +1,49 @@
-import BookCoverImage from "../../presentation/images/BookCover.jpg";
+import React from "react";
+import DefaultBookCoverImage from "../images/bookCover.png";
 
-const BookList = () => {
+interface Book {
+  id: number;
+  title: string;
+  author?: string;
+  authors?: string[];
+  coverImage?: string;
+  categories?: string[];
+}
+
+interface BookGridProps {
+  books: Book[];
+}
+
+const BookGrid: React.FC<BookGridProps> = ({books}) => {
+  if (books.length === 0) {
+    return <p className="text-gray-600">No books in your library yet!</p>;
+  }
+
   return (
-    <>
-      <div className="py-5 flex flex-col justitify- items-center">
-        <div className="font-helvetica border-y border-b p-10 flex flex-col">
-          <div>
-            <img src={BookCoverImage} className="w-full auto" alt="BookCover" />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-8">
+      {books.map((book) => (
+        <div
+          key={book.id}
+          className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
+        >
+          <img
+            src={book.coverImage || DefaultBookCoverImage}
+            alt={book.title}
+            className="w-full h-56 object-cover"
+          />
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-900">{book.title}</h3>
+            <p className="text-gray-600">{book.author || book.authors?.join(', ')}</p>
+            {book.categories && (
+              <p className="text-sm text-amber-900-600 mt-2">
+                Categories: {book.categories.join(', ')}
+              </p>
+            )}
           </div>
-          <h1 className="text-xl text-amber-950 font-bold text-center">
-            Swap a Book
-          </h1>
-          <p className="my-3 text-sm text-amber-950 text-center">
-            A lady in a cafe, some Adventures and delicious drinks
-          </p>
-          <button className="mt-6 inline-block b-4 bg-amber-950   px-6 py-2 font-semibold rounded-lg text-white shadow shadow-amber-950 hover:bg-white hover:text-amber-950 hover:font-semibold hover:border-amber-950">
-            Add to Library
-          </button>
         </div>
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
-export default BookList;
+
+export default BookGrid;

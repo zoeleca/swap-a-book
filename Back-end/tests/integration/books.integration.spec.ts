@@ -34,6 +34,7 @@ describe("PrismaBooksRepository", () => {
     await prisma.user.deleteMany({});
     await prisma.$disconnect();
   });
+
   describe("When Adding a book to a library", () => {
     it("should add a book to the database", async () => {
       const bookData: Book = {
