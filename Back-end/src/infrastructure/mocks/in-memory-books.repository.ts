@@ -23,6 +23,18 @@ export class InMemoryBooksRepository implements BooksRepository {
     return null;
   }
 
+  async searchBooks(query: string): Promise<BookModel[]> {
+    const lowerQuery = query.toLowerCase();
+
+    return Array.from(this.books.values()).filter((book) => {
+      const titleMatch = book.title.toLowerCase().includes(lowerQuery);
+      const authorsMatch = book.authors?.some(author =>
+        author.toLowerCase().includes(lowerQuery)
+      );
+      return titleMatch || authorsMatch;
+    });
+  }
+
 
   async getById(id: string): Promise<BookModel | undefined> {
     return this.books.get(id);

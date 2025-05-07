@@ -35,6 +35,37 @@ export class PrismaBooksRepository implements BooksRepository {
     return {libraryId: user.library.id};
   }
 
+  async searchBooks(query: string): Promise<BookModel[]> {
+    const books = await prisma.book.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            authors: {
+              hasSome: [query],
+            },
+          },
+        ],
+      },
+    });
+
+    return books.map((book) => ({
+      id: book.id,
+      title: book.title,
+      authors: book.authors,
+      categories: book.categories as BookCategoriesModel[],
+      borrowStatus: book.borrowStatus as BorrowStatusModel,
+      status: book.status as BookStatusModel,
+      languages: book.languages as BookLanguagesModel[],
+      libraryId: book.libraryId,
+    }));
+  }
+
 
   async delete(book: BookModel): Promise<void> {
     await prisma.book.delete({

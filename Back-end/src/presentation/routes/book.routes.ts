@@ -33,5 +33,6 @@ export class BookRoutes {
     this.router.post("/", this.jwtCheck, this.bookController.addBook);
     this.router.get("/:id", this.jwtCheck, this.bookController.getBookById);
     this.router.delete("/:id", this.jwtCheck, this.bookController.removeBook);
+    this.router.get("/search", this.bookController.searchBooks);
   }
 }

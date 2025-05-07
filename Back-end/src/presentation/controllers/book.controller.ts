@@ -68,6 +68,24 @@ export class BookController {
     }
   };
 
+  public searchBooks = async (req: Request, res: Response) => {
+    try {
+      const query = req.query.q as string;
+
+      if (!query) {
+        return res.status(400).send({error: "Missing search query parameter `q`."});
+      }
+
+      const books = await this.bookRepository.searchBooks(query);
+
+      res.status(200).json(books.map(this.toResponse));
+    } catch (error) {
+      console.error("Search book error:", error);
+      res.status(500).send({error: "Failed to search books"});
+    }
+  };
+
+
   // Remove a book
   public removeBook = async (req: Request, res: Response) => {
     try {

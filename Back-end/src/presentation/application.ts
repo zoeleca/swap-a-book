@@ -57,5 +57,6 @@ export class Application {
 
     const userRoutes = new UserRoutes();
     this.expressApp.use("/user", jwtCheck, userRoutes.getRouter());
+
   }
 }
