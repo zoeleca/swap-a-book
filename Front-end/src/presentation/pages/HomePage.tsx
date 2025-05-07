@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import BookGrid from "../components/BookList.tsx";
 import Cafe from "../images/Cafe.jpg";
+import BookDetailModal from "../components/BookDetailModal.tsx";
 
 interface Book {
   id: number;
@@ -17,10 +18,29 @@ const HomePage = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredBooks = books.filter(book =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.authors?.some(author => author.toLowerCase().includes(searchTerm.toLowerCase()))
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
+
+  const allCategories = Array.from(
+    new Set(books.flatMap(book => book.categories || []))
   );
+  const filteredBooks = books.filter(book =>
+    (book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.authors?.some(author => author.toLowerCase().includes(searchTerm.toLowerCase()))) &&
+    (selectedCategory ? book.categories?.includes(selectedCategory) : true)
+  );
+
+  const openModal = (book: Book) => {
+    setSelectedBook(book);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedBook(null);
+  };
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -85,13 +105,40 @@ const HomePage = () => {
           </svg>
         </div>
 
+        <div className="py-12 flex flex-wrap gap-3 mb-6">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-4 py-1 rounded-full border ${selectedCategory === null ? 'bg-amber-900 text-white' : 'text-amber-900 border-amber-900'}`}
+          >
+            All
+          </button>
+          {allCategories.map(category => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-1 rounded-full border ${selectedCategory === category ? 'bg-amber-900 text-white' : 'text-amber-900 border-amber-900'}`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
 
         {/* Book Grid */}
         <div className="w-full px-10 mt-10">
           <h3 className="text-2xl text-amber-950 font-bold mb-6">Books in the Library</h3>
-          <BookGrid books={filteredBooks} onDelete={() => {
-          }}/>
+          <BookGrid
+            books={filteredBooks}
+            onClickBook={openModal}
+          />
         </div>
+
+        {/* Modal */}
+        <BookDetailModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          book={selectedBook}
+        />
 
 
         {error && <p className="mt-4 text-red-500">{error}</p>}

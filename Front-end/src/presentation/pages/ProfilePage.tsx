@@ -4,10 +4,22 @@ import axios from "axios";
 import AddBookForm from "../hooks/AddBook.tsx";
 import Cafe from "../images/Cafe.jpg";
 import LibraryBookGrid from "../components/LibraryBookList.tsx";
+import BookDetailModal from "../components/BookDetailModal.tsx"; // Assuming you have this component
+
+interface Book {
+  id: number;
+  title: string;
+  author?: string;
+  authors?: string[];
+  coverImage?: string;
+  categories?: string[];
+}
 
 const Profile: React.FC = () => {
   const {user, isAuthenticated, isLoading, getAccessTokenSilently} = useAuth0();
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const handleDeleteBook = async (id: number) => {
     try {
@@ -43,6 +55,16 @@ const Profile: React.FC = () => {
     }
   }, [isAuthenticated]);
 
+  const openModal = (book: Book) => {
+    setSelectedBook(book);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedBook(null);
+  };
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -51,13 +73,11 @@ const Profile: React.FC = () => {
         <>
           {/* Header section with banner and profile pic */}
           <div className="relative h-60 bg-amber-900">
-            {/* Background image */}
             <img
               src={Cafe}
               alt="Profile banner"
               className="w-full h-full object-cover"
             />
-            {/* Profile picture */}
             <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
               <img
                 src={user?.picture}
@@ -73,15 +93,26 @@ const Profile: React.FC = () => {
             <p className="text-gray-700 mt-2">Lover of books, curious mind, occasional writer. 📚✨</p>
           </div>
 
-          {/* Book form */}
+          {/* Add Book form */}
           <div className="mt-8 px-4">
             <AddBookForm onBookAdded={fetchBooks}/>
           </div>
 
           {/* Book list */}
           <div className="px-4 pb-10">
-            <LibraryBookGrid books={books} onDelete={handleDeleteBook}/>
+            <LibraryBookGrid
+              books={books}
+              onDelete={handleDeleteBook}
+              onClickBook={openModal}
+            />
           </div>
+
+          {/* Modal */}
+          <BookDetailModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            book={selectedBook}
+          />
         </>
       ) : (
         <div className="text-center text-gray-600">Please log in to view your profile.</div>

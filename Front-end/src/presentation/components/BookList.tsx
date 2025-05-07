@@ -12,10 +12,10 @@ interface Book {
 
 interface BookGridProps {
   books: Book[];
-  onDelete: (id: number) => void;
+  onClickBook: (book: Book) => void;  // Add onClick handler for opening the modal
 }
 
-const BookGrid: React.FC<BookGridProps> = ({books}) => {
+const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
   if (books.length === 0) {
     return <p className="text-amber-900 text-lg text-center mt-12">No books in your library yet!</p>;
   }
@@ -25,7 +25,8 @@ const BookGrid: React.FC<BookGridProps> = ({books}) => {
       {books.map((book) => (
         <div
           key={book.id}
-          className="bg-white rounded-2xl shadow-xl border border-amber-900 transition-all transform hover:scale-[1.02] flex flex-col overflow-hidden"
+          className="bg-white rounded-2xl shadow-xl border border-amber-900 transition-all transform hover:scale-[1.02] flex flex-col overflow-hidden cursor-pointer" // Added cursor-pointer for the clickable effect
+          onClick={() => onClickBook(book)} // Call the onClickBook handler on click
         >
           <img
             src={book.coverImage || DefaultBookCoverImage}
