@@ -55,7 +55,7 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
   return (
     <div className="mb-8">
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+        className="bg-amber-800 text-white px-4 py-2 rounded-md hover:bg-amber-900 transition"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? 'Cancel' : 'Add Book'}
@@ -98,7 +98,7 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
           />
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            className="bg-amber-800 text-white px-4 py-2 rounded-md hover:bg-amber-900 transition"
           >
             Submit
           </button>
