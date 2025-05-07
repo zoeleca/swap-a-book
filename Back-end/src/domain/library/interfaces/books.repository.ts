@@ -9,5 +9,7 @@ export interface BooksRepository {
 
   findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null>;
 
-  listAllBooks(libraryId: string): Promise<BookModel[]>;
+  listLibraryBooks(libraryId: string): Promise<BookModel[]>;
+
+  listAllBooks(): Promise<BookModel[]>;
 }

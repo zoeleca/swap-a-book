@@ -39,7 +39,6 @@ export class Application {
       tokenSigningAlg: "RS256",
     });
 
-    this.expressApp.use(jwtCheck);
   }
 
   private initializeControllers() {
@@ -51,12 +50,12 @@ export class Application {
     const bookRoutes = new BookRoutes(this.bookRepository, this.uuidGenerator);
     this.expressApp.use("/books", jwtCheck, bookRoutes.getRouter());
 
-    const libraryRoutes = new LibraryRoutes(this.bookRepository);
+    const libraryRoutes = new LibraryRoutes(this.bookRepository, jwtCheck);
     this.expressApp.use("/library", libraryRoutes.getRouter());
 
     this.expressApp.use("/", libraryRoutes.getRouter());
 
     const userRoutes = new UserRoutes();
-    this.expressApp.use("/user", userRoutes.getRouter());
+    this.expressApp.use("/user", jwtCheck, userRoutes.getRouter());
   }
 }

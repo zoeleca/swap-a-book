@@ -1,21 +1,47 @@
+import {useEffect, useState} from "react";
+import axios from "axios";
 import SearchBar from "../components/SearchBar.tsx";
-import {useFetchLibrary} from "../hooks/Login.tsx";
+import BookGrid from "../components/BookList.tsx";
 import Cafe from "../images/Cafe.jpg";
 
+interface Book {
+  id: number;
+  title: string;
+  author?: string;
+  authors?: string[];
+  coverImage?: string;
+  categories?: string[];
+}
+
 const HomePage = () => {
-  const {loading, error, handleClick} = useFetchLibrary();
+  const [books, setBooks] = useState<Book[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/library/");
+        setBooks(response.data);
+      } catch (err) {
+        setError("Failed to load books from the library.");
+        console.error(err);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
   return (
     <>
-      <div className=" my-20 flex flex-col justitify- items-center">
-        <div className="p-20 font-helvetica border-t border-b  flex flex-col">
-          <h1 className="text-5xl text-amber-950 font-bold text-center">
-            Swap a Book
-          </h1>
+      <div className="my-20 flex flex-col items-center">
+        {/* Header Section */}
+        <div className="p-20 font-helvetica border-t border-b flex flex-col text-center">
+          <h1 className="text-5xl text-amber-950 font-bold">Swap a Book</h1>
           <br/>
-          <h3 className="my-3 text-xl text-amber-950 font-bold text-center">
+          <h3 className="my-3 text-xl text-amber-950 font-bold">
             Your neighborhood library, reimagined.
           </h3>
-          <p className="text-m text-amber-950 text-center">
+          <p className="text-m text-amber-950">
             BookSwap is a web application designed to bring people together
             through the love of books. Whether you're a casual reader or a
             bookworm, our platform allows you to exchange books with others in
@@ -24,39 +50,21 @@ const HomePage = () => {
           </p>
         </div>
 
-
-        <div className="w-full ">
-          <div>
-            <img src={Cafe} className="w-full auto" alt="BookCover"/>
-          </div>
-          {/*<div className="border-l border-r  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*<BookList/>*/}
-          {/*</div>*/}
-
+        {/* Banner Image */}
+        <div className="w-full">
+          <img src={Cafe} className="w-full h-auto" alt="Cafe background"/>
         </div>
-        <button
-          onClick={handleClick}
-          className="my-10 inline-block b-10 bg-amber-950   px-24 py-6  text-2xl font-bold rounded-lg text-white shadow shadow-amber-950 hover:bg-white hover:text-amber-950 hover:font-semibold hover:border-amber-950"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Start your Journey"}
-        </button>
-        <div className="px-20 w-full ">
-          <h3 className=" my-3 text-xl text-amber-950 font-bold ">
-            Find A Book
-          </h3>
+
+        {/* Book Grid */}
+        <div className="w-full px-10 mt-10">
+          <h3 className="text-2xl text-amber-950 font-bold mb-6">Books in the Library</h3>
+          <BookGrid books={books} onDelete={() => {
+          }}/>
+        </div>
+
+        {/* Search */}
+        <div className="px-20 w-full mt-10">
+          <h3 className="my-3 text-xl text-amber-950 font-bold">Find A Book</h3>
           <SearchBar/>
         </div>
 
@@ -65,4 +73,5 @@ const HomePage = () => {
     </>
   );
 };
+
 export default HomePage;

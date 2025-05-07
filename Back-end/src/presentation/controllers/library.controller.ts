@@ -12,19 +12,14 @@ export class LibraryController {
 
   public listBooks = async (req: Request, res: Response) => {
     try {
-      const libraryId = req.params.libraryId;
-      const books = await this.listLibraryBooks.execute(libraryId);
-
-
-      if (books.length === 0) {
-        return res.status(404).send({error: "No books found"});
-      }
-
-      res.status(200).json(books.map(this.toResponse));
+      const books = await this.listLibraryBooks.getAllBooks();
+      res.json(books);
     } catch (error) {
-      res.status(500).send({error: "Failed to retrieve books"});
+      console.error("Failed to fetch library:", error);
+      res.status(500).json({error: "Internal server error"});
     }
   };
+
 
   public getLibrary = async (req: Request, res: Response) => {
     try {
@@ -41,7 +36,7 @@ export class LibraryController {
         return res.status(500).json({error: "Library not found for user"});
       }
 
-      const books = await this.listLibraryBooks.execute(user.library.id);
+      const books = await this.listLibraryBooks.getLibraryBook(user.library.id);
       res.json(books);
     } catch (error) {
       console.error("Failed to fetch library:", error);

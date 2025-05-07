@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import axios from "axios";
 import AddBookForm from "../hooks/AddBook.tsx";
-import BookGrid from "../components/BookList.tsx";
 import Cafe from "../images/Cafe.jpg";
+import LibraryBookGrid from "../components/LibraryBookList.tsx";
 
 const Profile: React.FC = () => {
   const {user, isAuthenticated, isLoading, getAccessTokenSilently} = useAuth0();
@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
   const fetchBooks = async () => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await axios.get("http://localhost:8000/library", {
+      const response = await axios.get("http://localhost:8000/library/books", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +80,7 @@ const Profile: React.FC = () => {
 
           {/* Book list */}
           <div className="px-4 pb-10">
-            <BookGrid books={books} onDelete={handleDeleteBook}/>
+            <LibraryBookGrid books={books} onDelete={handleDeleteBook}/>
           </div>
         </>
       ) : (

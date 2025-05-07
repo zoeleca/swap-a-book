@@ -37,7 +37,7 @@ describe("InMemoryBooksRepository", () => {
     await repository.save(book1);
     await repository.save(book2);
 
-    const books = await repository.listAllBooks(libraryId);
+    const books = await repository.listLibraryBooks(libraryId);
 
     expect(books).toHaveLength(2);
     expect(books).toEqual(expect.arrayContaining([book1, book2]));

@@ -28,9 +28,15 @@ export class InMemoryBooksRepository implements BooksRepository {
     return this.books.get(id);
   }
 
-  async listAllBooks(libraryId: string): Promise<BookModel[]> {
+  async listLibraryBooks(libraryId: string): Promise<BookModel[]> {
     return Array.from(this.books.values()).filter(
       (book) => book.libraryId === libraryId
+    );
+  }
+
+  async listAllBooks(): Promise<BookModel[]> {
+    return Array.from(this.books.values()).filter(
+      (book) => book.status === "Visible"
     );
   }
 }
