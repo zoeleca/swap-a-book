@@ -11,7 +11,7 @@ describe("library", () => {
   const supertestApp = supertest(app.expressApp);
 
   beforeEach(async () => {
-    const lotrResponse = await supertestApp
+    await supertestApp
       .post("/books")
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
@@ -22,13 +22,13 @@ describe("library", () => {
         categories: ["Fiction", "Mystery", "Adventure"],
       });
 
-    const lesMemoiresResponse = await supertestApp
+    await supertestApp
       .post("/books")
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
       .send({
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
-        title: "les Memoires d'un chat",
+        title: "Les Mémoires d'un chat",
         authors: ["Hiro Arikawa"],
         categories: ["Fiction", "Novel", "Adventure"],
       });
@@ -42,14 +42,14 @@ describe("library", () => {
       .send({
         libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
         title: "Harry Potter 2",
-        authors: ["J.K Rowling"],
+        authors: ["J.K. Rowling"],
         categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       });
     expect(response.status).toBe(201);
     expect(response.body.book).toEqual({
       id: expect.any(String),
       title: "Harry Potter 2",
-      authors: ["J.K Rowling"],
+      authors: ["J.K. Rowling"],
       categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       borrowStatus: "Available",
       status: "Visible",
@@ -86,11 +86,13 @@ describe("library", () => {
 
   it("should list all books", async () => {
     const libraryResponse = await supertestApp
-      .get("/library/9d7f9732-4c9b-4f97-8da3-b12859c276af/books")
+      .get("/library/e240939f-b4f1-42de-801c-5e7adf4520b4/books")
       .set("Accept", "application/json")
       .set("Content-Type", "application/json");
 
+    console.log(JSON.stringify(libraryResponse));
     expect(libraryResponse.status).toBe(200);
+
     expect(libraryResponse.body).toEqual(
       expect.arrayContaining([
         {
@@ -109,20 +111,7 @@ describe("library", () => {
         {
           book: {
             id: expect.any(String),
-            title: "les Memoires d'un chat",
-            authors: ["Hiro Arikawa"],
-            categories: expect.arrayContaining([
-              "Fiction",
-              "Novel",
-              "Adventure",
-            ]),
-            borrowStatus: "Available",
-          },
-        },
-        {
-          book: {
-            id: expect.any(String),
-            title: "les Memoires d'un chat",
+            title: "Les Mémoires d'un chat",
             authors: ["Hiro Arikawa"],
             categories: expect.arrayContaining([
               "Fiction",
@@ -136,21 +125,8 @@ describe("library", () => {
           book: {
             id: expect.any(String),
             title: "Harry Potter 2",
-            authors: ["J.K Rowling"],
+            authors: ["J.K. Rowling"],
             categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
-            borrowStatus: "Available",
-          },
-        },
-        {
-          book: {
-            id: expect.any(String),
-            title: "les Memoires d'un chat",
-            authors: ["Hiro Arikawa"],
-            categories: expect.arrayContaining([
-              "Fiction",
-              "Novel",
-              "Adventure",
-            ]),
             borrowStatus: "Available",
           },
         },

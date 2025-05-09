@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 import {ListAllBooksUseCase} from "../../domain/library/features/list-all-books.use-case";
 import {ensureUserExists} from "../../infrastructure/repositories/ensure-user-exists";
+import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 
 export class LibraryController {
   private listLibraryBooks: ListAllBooksUseCase;
@@ -19,7 +19,6 @@ export class LibraryController {
       res.status(500).json({error: "Internal server error"});
     }
   };
-
 
   public getLibrary = async (req: Request, res: Response) => {
     try {

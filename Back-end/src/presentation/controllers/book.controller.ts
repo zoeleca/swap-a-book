@@ -28,7 +28,6 @@ export class BookController {
         return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
       }
 
-      // Find the user by auth0Id
       const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
 
       if (!user || !user.libraryId) {
@@ -52,7 +51,6 @@ export class BookController {
     }
   };
 
-  // Get book by ID
   public getBookById = async (req: Request, res: Response) => {
     try {
       const bookId = req.params.id;
@@ -85,8 +83,6 @@ export class BookController {
     }
   };
 
-
-  // Remove a book
   public removeBook = async (req: Request, res: Response) => {
     try {
       const bookId = req.params.id;

@@ -14,4 +14,6 @@ export interface BooksRepository {
   listLibraryBooks(libraryId: string): Promise<BookModel[]>;
 
   listAllBooks(): Promise<BookModel[]>;
+
+  createFakeUserAndLibrary(auth0Id: string): Promise<{ libraryId: string }>;
 }

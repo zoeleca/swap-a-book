@@ -18,7 +18,7 @@ export class LibraryRoutes {
   }
 
   private initializeRoutes() {
-    this.router.get("/:libraryId/books", this.libraryController.getLibrary);
+    this.router.get("/:libraryId/books", this.jwtCheck, this.libraryController.getLibrary);
     this.router.get("/books", this.jwtCheck, this.libraryController.getLibrary);
 
 

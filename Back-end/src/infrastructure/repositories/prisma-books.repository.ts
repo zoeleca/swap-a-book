@@ -5,6 +5,7 @@ import {BooksRepository} from "../../domain/library/interfaces/books.repository"
 import {BookStatusModel} from "../../domain/library/models/book-status.model";
 import {BookLanguagesModel} from "../../domain/library/models/book-languages.model";
 import {BookCategoriesModel} from "../../domain/library/models/book-categories.model";
+import {randomUUID} from "node:crypto";
 
 const prisma = new PrismaClient();
 
@@ -128,5 +129,28 @@ export class PrismaBooksRepository implements BooksRepository {
       languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
     }));
+  }
+
+  async createFakeUserAndLibrary(auth0Id: string): Promise<{ libraryId: string }> {
+    const user = await prisma.user.create({
+      data: {
+        id: randomUUID(),
+        auth0Id,
+        name: "Test User",
+        library: {
+          create: {
+            id: randomUUID(),
+            name: "Test Library",
+          },
+        },
+      },
+      include: {
+        library: true,
+      },
+    });
+
+    return {
+      libraryId: user.library!.id,
+    };
   }
 }
