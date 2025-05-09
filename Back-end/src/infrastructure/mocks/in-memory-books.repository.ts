@@ -19,7 +19,6 @@ export class InMemoryBooksRepository implements BooksRepository {
     const libraryId = uuidv4();
 
     this.users.set(auth0Id, {auth0Id, libraryId});
-
     this.libraries.set(libraryId, {id: libraryId, name: "My Library"});
 
     return {libraryId};

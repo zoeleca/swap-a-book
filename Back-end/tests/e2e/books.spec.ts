@@ -1,22 +1,27 @@
 import supertest from "supertest";
-import {beforeEach, describe, expect, it} from "vitest";
+import {beforeAll, describe, expect, it} from "vitest";
 import {Application} from "../../src/presentation/application";
 import {FakeUuidGenerator} from "../../src/infrastructure/mocks/fake-uuid-generator";
 import {InMemoryBooksRepository} from "../../src/infrastructure/mocks/in-memory-books.repository";
+
+process.env.NODE_ENV = "test";
 
 describe("library", () => {
   const uuidGenerator = new FakeUuidGenerator();
   const booksRepository = new InMemoryBooksRepository();
   const app = new Application(booksRepository, uuidGenerator);
   const supertestApp = supertest(app.expressApp);
+  let library: { libraryId: string };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
+    library = await booksRepository.createFakeUserAndLibrary("test-user-id");
+
     await supertestApp
       .post("/books")
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
       .send({
-        libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
+        libraryId: library.libraryId,
         title: "Lord of the Rings",
         authors: ["Tolkien"],
         categories: ["Fiction", "Mystery", "Adventure"],
@@ -27,7 +32,7 @@ describe("library", () => {
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
       .send({
-        libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
+        libraryId: library.libraryId,
         title: "Les Mémoires d'un chat",
         authors: ["Hiro Arikawa"],
         categories: ["Fiction", "Novel", "Adventure"],
@@ -40,11 +45,12 @@ describe("library", () => {
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
       .send({
-        libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
+        libraryId: library.libraryId,
         title: "Harry Potter 2",
         authors: ["J.K. Rowling"],
         categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
       });
+    console.log("library.libraryId", library.libraryId);
     expect(response.status).toBe(201);
     expect(response.body.book).toEqual({
       id: expect.any(String),
@@ -62,7 +68,7 @@ describe("library", () => {
       .set("Accept", "application/json")
       .set("Content-Type", "application/json")
       .send({
-        libraryId: "9d7f9732-4c9b-4f97-8da3-b12859c276af",
+        libraryId: library.libraryId,
         title: "Sherlock Holmes",
         authors: ["Conan Doyle"],
         categories: ["Fiction", "Mystery", "Crime", "Detective"],
@@ -85,51 +91,54 @@ describe("library", () => {
   });
 
   it("should list all books", async () => {
-    const libraryResponse = await supertestApp
-      .get("/library/e240939f-b4f1-42de-801c-5e7adf4520b4/books")
-      .set("Accept", "application/json")
-      .set("Content-Type", "application/json");
 
-    console.log(JSON.stringify(libraryResponse));
+
+    const libraryResponse = await supertestApp
+      .get("/library/books")
+      .set({
+        Authorization: "Bearer test-user-id",
+      });
+
+
     expect(libraryResponse.status).toBe(200);
 
     expect(libraryResponse.body).toEqual(
       expect.arrayContaining([
-        {
-          book: {
-            id: expect.any(String),
-            title: "Lord of the Rings",
-            authors: ["Tolkien"],
-            categories: expect.arrayContaining([
-              "Fiction",
-              "Mystery",
-              "Adventure",
-            ]),
-            borrowStatus: "Available",
-          },
-        },
-        {
-          book: {
-            id: expect.any(String),
-            title: "Les Mémoires d'un chat",
-            authors: ["Hiro Arikawa"],
-            categories: expect.arrayContaining([
-              "Fiction",
-              "Novel",
-              "Adventure",
-            ]),
-            borrowStatus: "Available",
-          },
-        },
-        {
-          book: {
-            id: expect.any(String),
-            title: "Harry Potter 2",
-            authors: ["J.K. Rowling"],
-            categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
-            borrowStatus: "Available",
-          },
-        },
+        expect.objectContaining({
+
+          id: expect.any(String),
+          title: "Lord of the Rings",
+          authors: ["Tolkien"],
+          categories: expect.arrayContaining([
+            "Fiction",
+            "Mystery",
+            "Adventure",
+          ]),
+          borrowStatus: "Available",
+
+        }),
+        expect.objectContaining({
+
+          id: expect.any(String),
+          title: "Les Mémoires d'un chat",
+          authors: ["Hiro Arikawa"],
+          categories: expect.arrayContaining([
+            "Fiction",
+            "Novel",
+            "Adventure",
+          ]),
+          borrowStatus: "Available",
+
+        }),
+        expect.objectContaining({
+
+          id: expect.any(String),
+          title: "Harry Potter 2",
+          authors: ["J.K. Rowling"],
+          categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
+          borrowStatus: "Available",
+
+        }),
       ])
     );
   });

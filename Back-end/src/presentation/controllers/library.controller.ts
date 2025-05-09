@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {ListAllBooksUseCase} from "../../domain/library/features/list-all-books.use-case";
-import {ensureUserExists} from "../../infrastructure/repositories/ensure-user-exists";
 import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
 
 export class LibraryController {
@@ -29,19 +28,18 @@ export class LibraryController {
         return res.status(401).json({error: "Unauthorized: missing user ID"});
       }
 
-      const user = await ensureUserExists(auth0Id);
-
-      if (!user || !user.library || !user.library.id) {
-        return res.status(500).json({error: "Library not found for user"});
+      const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+      if (!user) {
+        return res.status(401).json({error: "User not found"});
       }
 
-      const books = await this.listLibraryBooks.getLibraryBook(user.library.id);
+      const books = await this.bookRepository.listLibraryBooks(user.libraryId);
       res.json(books);
     } catch (error) {
       console.error("Failed to fetch library:", error);
       res.status(500).json({error: "Internal server error"});
     }
-  }
+  };
 
   private toResponse(book: any) {
     return {
