@@ -1,12 +1,12 @@
-import { describe, expect, it } from "vitest";
-import { AddBookUseCase } from "../../../../../src/domain/library/features/add-book.use-case";
-import { BookCategoriesModel } from "../../../../../src/domain/library/models/book-categories.model";
-import { randomUUID } from "node:crypto";
-import { InMemoryBooksRepository } from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
-import { FakeUuidGenerator } from "../../../../../src/infrastructure/mocks/fake-uuid-generator";
-import { BookLanguagesModel } from "../../../../../src/domain/library/models/book-languages.model";
+import {describe, expect, it} from "vitest";
+import {AddBookUseCase} from "../../../../../src/domain/library/features/add-book.use-case";
+import {BookCategoriesModel} from "../../../../../src/domain/library/models/book-categories.model";
+import {randomUUID} from "node:crypto";
+import {InMemoryBooksRepository} from "../../../../../src/infrastructure/mocks/in-memory-books.repository";
+import {FakeUuidGenerator} from "../../../../../src/infrastructure/mocks/fake-uuid-generator";
+import {BookLanguagesModel} from "../../../../../src/domain/library/models/book-languages.model";
 
-describe("listAllBooks", () => {
+describe("listLibraryBooks", () => {
   it("should display all books of my LibraryModel", async () => {
     const repository = new InMemoryBooksRepository();
     const uuidGenerator = new FakeUuidGenerator();
@@ -37,7 +37,7 @@ describe("listAllBooks", () => {
       languages: [BookLanguagesModel.English],
     });
 
-    const books = await repository.listAllBooks(libraryId);
+    const books = await repository.listLibraryBooks(libraryId);
 
     expect(books).toHaveLength(2);
     expect(books).toContainEqual(harryPotterBook);

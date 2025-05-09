@@ -28,7 +28,6 @@ export class BookController {
         return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
       }
 
-      // Find the user by auth0Id
       const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
 
       if (!user || !user.libraryId) {
@@ -52,7 +51,6 @@ export class BookController {
     }
   };
 
-  // Get book by ID
   public getBookById = async (req: Request, res: Response) => {
     try {
       const bookId = req.params.id;
@@ -68,7 +66,23 @@ export class BookController {
     }
   };
 
-  // Remove a book
+  public searchBooks = async (req: Request, res: Response) => {
+    try {
+      const query = req.query.q as string;
+
+      if (!query) {
+        return res.status(400).send({error: "Missing search query parameter `q`."});
+      }
+
+      const books = await this.bookRepository.searchBooks(query);
+
+      res.status(200).json(books.map(this.toResponse));
+    } catch (error) {
+      console.error("Search book error:", error);
+      res.status(500).send({error: "Failed to search books"});
+    }
+  };
+
   public removeBook = async (req: Request, res: Response) => {
     try {
       const bookId = req.params.id;

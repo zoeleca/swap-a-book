@@ -28,8 +28,8 @@ const Header = () => {
               >
                 <AvatarIcon className="w-10 h-10"/>
               </div>
-              <LogoutButton/>
               <span>{user?.name}</span> {/* Optionally show user's name */}
+              <LogoutButton/>
             </>
           ) : (
             <LoginButton/>

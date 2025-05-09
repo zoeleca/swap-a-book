@@ -1,5 +1,6 @@
 import React from "react";
 import DefaultBookCoverImage from "../images/bookCover.png";
+import DeleteBookButton from "./DeleteBookButton.tsx";
 
 interface Book {
   id: number;
@@ -12,10 +13,12 @@ interface Book {
 
 interface BookGridProps {
   books: Book[];
-  onClickBook: (book: Book) => void;  // Add onClick handler for opening the modal
+  onDelete: (id: number) => void;
+  onClickBook: (book: Book) => void;
+
 }
 
-const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
+const LibraryBookGrid: React.FC<BookGridProps> = ({books, onDelete, onClickBook}) => {
   if (books.length === 0) {
     return <p className="text-amber-900 text-lg text-center mt-12">No books in your library yet!</p>;
   }
@@ -45,6 +48,9 @@ const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
                 </p>
               )}
             </div>
+            <div className="mt-4">
+              <DeleteBookButton bookId={book.id} onDelete={onDelete}/>
+            </div>
           </div>
         </div>
       ))}
@@ -52,4 +58,4 @@ const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
   );
 };
 
-export default BookGrid;
+export default LibraryBookGrid;

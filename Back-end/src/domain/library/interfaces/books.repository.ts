@@ -7,7 +7,13 @@ export interface BooksRepository {
 
   getById(id: string): Promise<BookModel | undefined>;
 
+  searchBooks(query: string): Promise<BookModel[]>;
+
   findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null>;
 
-  listAllBooks(libraryId: string): Promise<BookModel[]>;
+  listLibraryBooks(libraryId: string): Promise<BookModel[]>;
+
+  listAllBooks(): Promise<BookModel[]>;
+
+  createFakeUserAndLibrary(auth0Id: string): Promise<{ libraryId: string }>;
 }
