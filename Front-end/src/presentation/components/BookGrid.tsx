@@ -2,9 +2,22 @@ import React from "react";
 import DefaultBookCoverImage from "../assets/bookCover.png";
 import {Book} from "../../domain/models/Book";
 
+const getAuthors = (author?: string, authors?: string[]): string => {
+  if (author) return author;
+  if (authors?.length) return authors.join(", ");
+  return "Unknown Author";
+};
+
+const getCategories = (categories?: string[]): string => {
+  if (categories && categories.length > 0) {
+    return categories.join(", ");
+  }
+  return "";
+};
+
 interface BookGridProps {
   books: Book[];
-  onClickBook: (book: Book) => void; // Add onClick handler for opening the modal
+  onClickBook: (book: Book) => void;
 }
 
 const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
@@ -16,12 +29,14 @@ const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 px-4">
       {books.map((book) => {
         const {id, title, author, authors, coverImage, categories} = book;
+        const bookAuthor = getAuthors(author, authors);
+        const bookCategories = getCategories(categories);
 
         return (
           <div
             key={id}
             className="bg-white rounded-2xl shadow-xl border border-amber-900 transition-all transform hover:scale-[1.02] flex flex-col overflow-hidden cursor-pointer"
-            onClick={() => onClickBook(book)} // Call the onClickBook handler on click
+            onClick={() => onClickBook(book)}
           >
             <img
               src={coverImage || DefaultBookCoverImage}
@@ -31,12 +46,10 @@ const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
             <div className="p-5 flex flex-col justify-between flex-1">
               <div>
                 <h3 className="text-xl font-semibold text-amber-900 mb-2">{title}</h3>
-                <p className="text-amber-700 mb-2">
-                  {author || authors?.join(', ') || 'Unknown Author'}
-                </p>
-                {categories && categories.length > 0 && (
+                <p className="text-amber-700 mb-2">{bookAuthor}</p>
+                {bookCategories && (
                   <p className="text-sm text-amber-600 italic">
-                    Categories: {categories.join(', ')}
+                    Categories: {bookCategories}
                   </p>
                 )}
               </div>
