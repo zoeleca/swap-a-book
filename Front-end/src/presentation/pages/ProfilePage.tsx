@@ -5,7 +5,9 @@ import AddBookForm from "../components/AddBookForm";
 import LibraryBookGrid from "../components/LibraryBookList";
 import BookDetailModal from "../components/BookDetailModal";
 import ProfileHeader from "../components/ProfileHeader";
-import {Book, useBooks} from "../hooks/UseBooks.tsx"
+import {useBooks} from "../hooks/UseBooks.tsx"
+
+import {Book} from "../../domain/models/Book.ts";
 
 
 const Profile: React.FC = () => {
@@ -43,6 +45,7 @@ const Profile: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         book={selectedBook}
       />
+
     </div>
   );
 };

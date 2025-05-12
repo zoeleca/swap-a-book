@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 export interface Book {
-  id: number;
+  id: string;
   title: string;
   author?: string;
   authors?: string[];
@@ -30,7 +30,7 @@ export const useBooks = () => {
     }
   };
 
-  const deleteBook = async (id: number) => {
+  const deleteBook = async (id: string) => {
     try {
       const token = await getAccessTokenSilently();
       await axios.delete(`http://localhost:8000/books/${id}`, {

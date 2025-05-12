@@ -1,5 +1,5 @@
 import React from "react";
-import Cafe from "../images/Cafe.jpg";
+import Cafe from "../assets/Cafe.jpg";
 import {User} from "@auth0/auth0-react";
 
 

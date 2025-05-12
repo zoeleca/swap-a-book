@@ -1,4 +1,4 @@
-import Cafe from "../images/Cafe.jpg";
+import Cafe from "../assets/Cafe.jpg";
 
 const HomeHeader = () => (
   <>
