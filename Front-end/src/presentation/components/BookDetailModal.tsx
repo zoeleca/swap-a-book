@@ -16,7 +16,6 @@ interface BookDetailModalProps {
 }
 
 const BookDetailModal: React.FC<BookDetailModalProps> = ({isOpen, onClose, book}) => {
-  // Close the modal if the user clicks outside the modal content
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const modal = document.getElementById("book-modal-content");
