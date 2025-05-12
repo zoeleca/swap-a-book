@@ -1,0 +1,52 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Back-end
+
+    services:
+      postgres_tests:
+        image: postgres:15
+        ports:
+          - 5433:5433
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: swap_a_book_test
+        options: >-
+          --health-cmd "pg_isready -U postgres -p 5433"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/swap_a_book_test?schema=public
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          cache-dependency-path: 'Back-end/yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Reset and migrate test database
+        run: yarn prisma:migrate:reset
+
+      - name: Run integration tests
+        run: yarn test:integration
