@@ -3,9 +3,7 @@ name: Run Tests
 on:
   pull_request:
     branches:
-      - main  # or replace with the branch you want to monitor
-    paths:
-      - 'Back-end/tests/**'  # Only trigger on test file changes
+      - main
 
 jobs:
   test:
