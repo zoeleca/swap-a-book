@@ -1,0 +1,37 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main  # or replace with the branch you want to monitor
+    paths:
+      - 'Back-end/tests/**'  # Only trigger on test file changes
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust the Node.js version as needed (your version of vitest should support 16)
+
+      - name: Install dependencies
+        run: |
+          npm install  # Or use 'yarn install' if you are using yarn
+
+      - name: Run unit tests
+        run: |
+          npm run test  # Run unit tests using the script defined in package.json
+
+      - name: Run e2e tests
+        run: |
+          npm run test:e2e  # Run end-to-end tests using the script defined in package.json
+
+      - name: Run integration tests
+        run: |
+          npm run test:integration  # Run integration tests using the script defined in package.json
