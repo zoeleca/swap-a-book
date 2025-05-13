@@ -35,8 +35,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Load .env.test
-        run: |
-          cp .env.test .env
+        run: cp Back-end/.env.test Back-end/.env
 
       - name: Use Node.js
         uses: actions/setup-node@v4
