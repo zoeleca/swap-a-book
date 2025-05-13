@@ -28,12 +28,15 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/swap_a_book_test?schema=public
       NODE_ENV: test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Load .env.test
+        run: |
+          cp .env.test .env
 
       - name: Use Node.js
         uses: actions/setup-node@v4
