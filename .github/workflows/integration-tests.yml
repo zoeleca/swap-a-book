@@ -34,6 +34,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create .env file from ENV_TEST secret
+        run: echo "${{ secrets.ENV_TEST }}" > Back-end/.env
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -43,9 +46,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-
-      - name: Create .env file from ENV_TEST secret
-        run: echo "${{ secrets.ENV_TEST }}" > Back-end/.env
 
       - name: Reset and migrate test database
         run: yarn prisma:migrate:reset
