@@ -45,8 +45,7 @@ jobs:
         run: yarn install
 
       - name: Create .env file from ENV_TEST secret
-        run: |
-          echo "${{ secrets.ENV_TEST }}" > .env
+        run: echo "${{ secrets.ENV_TEST }}" > Back-end/.env
 
       - name: Reset and migrate test database
         run: yarn prisma:migrate:reset
