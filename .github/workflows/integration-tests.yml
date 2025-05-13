@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env file from ENV_TEST secret
-        run: echo "${{ secrets.ENV_TEST }}" > Back-end/.env
+        run: echo "${{ secrets.ENV_TEST }}" > .env
 
       - name: Use Node.js
         uses: actions/setup-node@v4
