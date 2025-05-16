@@ -1,44 +1,13 @@
-import React, {useEffect} from "react";
+import React from "react";
+import {Book} from "../../domain/models/Book";
 
-interface Book {
-  id: number;
-  title: string;
-  author?: string;
-  authors?: string[];
-  coverImage?: string;
-  categories?: string[];
-}
-
-interface BookDetailModalProps {
+export interface BookDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   book: Book | null;
 }
 
 const BookDetailModal: React.FC<BookDetailModalProps> = ({isOpen, onClose, book}) => {
-  // Close the modal if the user clicks outside the modal content
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const modal = document.getElementById("book-modal-content");
-      const backdrop = document.getElementById("book-modal-backdrop");
-
-      if (backdrop && modal && !modal.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    // Clean up the event listener when modal is closed or component is unmounted
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
-
   if (!isOpen || !book) return null;
 
   return (
@@ -73,5 +42,6 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({isOpen, onClose, book}
     </div>
   );
 };
+
 
 export default BookDetailModal;

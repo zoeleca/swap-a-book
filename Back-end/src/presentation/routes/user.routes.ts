@@ -1,6 +1,6 @@
-import {Router} from "express";
-import {auth} from "express-oauth2-jwt-bearer";
-import {UserController} from "../controllers/user.controller";
+import { Router } from "express";
+import { auth } from "express-oauth2-jwt-bearer";
+import { UserController } from "../controllers/user.controller";
 
 export class UserRoutes {
   private router: Router;
@@ -25,5 +25,7 @@ export class UserRoutes {
 
 
     this.router.get("/profile", jwtCheck, this.controller.getProfile);
+    this.router.delete("/", jwtCheck, this.controller.deleteUser);
+
   }
 }

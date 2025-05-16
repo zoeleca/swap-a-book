@@ -2,23 +2,27 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white text-black p-8 mt-auto">
-      <div className="flex justify-between items-start">
-        <div className="border-r border-gray-200 pr-6 mr-6 text-left">
-          <h3 className="mb-4">Conditions Générales de Vente</h3>
-          <a href="/conditions-de-vente">Consulter nos CGV</a>
+    <footer className="bg-white text-black p-8 mt-auto border-t border-gray-200">
+      <div className="flex flex-wrap justify-between items-start gap-6">
+        <div className="min-w-[200px] text-left">
+          <h3 className="mb-2 font-semibold">À propos du projet</h3>
+          <p className="text-sm text-gray-600">
+            Projet réalisé dans le cadre du Titre Professionnel RNCP "Concepteur Développeur d'Applications".
+          </p>
         </div>
-        <div className="border-r border-gray-200 pr-6 mr-6 text-left">
-          <h3 className="mb-4">Email</h3>
-          <p>contact@ampunv.com</p>
+        <div className="min-w-[200px] text-left">
+          <h3 className="mb-2 font-semibold">Modalités</h3>
+          <p className="text-sm text-gray-600">
+            Ce site est une démonstration à but pédagogique et ne propose pas de services commerciaux réels.
+          </p>
         </div>
-        <div className="border-r border-gray-200 pr-6 mr-6 text-left">
-          <h3 className="mb-4">Adresse Postale</h3>
-          <p>Anciens meubles pour une nouvelle vie<br/>123 Rue Royale<br/>Capital City</p>
+        <div className="min-w-[200px] text-left">
+          <h3 className="mb-2 font-semibold">Contact</h3>
+          <p className="text-sm text-gray-600">votre.email@example.com</p>
         </div>
-        <div className="text-left">
-          <h3 className="mb-4">Téléphone</h3>
-          <p>+33 1 23 45 67 89</p>
+        <div className="min-w-[200px] text-left">
+          <h3 className="mb-2 font-semibold">Version</h3>
+          <p className="text-sm text-gray-600">v1.0 - 2025</p>
         </div>
       </div>
     </footer>

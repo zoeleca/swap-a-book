@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {ListAllBooksUseCase} from "../../domain/library/features/list-all-books.use-case";
-import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
+import { Request, Response } from "express";
+import { ListAllBooksUseCase } from "../../domain/library/features/list-all-books.use-case";
+import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
 
 export class LibraryController {
   private listLibraryBooks: ListAllBooksUseCase;
@@ -15,7 +15,7 @@ export class LibraryController {
       res.json(books);
     } catch (error) {
       console.error("Failed to fetch library:", error);
-      res.status(500).json({error: "Internal server error"});
+      res.status(500).json({ error: "Internal server error" });
     }
   };
 
@@ -25,19 +25,19 @@ export class LibraryController {
       const auth0Id = auth?.payload?.sub;
 
       if (!auth0Id) {
-        return res.status(401).json({error: "Unauthorized: missing user ID"});
+        return res.status(401).json({ error: "Unauthorized: missing user ID" });
       }
 
       const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
       if (!user) {
-        return res.status(401).json({error: "User not found"});
+        return res.status(401).json({ error: "User not found" });
       }
 
       const books = await this.bookRepository.listLibraryBooks(user.libraryId);
       res.json(books);
     } catch (error) {
       console.error("Failed to fetch library:", error);
-      res.status(500).json({error: "Internal server error"});
+      res.status(500).json({ error: "Internal server error" });
     }
   };
 
