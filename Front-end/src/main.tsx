@@ -1,10 +1,8 @@
-import {StrictMode} from "react";
-import {createRoot} from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import {Auth0Provider} from "@auth0/auth0-react";
-
-console.log('Auth0 Domain:', process.env.VITE_AUTH0_DOMAIN); // This should output your correct Auth0 domain
+import { Auth0Provider } from "@auth0/auth0-react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

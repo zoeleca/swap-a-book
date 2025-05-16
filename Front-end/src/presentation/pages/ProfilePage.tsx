@@ -1,18 +1,18 @@
 // pages/Profile.tsx
-import React, {useState} from "react";
-import {useAuth0} from "@auth0/auth0-react";
+import React, { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import AddBookForm from "../components/AddBookForm";
 import LibraryBookGrid from "../components/LibraryBookList";
 import BookDetailModal from "../components/BookDetailModal";
 import ProfileHeader from "../components/ProfileHeader";
-import {useBooks} from "../hooks/UseBooks.tsx"
-
-import {Book} from "../../domain/models/Book.ts";
-
+import { Book } from "../../domain/models/Book.ts";
+import { useBooks } from "../hooks/UseBooks.tsx";
+import DeleteAccountButton from "../components/DeleteAccountButton.tsx";
+import Footer from "../components/Footer.tsx";
 
 const Profile: React.FC = () => {
-  const {user, isAuthenticated, isLoading} = useAuth0();
-  const {books, fetchBooks, deleteBook} = useBooks();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { books, fetchBooks, deleteBook } = useBooks();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
@@ -45,6 +45,10 @@ const Profile: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         book={selectedBook}
       />
+
+      <DeleteAccountButton/>
+
+      <Footer/>
 
     </div>
   );
