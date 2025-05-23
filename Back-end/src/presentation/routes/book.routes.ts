@@ -1,7 +1,8 @@
-import {Router} from "express";
-import {BookController} from "../controllers/book.controller";
-import {BooksRepository} from "../../domain/library/interfaces/books.repository";
-import {UuidGenerator} from "../../domain/library/interfaces/uuid-generator";
+import { Router } from "express";
+import { BookController } from "../controllers/book.controller";
+import { BooksRepository } from "../../domain/library/interfaces/books.repository";
+import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
+import { UsersRepository } from "../../domain/library/interfaces/user.repository";
 
 export class BookRoutes {
   private router: Router;
@@ -9,12 +10,14 @@ export class BookRoutes {
 
   constructor(
     private readonly bookRepository: BooksRepository,
+    private readonly userRepository: UsersRepository,
     private readonly uuidGenerator: UuidGenerator,
     private readonly jwtCheck: any
   ) {
     this.router = Router();
     this.bookController = new BookController(
       this.bookRepository,
+      this.userRepository,
       this.uuidGenerator
     );
     this.initializeRoutes();

@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { UsersRepository } from "../../domain/library/interfaces/user.repository";
+import { randomUUID } from "node:crypto";
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,44 @@ export class PrismaUsersRepository implements UsersRepository {
     await prisma.user.delete({
       where: { auth0Id },
     });
+  }
+
+  async createUserWithLibrary(auth0Id: string): Promise<{ id: string; auth0Id: string; libraryId: string }> {
+    const user = await prisma.user.create({
+      data: {
+        id: randomUUID(),
+        name: 'New User',
+        auth0Id,
+        library: {
+          create: {
+            name: 'Default Library',
+          },
+        },
+      },
+      include: {
+        library: true,
+      },
+    });
+
+    return {
+      id: user.id,
+      auth0Id: user.auth0Id,
+      libraryId: user.library!.id,
+    };
+  }
+  async findUserByAuth0Id(auth0Id: string): Promise<{ id: string; auth0Id: string; libraryId: string | null } | null> {
+    const user = await prisma.user.findUnique({
+      where: { auth0Id },
+      include: { library: true },
+    });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      auth0Id: user.auth0Id,
+      libraryId: user.library?.id ?? null,
+    };
   }
 
 }

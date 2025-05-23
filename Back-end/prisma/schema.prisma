@@ -11,7 +11,7 @@ datasource db {
 model User {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
-  auth0Id   String   @unique // Auth0 user ID for linking users to Auth0 account
+  auth0Id   String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   library   Library?
@@ -33,10 +33,14 @@ model Book {
   authors      String[]
   categories   BookCategory[]
   languages    BookLanguage[]
-  borrowStatus BorrowStatus
+  borrowStatus BorrowStatus   @default(Available)
   status       BookStatus
   libraryId    String         @db.Uuid
   library      Library        @relation(fields: [libraryId], references: [id])
+
+  // Ajout temporaire pour gérer l'emprunt
+  borrowedBy String?   @db.Uuid
+  borrowedAt DateTime?
 }
 
 enum BookCategory {

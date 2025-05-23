@@ -1,22 +1,29 @@
-// AddBookForm.tsx
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {useAuth0} from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { z } from 'zod';
 import CategorySelector from './CategorySelector';
 import LanguageSelector from './LanguageSelector';
 
 const categories = ["Fiction", "Fantasy", "ChildrenStory", "Adventure", "Novel", "Mystery", "Crime", "Detective"];
 const languages = ["English", "Chinese", "Hindi", "Spanish", "French", "Arabic", "Bengali", "Portuguese", "Russian", "Urdu", "Indonesian", "German", "Japanese", "Swahili", "Marathi", "Telugu", "Turkish", "Korean", "Tamil", "Vietnamese"];
 
-interface FormData {
+const bookSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  authors: z.string().min(1, 'At least one author is required'),
+  categories: z.array(z.string()).nonempty('Select at least one category'),
+  languages: z.array(z.string()).nonempty('Select at least one language'),
+});
+
+type FormData = {
   title: string;
   authors: string;
   categories: string[];
   languages: string[];
-}
+};
 
-const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
-  const {getAccessTokenSilently} = useAuth0();
+const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
+  const { getAccessTokenSilently } = useAuth0();
 
   const [formData, setFormData] = useState<FormData>({
     title: '',
@@ -25,9 +32,11 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
     languages: [],
   });
 
+  const [errors, setErrors] = useState<{ path: string; message: string }[]>([]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
-    setFormData({...formData, [name]: value});
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleCategorySelect = (category: string) => {
@@ -57,8 +66,11 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors([]);
 
     try {
+      const validated = bookSchema.parse(formData);
+
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
@@ -68,10 +80,10 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
       await axios.post(
         'http://localhost:8000/books',
         {
-          title: formData.title,
-          authors: formData.authors.split(',').map((a) => a.trim()),
-          categories: formData.categories,
-          languages: formData.languages,
+          title: validated.title,
+          authors: validated.authors.split(',').map((a) => a.trim()),
+          categories: validated.categories,
+          languages: validated.languages,
         },
         {
           headers: {
@@ -82,7 +94,14 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
 
       onBookAdded();
     } catch (error) {
-      console.error('Error adding book:', error);
+      if (error instanceof z.ZodError) {
+        setErrors(error.errors.map((err) => ({
+          path: err.path[0]?.toString() || '',
+          message: err.message,
+        })));
+      } else {
+        console.error('Error adding book:', error);
+      }
     }
   };
 
@@ -95,7 +114,6 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
           placeholder="Book Title"
           value={formData.title}
           onChange={handleChange}
-          required
           className="w-full px-3 py-2 rounded border border-gray-300"
         />
         <input
@@ -106,6 +124,10 @@ const AddBookForm = ({onBookAdded}: { onBookAdded: () => void }) => {
           onChange={handleChange}
           className="w-full px-3 py-2 rounded border border-gray-300"
         />
+
+        {errors.map((err, idx) => (
+          <p key={idx} className="text-red-500 text-sm">{err.message}</p>
+        ))}
 
         <CategorySelector
           categories={categories}

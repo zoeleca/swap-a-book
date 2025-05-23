@@ -1,11 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+export interface UsersRepository {
+  deleteUserByAuth0Id(auth0Id: string): Promise<void>;
 
-const prisma = new PrismaClient();
+  findUserByAuth0Id(auth0Id: string): Promise<{ id: string; auth0Id: string; libraryId: string | null } | null>;
 
-export class UsersRepository {
-  async deleteUserByAuth0Id(auth0Id: string): Promise<void> {
-    await prisma.user.delete({
-      where: { auth0Id },
-    });
-  }
+  createUserWithLibrary(auth0Id: string): Promise<{ id: string; auth0Id: string; libraryId: string }>;
 }

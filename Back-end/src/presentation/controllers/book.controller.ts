@@ -1,9 +1,10 @@
-import {Request, Response} from "express";
-import {AddBookUseCase} from "../../domain/library/features/add-book.use-case";
-import {RemoveBookUseCase} from "../../domain/library/features/remove-book.use-case";
-import {UuidGenerator} from "../../domain/library/interfaces/uuid-generator";
-import {BookModel} from "../../domain/library/models/book.model";
-import {PrismaBooksRepository} from "../../infrastructure/repositories/prisma-books.repository";
+import { Request, Response } from "express";
+import { AddBookUseCase } from "../../domain/library/features/add-book.use-case";
+import { RemoveBookUseCase } from "../../domain/library/features/remove-book.use-case";
+import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
+import { BookModel } from "../../domain/library/models/book.model";
+import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 
 export class BookController {
   private addBookUseCase: AddBookUseCase;
@@ -11,6 +12,7 @@ export class BookController {
 
   constructor(
     private readonly bookRepository: PrismaBooksRepository,
+    private readonly userRepository: PrismaUsersRepository,
     private readonly uuidGenerator: UuidGenerator
   ) {
     this.addBookUseCase = new AddBookUseCase(
@@ -28,10 +30,10 @@ export class BookController {
         return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
       }
 
-      const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+      let user = await this.bookRepository.findUserByAuth0Id(auth0Id);
 
       if (!user || !user.libraryId) {
-        return res.status(404).send({error: "User or user's library not found"});
+        user = await this.userRepository.createUserWithLibrary(auth0Id);
       }
 
       const {title, authors, categories, languages} = req.body;
