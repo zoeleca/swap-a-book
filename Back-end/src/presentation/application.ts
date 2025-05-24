@@ -20,7 +20,7 @@ export class Application {
     private readonly uuidGenerator: UuidGenerator,
   ) {
     this.initializeMiddleware();
-    this.initializeControllers();
+    this.initializeRoutes();
   }
 
   public start(port: number) {
@@ -37,7 +37,7 @@ export class Application {
 
   }
 
-  private initializeControllers() {
+  private initializeRoutes() {
     const jwtCheck =
       process.env.NODE_ENV === "test"
         ? (req: Request, res: Response, next: NextFunction) => {
