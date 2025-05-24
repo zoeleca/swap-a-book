@@ -24,17 +24,12 @@ export class BookController {
 
   public addBook = async (req: Request, res: Response) => {
     try {
-      const auth0Id = (req as any).auth?.payload?.sub;
+      const auth0Id: string = (req as any).auth?.payload?.sub;
 
       if (!auth0Id) {
         return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
       }
-
-      let user = await this.bookRepository.findUserByAuth0Id(auth0Id);
-
-      if (!user || !user.libraryId) {
-        user = await this.userRepository.createUserWithLibrary(auth0Id);
-      }
+      let user = await this.getLibraryId(auth0Id);
 
       const {title, authors, categories, languages} = req.body;
 
@@ -95,6 +90,15 @@ export class BookController {
       res.status(500).send({error: "Failed to remove book"});
     }
   };
+
+  private async getLibraryId(auth0Id: string) {
+    let user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+
+    if (!user || !user.libraryId) {
+      user = await this.userRepository.createUserWithLibrary(auth0Id);
+    }
+    return user;
+  }
 
   private toResponse(book: BookModel) {
     return {
