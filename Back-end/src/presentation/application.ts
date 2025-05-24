@@ -54,7 +54,12 @@ export class Application {
           tokenSigningAlg: "RS256",
         });
 
-    const bookRoutes = new BookRoutes(this.bookRepository, this.userRepository, this.uuidGenerator, jwtCheck);
+    const bookRoutes = new BookRoutes(
+      this.bookRepository,
+      this.userRepository,
+      this.uuidGenerator,
+      jwtCheck
+    );
     this.expressApp.use("/books", bookRoutes.getRouter());
 
 
