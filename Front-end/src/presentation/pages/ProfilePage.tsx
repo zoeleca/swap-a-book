@@ -24,11 +24,7 @@ const Profile: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <ProfileHeader user={user}/>
-
-      <div className="mt-8 px-4">
         <AddBookForm onBookAdded={fetchBooks}/>
-      </div>
-
       <div className="px-4 pb-10">
         <LibraryBookGrid
           books={books}
@@ -39,17 +35,13 @@ const Profile: React.FC = () => {
           }}
         />
       </div>
-
       <BookDetailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         book={selectedBook}
       />
-
       <DeleteAccountButton/>
-
       <Footer/>
-
     </div>
   );
 };

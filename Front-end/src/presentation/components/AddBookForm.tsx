@@ -106,7 +106,7 @@ const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 mt-8 px-4">
       <form onSubmit={handleSubmit} className="mt-4 bg-gray-100 p-6 rounded-lg shadow-md space-y-4">
         <input
           type="text"
