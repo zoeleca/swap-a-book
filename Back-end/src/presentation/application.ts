@@ -32,7 +32,7 @@ export class Application {
   private initializeMiddleware() {
     this.expressApp.use(express.json());
     this.expressApp.use(cors({
-      origin: ["http://localhost:3000", "http://localhost:5173"],
+      origin: [`${process.env.FRONT_END}`,`${process.env.VITE_API_URL}`, `${process.env.FRONT_TEST}`, ],
     }));
 
   }
