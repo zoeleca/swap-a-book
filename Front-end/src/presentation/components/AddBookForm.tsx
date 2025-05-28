@@ -24,14 +24,12 @@ type FormData = {
 
 const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
   const { getAccessTokenSilently } = useAuth0();
-
   const [formData, setFormData] = useState<FormData>({
     title: '',
     authors: '',
     categories: [],
     languages: [],
   });
-
   const [errors, setErrors] = useState<{ path: string; message: string }[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,16 +65,13 @@ const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors([]);
-
     try {
       const validated = bookSchema.parse(formData);
-
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         },
       });
-
       await axios.post(
         'http://localhost:8000/books',
         {
@@ -91,7 +86,6 @@ const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
           },
         }
       );
-
       onBookAdded();
     } catch (error) {
       if (error instanceof z.ZodError) {

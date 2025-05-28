@@ -25,7 +25,6 @@ const Profile: React.FC = () => {
     <div className="max-w-7xl mx-auto">
       <ProfileHeader user={user}/>
         <AddBookForm onBookAdded={fetchBooks}/>
-      <div className="px-4 pb-10">
         <LibraryBookGrid
           books={books}
           onDelete={deleteBook}
@@ -34,7 +33,6 @@ const Profile: React.FC = () => {
             setIsModalOpen(true);
           }}
         />
-      </div>
       <BookDetailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
