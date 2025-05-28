@@ -34,7 +34,6 @@ export class Application {
     this.expressApp.use(cors({
       origin: [`${process.env.FRONT_END}`,`${process.env.VITE_API_URL}`, `${process.env.FRONT_TEST}`, ],
     }));
-
   }
 
   private initializeRoutes() {
