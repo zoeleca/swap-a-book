@@ -13,7 +13,8 @@
     "test:all": "vitest",
     "test:setup": "dotenv -e .env.test npx prisma migrate reset --force --skip-seed && prisma migrate dev",
     "test:integration": "yarn test:setup && vitest --run",
-    "start": "prisma migrate dev  && yarn ts-node src/main.ts"
+    "start": "prisma migrate dev  && yarn ts-node src/main.ts",
+    "dev:docker": "dotenv -e .env.development nodemon src/main.ts"
   },
   "author": "",
   "license": "ISC",

@@ -9,7 +9,10 @@ import dotenv from "dotenv";
 import { UserRoutes } from "./routes/user.routes";
 import { UsersRepository } from "../domain/library/interfaces/user.repository";
 
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development",
+});
+
 
 export class Application {
   public expressApp = express();
