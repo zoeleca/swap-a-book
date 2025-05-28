@@ -50,19 +50,17 @@ export class PrismaUsersRepository implements UsersRepository {
       libraryId: user.library!.id,
     };
   }
-  async findUserByAuth0Id(auth0Id: string): Promise<{ id: string; auth0Id: string; libraryId: string | null } | null> {
+
+
+  async findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null> {
     const user = await prisma.user.findUnique({
-      where: { auth0Id },
-      include: { library: true },
+      where: {auth0Id},
+      include: {library: true},
     });
 
-    if (!user) return null;
+    if (!user || !user.library) return null;
 
-    return {
-      id: user.id,
-      auth0Id: user.auth0Id,
-      libraryId: user.library?.id ?? null,
-    };
+    return {libraryId: user.library.id};
   }
 
 }

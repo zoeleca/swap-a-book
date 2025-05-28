@@ -3,11 +3,8 @@ import { ensureUserExists } from "../../infrastructure/repositories/ensure-user-
 import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 
 export class UserController {
-  private usersRepository: PrismaUsersRepository;
 
-  constructor() {
-    this.usersRepository = new PrismaUsersRepository();
-  }
+  constructor( private readonly usersRepository : PrismaUsersRepository) {}
 
   public getProfile = async (req: Request, res: Response) => {
     try {

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { ListAllBooksUseCase } from "../../domain/library/features/list-all-books.use-case";
 import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
+import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 
 export class LibraryController {
   private listLibraryBooks: ListAllBooksUseCase;
 
-  constructor(private readonly bookRepository: PrismaBooksRepository) {
+  constructor(private readonly bookRepository: PrismaBooksRepository, private  readonly userRepository: PrismaUsersRepository) {
     this.listLibraryBooks = new ListAllBooksUseCase(this.bookRepository);
   }
 
@@ -28,7 +29,7 @@ export class LibraryController {
         return res.status(401).json({ error: "Unauthorized: missing user ID" });
       }
 
-      const user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+      const user = await this.userRepository.findUserByAuth0Id(auth0Id);
       if (!user) {
         return res.status(401).json({ error: "User not found" });
       }

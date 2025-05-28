@@ -1,14 +1,15 @@
-import { Router } from "express";
-import { auth } from "express-oauth2-jwt-bearer";
+import { RequestHandler, Router } from "express";
 import { UserController } from "../controllers/user.controller";
+import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 
 export class UserRoutes {
   private router: Router;
   private controller: UserController;
 
-  constructor() {
+  constructor(  private readonly userRepository: PrismaUsersRepository,
+                private readonly jwtCheck: RequestHandler) {
     this.router = Router();
-    this.controller = new UserController();
+    this.controller = new UserController(this.userRepository);
     this.initializeRoutes();
   }
 
@@ -17,15 +18,9 @@ export class UserRoutes {
   }
 
   private initializeRoutes() {
-    const jwtCheck = auth({
-      audience: "http://localhost:8000",
-      issuerBaseURL: "https://dev-b77oxg884oraklfh.eu.auth0.com",
-      tokenSigningAlg: "RS256",
-    });
 
-
-    this.router.get("/profile", jwtCheck, this.controller.getProfile);
-    this.router.delete("/", jwtCheck, this.controller.deleteUser);
+    this.router.get("/profile", this.jwtCheck, this.controller.getProfile);
+    this.router.delete("/", this.jwtCheck, this.controller.deleteUser);
 
   }
 }

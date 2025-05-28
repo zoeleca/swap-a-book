@@ -62,12 +62,11 @@ export class Application {
     );
     this.expressApp.use("/books", bookRoutes.getRouter());
 
-
-    const libraryRoutes = new LibraryRoutes(this.bookRepository, jwtCheck);
+    const libraryRoutes = new LibraryRoutes(this.bookRepository, this.userRepository, jwtCheck);
     this.expressApp.use("/library", libraryRoutes.getRouter());
     this.expressApp.use("/", libraryRoutes.getRouter());
 
-    const userRoutes = new UserRoutes();
+    const userRoutes = new UserRoutes(this.userRepository, jwtCheck);
     this.expressApp.use("/user", jwtCheck, userRoutes.getRouter());
   }
 }

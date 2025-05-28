@@ -92,7 +92,7 @@ export class BookController {
   };
 
   private async getLibraryId(auth0Id: string) {
-    let user = await this.bookRepository.findUserByAuth0Id(auth0Id);
+    let user = await this.userRepository.findUserByAuth0Id(auth0Id);
 
     if (!user || !user.libraryId) {
       user = await this.userRepository.createUserWithLibrary(auth0Id);
