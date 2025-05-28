@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN yarn
+
+COPY . .
+
+COPY prisma ./prisma/
+
+RUN yarn prisma generate
+
+EXPOSE 8000
+
+CMD ["yarn", "dev"]

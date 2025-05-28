@@ -73,7 +73,7 @@ const AddBookForm = ({ onBookAdded }: { onBookAdded: () => void }) => {
         },
       });
       await axios.post(
-        'http://localhost:8000/books',
+        `${import.meta.env.VITE_API_URL}/books`,
         {
           title: validated.title,
           authors: validated.authors.split(',').map((a) => a.trim()),

@@ -1,19 +1,20 @@
-import {BookCategory, BookLanguage, BookStatus, BorrowStatus, PrismaClient,} from "@prisma/client";
+import { BookCategory, BookLanguage, BookStatus, BorrowStatus, PrismaClient, } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create a sample user
-  const user = await prisma.user.create({
-    data: {
+  const user = await prisma.user.upsert({
+    where: { auth0Id: "auth0|johny" },
+    update: {},
+    create: {
       name: "John Doe",
       auth0Id: "auth0|johny",
     },
   });
 
+
   console.log("Created user: ", user);
 
-  // Create a sample library for the user
   const library = await prisma.library.create({
     data: {
       name: "John Doe's Library",

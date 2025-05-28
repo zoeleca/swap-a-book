@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { auth } from "express-oauth2-jwt-bearer";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import { BookRoutes } from "./routes/book.routes";
 import { BooksRepository } from "../domain/library/interfaces/books.repository";
 import { UuidGenerator } from "../domain/library/interfaces/uuid-generator";
@@ -30,11 +30,20 @@ export class Application {
   }
 
   private initializeMiddleware() {
-    this.expressApp.use(express.json());
-    this.expressApp.use(cors({
-      origin: [`${process.env.FRONT_END}`,`${process.env.VITE_API_URL}`, `${process.env.FRONT_TEST}`, ],
-    }));
-  }
+      const allowedOrigins: string[] = [
+        process.env.FRONT_END,
+        process.env.FRONT_TEST,
+        process.env.VITE_API_URL,
+        process.env.PROD_FRONTEND_URL,
+      ].filter((origin): origin is string => Boolean(origin)); // filtre et garantit les types string
+
+      const corsOptions: CorsOptions = {
+        origin: allowedOrigins,
+      };
+
+      this.expressApp.use(express.json());
+      this.expressApp.use(cors(corsOptions));
+    }
 
   private initializeRoutes() {
     const jwtCheck =

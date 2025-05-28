@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    container_name: swap-a-book-db
+    ports:
+      - "${DB_PORT_ENV}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER_ENV}
+      POSTGRES_PASSWORD: ${DB_PASS_ENV}
+      POSTGRES_DB: ${DB_NAME_ENV}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  postgres_tests:
+    image: postgres:15
+    restart: always
+    container_name: swap-a-book-db-test
+    ports:
+      - "${DB_TEST_PORT_ENV}:5433"
+    environment:
+      POSTGRES_USER: ${DB_TEST_USER_ENV}
+      POSTGRES_PASSWORD: ${DB_TEST_PASS_ENV}
+      POSTGRES_DB: ${DB_TEST_NAME_ENV}
+    command: postgres -p 5433
+    volumes:
+      - postgres-tests-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./Back-end
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./Back-end:/app
+      - /app/node_modules
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/swap_a_book
+      AUTH0_AUDIENCE: http://localhost:8000
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./Front-end
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./Front-end:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  postgres-tests-data:
+
+networks:
+  app-network:
+    driver: bridge
