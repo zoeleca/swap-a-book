@@ -112,6 +112,11 @@ AUTH0_CLIENT_SECRET=your-client-secret
 ```
 docker-compose up --build
 ```
+ for Local Development: 
+```
+docker compose -f docker-compose.yml up --build
+
+```
 
 2 - Access the application:
 Frontend: http://localhost:5173
