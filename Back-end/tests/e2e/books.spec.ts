@@ -1,15 +1,17 @@
 import supertest from "supertest";
-import {beforeAll, describe, expect, it} from "vitest";
-import {Application} from "../../src/presentation/application";
-import {FakeUuidGenerator} from "../../src/infrastructure/mocks/fake-uuid-generator";
-import {InMemoryBooksRepository} from "../../src/infrastructure/mocks/in-memory-books.repository";
+import { beforeAll, describe, expect, it } from "vitest";
+import { Application } from "../../src/presentation/application";
+import { FakeUuidGenerator } from "../../src/infrastructure/mocks/fake-uuid-generator";
+import { InMemoryBooksRepository } from "../../src/infrastructure/mocks/in-memory-books.repository";
+import { InMemoryUsersRepository } from "../../src/infrastructure/mocks/in-memory-users.repository";
 
 process.env.NODE_ENV = "test";
 
 describe("library", () => {
   const uuidGenerator = new FakeUuidGenerator();
   const booksRepository = new InMemoryBooksRepository();
-  const app = new Application(booksRepository, uuidGenerator);
+  const userRepository = new InMemoryUsersRepository();
+  const app = new Application(booksRepository, userRepository, uuidGenerator);
   const supertestApp = supertest(app.expressApp);
   let library: { libraryId: string };
 

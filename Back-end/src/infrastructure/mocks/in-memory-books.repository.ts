@@ -1,6 +1,6 @@
-import {v4 as uuidv4} from "uuid"; // Using uuidv4 for generating unique IDs
-import {BookModel} from "../../domain/library/models/book.model";
-import {BooksRepository} from "../../domain/library/interfaces/books.repository";
+import { v4 as uuidv4 } from "uuid"; // Using uuidv4 for generating unique IDs
+import { BookModel } from "../../domain/library/models/book.model";
+import { BooksRepository } from "../../domain/library/interfaces/books.repository";
 
 export class InMemoryBooksRepository implements BooksRepository {
   public books = new Map<string, BookModel>();
@@ -22,11 +22,6 @@ export class InMemoryBooksRepository implements BooksRepository {
     this.libraries.set(libraryId, {id: libraryId, name: "My Library"});
 
     return {libraryId};
-  }
-
-  async findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null> {
-    const user = this.users.get(auth0Id);
-    return user ? {libraryId: user.libraryId} : null;
   }
 
   async listLibraryBooks(libraryId: string): Promise<BookModel[]> {

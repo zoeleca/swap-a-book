@@ -1,8 +1,8 @@
 import React from "react";
 
 interface DeleteBookButtonProps {
-  bookId: number;
-  onDelete: (id: number) => void;
+  bookId: string;
+  onDelete: (id: string) => void;
 }
 
 const DeleteBookButton: React.FC<DeleteBookButtonProps> = ({bookId, onDelete}) => {

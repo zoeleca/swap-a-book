@@ -82,6 +82,20 @@ cd swap-a-book
 #### **Example `.env` file for the Backend**
 
 ```env
+PORT=8000
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/swap_a_book
+AUTH0_DOMAIN=dev-xxx.eu.auth0.com
+AUTH0_AUDIENCE=http://localhost:8000
+AUTH0_SECRET=your-secret
+FRONTEND_URL=http://localhost:3000
+
+```
+
+---
+
+#### **Example `.env` file for the Frontend**
+
+```env
 PORT=3000
 DATABASE_URL=postgresql://user:password@localhost:5432/bookshare
 AUTH0_DOMAIN=your-auth0-domain
@@ -97,6 +111,11 @@ AUTH0_CLIENT_SECRET=your-client-secret
 
 ```
 docker-compose up --build
+```
+ for Local Development: 
+```
+docker compose -f docker-compose.yml up --build
+
 ```
 
 2 - Access the application:
@@ -217,20 +236,23 @@ tests/                  # Test configuration and utilities
 
 ```
 src/
-├── core/                   # Core business logic and entities
-│   ├── models/             
-│   ├── usecases/           
-├── data/                   # Data access and repositories
-│   ├── api/                
-│   ├── repositories/       
-├── ui/                     # UI and presentation layer
-│   ├── components/         
-│   ├── pages/              
-│   ├── routes/             # Custom React hooks
-├── main.tsx                # Entry point
-├── App.tsx                 # Root component
-└── types.d.ts              
- 
+├── auth/              # Auth0 login/logout buttons
+├── components/        # UI components (Header, Form, Modal...)
+├── pages/             # Main views (Home, Profile, Library)
+├── routes/            # App routes config (react-router)
+├── styles/            # Tailwind CSS & styles
+├── utils/             # Custom hooks & helpers
+├── App.tsx            # Root component
+└── main.tsx           # Entry point
+
+config/
+├── .env               # Env variables (Auth0, backend URL)
+├── vite.config.ts     # Vite bundler config
+└── tsconfig.json      # TypeScript config
+
+public/
+└── index.html         # Static entry HTML
+
 ```
 
 ---
@@ -240,3 +262,19 @@ src/
 - 1 . **Geolocalisation**: being able to see borrowable books not far from the user.
 - 2 . **Push Notifications**: Notify users when their borrow requests are approved.
 - 3 . **Admin Dashboard**: For better management of the system.
+
+
+## 📚 Resources
+
+- [React](https://react.dev/) – A JavaScript library for building user interfaces
+- [Vite](https://vitejs.dev/) – Next-generation frontend tooling
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
+
+- [Prisma](https://www.prisma.io/) – Next-generation Node.js and TypeScript ORM
+- [PostgreSQL](https://www.postgresql.org/) – Powerful open source relational database
+
+- [Auth0](https://auth0.com/) – Identity management and authentication service
+- [Docker](https://www.docker.com/) – Containerization platform for app deployment
+
+- [Vitest](https://vitest.dev/) – Unit test framework for Vite-powered projects
+- [Supertest](https://github.com/ladjs/supertest) – HTTP assertions for testing Express APIs  

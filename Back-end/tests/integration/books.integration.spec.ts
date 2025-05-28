@@ -1,8 +1,8 @@
-import {afterAll, beforeAll, describe, expect, it} from "vitest";
-import {randomUUID} from "node:crypto";
-import {BookCategoriesModel} from "../../src/domain/library/models/book-categories.model";
-import {Book, BookStatus, BorrowStatus, PrismaClient} from "@prisma/client";
-import {BookLanguagesModel} from "../../src/domain/library/models/book-languages.model";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { randomUUID } from "node:crypto";
+import { BookCategoriesModel } from "../../src/domain/library/models/book-categories.model";
+import { Book, BookStatus, BorrowStatus, PrismaClient } from "@prisma/client";
+import { BookLanguagesModel } from "../../src/domain/library/models/book-languages.model";
 
 let prisma = new PrismaClient();
 
@@ -31,7 +31,6 @@ describe("PrismaBooksRepository", () => {
   afterAll(async () => {
     await prisma.book.deleteMany({});
     await prisma.library.deleteMany({});
-    await prisma.user.deleteMany({});
     await prisma.$disconnect();
   });
 
@@ -50,6 +49,8 @@ describe("PrismaBooksRepository", () => {
         borrowStatus: BorrowStatus.Available,
         status: BookStatus.Visible,
         libraryId,
+        borrowedAt: null,
+        borrowedBy: null
       };
 
       await prisma.book.create({
@@ -63,10 +64,11 @@ describe("PrismaBooksRepository", () => {
       expect(insertedBook).toEqual(bookData);
     });
   });
-  // describe("When Finding a book by Id", async () => {
-  // });
-  // describe("When Deleting a book by Id", async () => {
-  // });
-  // describe("When Listing a book by Id", async () => {
-  // });
+
+  describe.todo("When Finding a book by Id", async () => {
+  });
+  describe.todo("When Deleting a book by Id", async () => {
+  });
+  describe.todo("When Listing a book by Id", async () => {
+  });
 });

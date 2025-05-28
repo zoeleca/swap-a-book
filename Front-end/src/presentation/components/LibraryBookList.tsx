@@ -1,9 +1,9 @@
 import React from "react";
-import DefaultBookCoverImage from "../images/bookCover.png";
+import DefaultBookCoverImage from "../assets/bookCover.png";
 import DeleteBookButton from "./DeleteBookButton.tsx";
 
 interface Book {
-  id: number;
+  id: string;
   title: string;
   author?: string;
   authors?: string[];
@@ -13,7 +13,7 @@ interface Book {
 
 interface BookGridProps {
   books: Book[];
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
   onClickBook: (book: Book) => void;
 
 }
@@ -24,7 +24,7 @@ const LibraryBookGrid: React.FC<BookGridProps> = ({books, onDelete, onClickBook}
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 px-8 pb-10">
       {books.map((book) => (
         <div
           key={book.id}

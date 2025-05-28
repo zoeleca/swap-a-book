@@ -1,12 +1,13 @@
-import express, {NextFunction, Request, Response} from "express";
-import {auth} from "express-oauth2-jwt-bearer";
-import cors from "cors";
-import {BookRoutes} from "./routes/book.routes";
-import {BooksRepository} from "../domain/library/interfaces/books.repository";
-import {UuidGenerator} from "../domain/library/interfaces/uuid-generator";
-import {LibraryRoutes} from "./routes/library.routes";
+import express, { NextFunction, Request, Response } from "express";
+import { auth } from "express-oauth2-jwt-bearer";
+import cors, { CorsOptions } from "cors";
+import { BookRoutes } from "./routes/book.routes";
+import { BooksRepository } from "../domain/library/interfaces/books.repository";
+import { UuidGenerator } from "../domain/library/interfaces/uuid-generator";
+import { LibraryRoutes } from "./routes/library.routes";
 import dotenv from "dotenv";
-import {UserRoutes} from "./routes/user.routes";
+import { UserRoutes } from "./routes/user.routes";
+import { UsersRepository } from "../domain/library/interfaces/user.repository";
 
 dotenv.config();
 
@@ -15,10 +16,11 @@ export class Application {
 
   constructor(
     private readonly bookRepository: BooksRepository,
+    private readonly userRepository: UsersRepository,
     private readonly uuidGenerator: UuidGenerator,
   ) {
     this.initializeMiddleware();
-    this.initializeControllers();
+    this.initializeRoutes();
   }
 
   public start(port: number) {
@@ -28,14 +30,22 @@ export class Application {
   }
 
   private initializeMiddleware() {
-    this.expressApp.use(express.json());
-    this.expressApp.use(cors({
-      origin: ["http://localhost:3000", "http://localhost:5173"],
-    }));
+      const allowedOrigins: string[] = [
+        process.env.FRONT_END,
+        process.env.FRONT_TEST,
+        process.env.VITE_API_URL,
+        process.env.PROD_FRONTEND_URL,
+      ].filter((origin): origin is string => Boolean(origin)); // filtre et garantit les types string
 
-  }
+      const corsOptions: CorsOptions = {
+        origin: allowedOrigins,
+      };
 
-  private initializeControllers() {
+      this.expressApp.use(express.json());
+      this.expressApp.use(cors(corsOptions));
+    }
+
+  private initializeRoutes() {
     const jwtCheck =
       process.env.NODE_ENV === "test"
         ? (req: Request, res: Response, next: NextFunction) => {
@@ -52,15 +62,19 @@ export class Application {
           tokenSigningAlg: "RS256",
         });
 
-    const bookRoutes = new BookRoutes(this.bookRepository, this.uuidGenerator, jwtCheck);
+    const bookRoutes = new BookRoutes(
+      this.bookRepository,
+      this.userRepository,
+      this.uuidGenerator,
+      jwtCheck
+    );
     this.expressApp.use("/books", bookRoutes.getRouter());
 
-
-    const libraryRoutes = new LibraryRoutes(this.bookRepository, jwtCheck);
+    const libraryRoutes = new LibraryRoutes(this.bookRepository, this.userRepository, jwtCheck);
     this.expressApp.use("/library", libraryRoutes.getRouter());
     this.expressApp.use("/", libraryRoutes.getRouter());
 
-    const userRoutes = new UserRoutes();
+    const userRoutes = new UserRoutes(this.userRepository, jwtCheck);
     this.expressApp.use("/user", jwtCheck, userRoutes.getRouter());
   }
 }
