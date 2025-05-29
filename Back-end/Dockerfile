@@ -1,29 +1,27 @@
 FROM node:20-alpine AS build
 
-# Install OpenSSL (for Prisma compatibility)
+# Install OpenSSL (needed by Prisma) and ts-node (for seed script)
 RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-# Copy package.json and yarn.lock to install dependencies
+# Copy dependency files
 COPY package.json yarn.lock ./
+RUN yarn install
 
-# Install dependencies
-RUN yarn
-
+# Copy Prisma schema and generate the client
 COPY prisma ./prisma/
-
-# Copy the rest of the application code
-COPY . .
-
-# Generate Prisma client
 RUN yarn prisma generate
 
-# Expose the application port
+# Copy the rest of the code
+COPY . .
+
+# Build TypeScript
+RUN yarn build
+
 EXPOSE 8000
 
-# Use a non-root user for security
 USER node
 
-# Start the application
-CMD ["sh", "-c", "yarn prisma migrate deploy && yarn prisma db seed && yarn dev --host 0.0.0.0"]
+# Run migrations, seed, then start the dev server
+CMD yarn prisma migrate deploy && yarn prisma db seed && yarn dev --host 0.0.0.0
