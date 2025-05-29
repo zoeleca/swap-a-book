@@ -1,7 +1,9 @@
 import axios from "axios";
-import {Book} from "../../domain/models/Book.ts";
+import { Book } from "../../domain/models/Book.ts";
 
 export const fetchBooksFromApi = async (): Promise<Book[]> => {
-  const response = await axios.get("http://localhost:8000/library/");
+  const baseUrl = import.meta.env.VITE_API_URL;
+
+  const response = await axios.get(`${baseUrl}/library/`);
   return response.data;
 };

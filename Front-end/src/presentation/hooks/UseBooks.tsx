@@ -1,6 +1,6 @@
 // hooks/useBooks.ts
-import {useAuth0} from "@auth0/auth0-react";
-import {useEffect, useState} from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export interface Book {
@@ -15,11 +15,13 @@ export interface Book {
 export const useBooks = () => {
   const {getAccessTokenSilently, isAuthenticated} = useAuth0();
   const [books, setBooks] = useState<Book[]>([]);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchBooks = async () => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await axios.get("http://localhost:8000/library/books", {
+
+      const response = await axios.get(`${baseUrl}/library/books`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +35,7 @@ export const useBooks = () => {
   const deleteBook = async (id: string) => {
     try {
       const token = await getAccessTokenSilently();
-      await axios.delete(`http://localhost:8000/books/${id}`, {
+      await axios.delete(`${baseUrl}/books/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
