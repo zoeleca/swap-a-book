@@ -48,7 +48,7 @@ jobs:
         run: yarn install
 
       - name: Reset and migrate test database
-        run: yarn prisma:migrate:reset
+        run: yarn prisma migrate reset --force --skip-seed
 
       - name: Run integration tests
         run: yarn test:integration
