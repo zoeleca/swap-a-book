@@ -48,10 +48,7 @@ jobs:
         run: yarn install
 
       - name: Reset and migrate test database
-        run: |
-          # Ensure Prisma uses the .env file
-          yarn prisma migrate reset --force --skip-seed
-          yarn prisma migrate dev --name init
+        run: yarn prisma:migrate:reset
 
       - name: Run integration tests
         run: yarn test:integration
