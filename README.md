@@ -114,8 +114,7 @@ docker-compose up --build
 ```
  for Local Development: 
 ```
-docker compose -f docker-compose.yml up --build
-
+docker compose -f docker-compose.yml -f docker-compose.override.yml up --build
 ```
 
 2 - Access the application:

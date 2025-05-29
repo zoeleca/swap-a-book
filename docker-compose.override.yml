@@ -37,9 +37,12 @@ services:
     volumes:
       - ./Back-end:/app
       - /app/node_modules
+      - ./Back-end/.env.development:/app/.env
+
     ports:
       - "8000:8000"
     environment:
+      NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/swap_a_book
       AUTH0_AUDIENCE: http://localhost:8000
       FRONTEND_URL: http://localhost:3000
@@ -55,6 +58,7 @@ services:
     volumes:
       - ./Front-end:/app
       - /app/node_modules
+      - ./Front-end/.env.development:/app/.env
     command: npm run dev
     environment:
       - VITE_API_URL=http://localhost:8000
