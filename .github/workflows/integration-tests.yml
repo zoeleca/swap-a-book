@@ -50,5 +50,9 @@ jobs:
       - name: Reset and migrate test database
         run: yarn prisma migrate reset --force --skip-seed
 
+      - name: Migrate test database
+        run: yarn prisma migrate dev --name init
+
+
       - name: Run integration tests
         run: yarn test:integration
