@@ -3,7 +3,12 @@ import { BookCategory, BookLanguage, BookStatus, BorrowStatus, PrismaClient, } f
 const prisma = new PrismaClient();
 
 async function main() {
-  // 1. Upsert user
+
+  if (process.env.NODE_ENV === "production") {
+    console.log("⛔ Skipping seed in production.");
+    process.exit(0);
+  }
+  
   const user = await prisma.user.upsert({
     where: { auth0Id: "auth0|johny" },
     update: {},

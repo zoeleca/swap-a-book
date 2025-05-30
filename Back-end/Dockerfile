@@ -24,4 +24,4 @@ EXPOSE 8000
 USER node
 
 # Run migrations, seed, then start the dev server
-CMD yarn prisma migrate deploy && yarn prisma db seed && yarn dev --host 0.0.0.0
+CMD yarn prisma migrate deploy && yarn dev --host 0.0.0.0
