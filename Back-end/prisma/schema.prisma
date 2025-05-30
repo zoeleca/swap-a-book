@@ -39,8 +39,10 @@ model Book {
   library      Library        @relation(fields: [libraryId], references: [id])
 
   // Ajout temporaire pour gérer l'emprunt
-  borrowedBy String?   @db.Uuid
-  borrowedAt DateTime?
+  borrowedBy  String?   @db.Uuid
+  borrowedAt  DateTime?
+  coverImage  String?
+  description String?
 }
 
 enum BookCategory {

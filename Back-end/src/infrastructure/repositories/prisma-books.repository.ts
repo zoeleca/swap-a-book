@@ -21,6 +21,8 @@ export class PrismaBooksRepository implements BooksRepository {
         libraryId: book.libraryId,
         status: book.status,
         languages: book.languages,
+        coverImage: book.coverImage || null,
+        description: book.description || null,
       },
     });
   }
@@ -51,6 +53,8 @@ export class PrismaBooksRepository implements BooksRepository {
         status: true,
         languages: true,
         libraryId: true,
+        coverImage: true,
+        description: true,
       },
     });
 
@@ -63,6 +67,8 @@ export class PrismaBooksRepository implements BooksRepository {
       status: book.status as BookStatusModel,
       languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
+      coverImage: book.coverImage ?? undefined,
+      description: book.description ?? undefined,
     }));
   }
 
@@ -84,6 +90,8 @@ export class PrismaBooksRepository implements BooksRepository {
         status: true,
         languages: true,
         libraryId: true,
+        coverImage: true,
+        description: true,
       },
     });
 
@@ -101,6 +109,8 @@ export class PrismaBooksRepository implements BooksRepository {
       status: book.status as BookStatusModel,
       languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
+      coverImage: book.coverImage ?? undefined,
+      description: book.description ?? undefined,
     };
   }
 
@@ -116,6 +126,8 @@ export class PrismaBooksRepository implements BooksRepository {
         status: true,
         languages: true,
         libraryId: true,
+        coverImage: true,
+        description: true,
       },
     });
 
@@ -128,6 +140,8 @@ export class PrismaBooksRepository implements BooksRepository {
       status: book.status as BookStatusModel,
       languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
+      coverImage: book.coverImage ?? undefined,
+      description: book.description ?? undefined,
     }));
   }
 
@@ -143,6 +157,8 @@ export class PrismaBooksRepository implements BooksRepository {
         status: true,
         languages: true,
         libraryId: true,
+        coverImage: true,
+        description: true,
       },
     });
 
@@ -155,6 +171,8 @@ export class PrismaBooksRepository implements BooksRepository {
       status: book.status as BookStatusModel,
       languages: book.languages as BookLanguagesModel[],
       libraryId: book.libraryId,
+      coverImage: book.coverImage ?? undefined,
+      description: book.description ?? undefined,
     }));
   }
 

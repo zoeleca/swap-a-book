@@ -5,6 +5,19 @@ import { UuidGenerator } from "../../domain/library/interfaces/uuid-generator";
 import { BookModel } from "../../domain/library/models/book.model";
 import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-books.repository";
 import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
+import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
+import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
+import { z } from "zod";
+
+const addBookSchema = z.object({
+  title: z.string().min(1),
+  authors: z.array(z.string().min(1)).nonempty(),
+  categories: z.array(z.nativeEnum(BookCategoriesModel)).nonempty(),
+  languages: z.array(z.nativeEnum(BookLanguagesModel)).nonempty(),
+  coverImage: z.string().url().nullable().optional(),
+  description: z.string().nullable().optional(),
+});
+
 
 export class BookController {
   private addBookUseCase: AddBookUseCase;
@@ -27,26 +40,38 @@ export class BookController {
       const auth0Id: string = (req as any).auth?.payload?.sub;
 
       if (!auth0Id) {
-        return res.status(401).send({error: "Unauthorized: No Auth0 ID found"});
+        return res.status(401).send({ error: "Unauthorized: No Auth0 ID found" });
       }
-      let user = await this.getLibraryId(auth0Id);
 
-      const {title, authors, categories, languages} = req.body;
+      const user = await this.getLibraryId(auth0Id);
+
+      const parseResult = addBookSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({
+          error: "Invalid input",
+          details: parseResult.error.flatten(),
+        });
+      }
+      const { title, authors, categories, languages, coverImage, description } = parseResult.data;
 
       const addedBook = await this.addBookUseCase.execute({
-        libraryId: user.libraryId,
+        libraryId: user.library.id,
         title,
         authors,
         categories,
         languages,
+        coverImage: coverImage ?? undefined,
+        description: description ?? undefined,
       });
+
 
       res.status(201).json(this.toResponse(addedBook));
     } catch (error) {
       console.error("Add book error:", error);
-      res.status(500).send({error: "Failed to add book"});
+      res.status(500).send({ error: "Failed to add book" });
     }
   };
+
 
   public getBookById = async (req: Request, res: Response) => {
     try {
@@ -92,12 +117,9 @@ export class BookController {
   };
 
   private async getLibraryId(auth0Id: string) {
-    let user = await this.userRepository.findUserByAuth0Id(auth0Id);
+    let userData = await this.userRepository.ensureUserWithLibrary(auth0Id);
 
-    if (!user || !user.libraryId) {
-      user = await this.userRepository.createUserWithLibrary(auth0Id);
-    }
-    return user;
+    return userData;
   }
 
   private toResponse(book: BookModel) {
@@ -110,6 +132,8 @@ export class BookController {
         borrowStatus: book.borrowStatus,
         status: book.status,
         languages: book.languages,
+        coverImage: book.coverImage,
+        description: book.description,
       },
     };
   }

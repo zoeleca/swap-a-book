@@ -1,20 +1,42 @@
 import { v4 as uuidv4 } from "uuid";
 import { UsersRepository } from "../../domain/library/interfaces/user.repository";
+import { UserWithLibrary } from "../../domain/library/entity/user-with-library";
 
 export class InMemoryUsersRepository implements UsersRepository {
   private users = new Map<string, { id: string; auth0Id: string; libraryId: string }>();
   private libraries = new Map<string, { id: string; name: string }>();
 
   async deleteUserByAuth0Id(auth0Id: string): Promise<void> {
-    const user = Array.from(this.users.values()).find(u => u.auth0Id === auth0Id);
+    const user = Array.from(this.users.values()).find(user => user.auth0Id === auth0Id);
     if (user) {
       this.users.delete(user.id);
       this.libraries.delete(user.libraryId);
     }
   }
 
+  async ensureUserWithLibrary(auth0Id: string): Promise<UserWithLibrary> {
+    let existing = Array.from(this.users.values()).find(user => user.auth0Id === auth0Id);
+
+    if (!existing) {
+      existing = await this.createUserWithLibrary(auth0Id);
+    }
+
+    return {
+      id: existing.id,
+      name: "InMemory User",
+      auth0Id: existing.auth0Id,
+      library: {
+        id: existing.libraryId,
+        name: this.libraries.get(existing.libraryId)?.name || "InMemory Library",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: existing.id,
+      },
+    };
+  }
+
   async findUserByAuth0Id(auth0Id: string): Promise<{ libraryId: string } | null> {
-    const user = Array.from(this.users.values()).find(u => u.auth0Id === auth0Id);
+    const user = Array.from(this.users.values()).find(user => user.auth0Id === auth0Id);
     if (!user) return null;
     return { libraryId: user.libraryId };
   }
@@ -29,4 +51,5 @@ export class InMemoryUsersRepository implements UsersRepository {
 
     return newUser;
   }
+
 }
