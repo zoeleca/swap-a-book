@@ -14,6 +14,8 @@ export class BookModel {
     public readonly languages: BookLanguagesModel[],
     public readonly borrowStatus: BorrowStatusModel,
     public readonly status: BookStatusModel,
-    public readonly libraryId: string
-  ) {}
+    public readonly libraryId: string,
+    public readonly coverImage?: string,
+    public readonly description?: string
+) {}
 }

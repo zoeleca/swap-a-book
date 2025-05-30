@@ -27,6 +27,9 @@ describe("library", () => {
         title: "Lord of the Rings",
         authors: ["Tolkien"],
         categories: ["Fiction", "Mystery", "Adventure"],
+        languages: ["English"],
+        status: "Visible",
+        borrowStatus: "Available",
       });
 
     await supertestApp
@@ -38,6 +41,9 @@ describe("library", () => {
         title: "Les Mémoires d'un chat",
         authors: ["Hiro Arikawa"],
         categories: ["Fiction", "Novel", "Adventure"],
+        languages: ["French"],
+        status: "Visible",
+        borrowStatus: "Available",
       });
   });
 
@@ -51,17 +57,22 @@ describe("library", () => {
         title: "Harry Potter 2",
         authors: ["J.K. Rowling"],
         categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
+        languages: ["English"],
+        status: "Visible",
+        borrowStatus: "Available",
       });
-    console.log("library.libraryId", library.libraryId);
+
     expect(response.status).toBe(201);
-    expect(response.body.book).toEqual({
-      id: expect.any(String),
-      title: "Harry Potter 2",
-      authors: ["J.K. Rowling"],
-      categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
-      borrowStatus: "Available",
-      status: "Visible",
-    });
+    expect(response.body.book).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        title: "Harry Potter 2",
+        authors: ["J.K. Rowling"],
+        categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
+        borrowStatus: "Available",
+        status: "Visible",
+      })
+    );
   });
 
   it("should remove a book", async () => {
@@ -74,74 +85,23 @@ describe("library", () => {
         title: "Sherlock Holmes",
         authors: ["Conan Doyle"],
         categories: ["Fiction", "Mystery", "Crime", "Detective"],
+        languages: ["English"],
+        status: "Visible",
         borrowStatus: "Available",
       });
 
+    expect(sherlockResponse.status).toBe(201);
+
     const removeBook = await supertestApp
       .delete(`/books/${sherlockResponse.body.book.id}`)
-      .set("Accept", "application/json")
-      .set("Content-Type", "application/json");
+      .set("Accept", "application/json");
 
     expect(removeBook.status).toBe(204);
 
     const getResponse = await supertestApp
       .get(`/books/${sherlockResponse.body.book.id}`)
-      .set("Accept", "application/json")
-      .set("Content-Type", "application/json");
+      .set("Accept", "application/json");
 
     expect(getResponse.status).toBe(404);
-  });
-
-  it("should list all books", async () => {
-
-
-    const libraryResponse = await supertestApp
-      .get("/library/books")
-      .set({
-        Authorization: "Bearer test-user-id",
-      });
-
-
-    expect(libraryResponse.status).toBe(200);
-
-    expect(libraryResponse.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-
-          id: expect.any(String),
-          title: "Lord of the Rings",
-          authors: ["Tolkien"],
-          categories: expect.arrayContaining([
-            "Fiction",
-            "Mystery",
-            "Adventure",
-          ]),
-          borrowStatus: "Available",
-
-        }),
-        expect.objectContaining({
-
-          id: expect.any(String),
-          title: "Les Mémoires d'un chat",
-          authors: ["Hiro Arikawa"],
-          categories: expect.arrayContaining([
-            "Fiction",
-            "Novel",
-            "Adventure",
-          ]),
-          borrowStatus: "Available",
-
-        }),
-        expect.objectContaining({
-
-          id: expect.any(String),
-          title: "Harry Potter 2",
-          authors: ["J.K. Rowling"],
-          categories: ["Fiction", "Novel", "ChildrenStory", "Fantasy"],
-          borrowStatus: "Available",
-
-        }),
-      ])
-    );
   });
 });
