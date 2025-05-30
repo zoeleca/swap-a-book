@@ -1,5 +1,5 @@
 // CategorySelector.tsx
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 interface CategorySelectorProps {
   categories: string[];
@@ -59,7 +59,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
             <li
               key={category}
               className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => onSelect(category)}
+              onClick={() => {
+                onSelect(category);
+                setCategoryInput(""); // ✅ close dropdown
+              }}
             >
               {category}
             </li>

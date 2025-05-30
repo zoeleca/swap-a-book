@@ -79,5 +79,11 @@ export class Application {
 
     const userRoutes = new UserRoutes(this.userRepository, jwtCheck);
     this.expressApp.use("/user", jwtCheck, userRoutes.getRouter());
+
+    this.expressApp.get("*", (req, res) => {
+      console.warn("Route not found:", req.method, req.originalUrl);
+      res.status(404).json({ error: "Route not found" });
+    });
+
   }
 }

@@ -13,13 +13,17 @@ export interface Book {
 }
 
 export const useBooks = () => {
-  const {getAccessTokenSilently, isAuthenticated} = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const [books, setBooks] = useState<Book[]>([]);
   const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchBooks = async () => {
     try {
-      const token = await getAccessTokenSilently();
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        },
+      });
 
       const response = await axios.get(`${baseUrl}/library/books`, {
         headers: {
@@ -34,13 +38,18 @@ export const useBooks = () => {
 
   const deleteBook = async (id: string) => {
     try {
-      const token = await getAccessTokenSilently();
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        },
+      });
+
       await axios.delete(`${baseUrl}/books/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      await fetchBooks(); // Refresh after deletion
+      await fetchBooks();
     } catch (error) {
       console.error("Error deleting book:", error);
     }
@@ -52,5 +61,5 @@ export const useBooks = () => {
     }
   }, [isAuthenticated]);
 
-  return {books, fetchBooks, deleteBook};
+  return { books, fetchBooks, deleteBook };
 };

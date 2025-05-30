@@ -1,4 +1,4 @@
-import {PrismaClient} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -6,8 +6,8 @@ export async function ensureUserExists(auth0Id: string) {
   if (!auth0Id) throw new Error("Missing Auth0 ID");
 
   let user = await prisma.user.findUnique({
-    where: {auth0Id},
-    include: {library: true},
+    where: { auth0Id },
+    include: { library: true },
   });
 
   if (!user) {
@@ -21,12 +21,24 @@ export async function ensureUserExists(auth0Id: string) {
           },
         },
       },
-      include: {library: true},
+      include: { library: true },
     });
   }
 
   if (!user.library) {
-    throw new Error("Library creation failed");
+    const library = await prisma.library.create({
+      data: {
+        name: "My Library",
+        user: {
+          connect: { id: user.id },
+        },
+      },
+    });
+
+    user = {
+      ...user,
+      library,
+    };
   }
 
   const userWithLibrary = user.library as {
@@ -37,5 +49,5 @@ export async function ensureUserExists(auth0Id: string) {
     userId: string;
   };
 
-  return {...user, library: userWithLibrary};
+  return { ...user, library: userWithLibrary };
 }
