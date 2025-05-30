@@ -8,6 +8,7 @@ import { LibraryRoutes } from "./routes/library.routes";
 import dotenv from "dotenv";
 import { UserRoutes } from "./routes/user.routes";
 import { UsersRepository } from "../domain/library/interfaces/user.repository";
+import adminRoutes from "./routes/admin.routes";
 
 dotenv.config({
   path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development",
@@ -84,6 +85,6 @@ export class Application {
       console.warn("Route not found:", req.method, req.originalUrl);
       res.status(404).json({ error: "Route not found" });
     });
-
+    this.expressApp.use("/admin", adminRoutes);
   }
 }
