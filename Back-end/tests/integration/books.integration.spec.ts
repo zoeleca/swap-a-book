@@ -50,8 +50,11 @@ describe("PrismaBooksRepository", () => {
         status: BookStatus.Visible,
         libraryId,
         borrowedAt: null,
-        borrowedBy: null
+        borrowedBy: null,
+        coverImage: null,
+        description: null,
       };
+
 
       await prisma.book.create({
         data: bookData,

@@ -12,6 +12,8 @@ export interface AddBookInput {
   authors: string[];
   categories: BookCategoriesModel[];
   languages: BookLanguagesModel[];
+  coverImage?: string;
+  description?: string;
 }
 
 export class AddBookUseCase {
@@ -29,7 +31,9 @@ export class AddBookUseCase {
       input.languages,
       BorrowStatusModel.Available,
       BookStatusModel.Visible,
-      input.libraryId
+      input.libraryId,
+    input.coverImage,
+      input.description
     );
 
     await this.repository.save(book);

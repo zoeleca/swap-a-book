@@ -6,7 +6,10 @@ import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-
 export class LibraryController {
   private listLibraryBooks: ListAllBooksUseCase;
 
-  constructor(private readonly bookRepository: PrismaBooksRepository, private  readonly userRepository: PrismaUsersRepository) {
+  constructor(
+    private readonly bookRepository: PrismaBooksRepository,
+    private readonly userRepository: PrismaUsersRepository
+  ) {
     this.listLibraryBooks = new ListAllBooksUseCase(this.bookRepository);
   }
 
@@ -15,42 +18,47 @@ export class LibraryController {
       const books = await this.listLibraryBooks.getAllBooks();
       res.json(books);
     } catch (error) {
-      console.error("Failed to fetch library:", error);
+      console.error("Failed to fetch all books:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   };
 
-  public getLibrary = async (req: Request, res: Response) => {
+  public getBooksForAuthenticatedUser = async (req: Request, res: Response) => {
     try {
-      const auth = (req as any).auth;
-      const auth0Id = auth?.payload?.sub;
+      const auth0Id = (req as any).auth?.payload?.sub;
 
       if (!auth0Id) {
         return res.status(401).json({ error: "Unauthorized: missing user ID" });
       }
 
-      const user = await this.userRepository.findUserByAuth0Id(auth0Id);
+      let user = await this.userRepository.findUserByAuth0Id(auth0Id);
+
       if (!user) {
-        return res.status(401).json({ error: "User not found" });
+        // ✅ Create user and library automatically
+        const created = await this.userRepository.createUserWithLibrary(auth0Id);
+        user = { libraryId: created.libraryId };
       }
 
       const books = await this.bookRepository.listLibraryBooks(user.libraryId);
       res.json(books);
     } catch (error) {
-      console.error("Failed to fetch library:", error);
+      console.error("Failed to fetch authenticated user library:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   };
 
-  private toResponse(book: any) {
-    return {
-      book: {
-        id: book.id,
-        title: book.title,
-        authors: book.authors,
-        categories: book.categories,
-        borrowStatus: book.borrowStatus,
-      },
-    };
-  }
+  public getLibraryById = async (req: Request, res: Response) => {
+    try {
+      const libraryId = req.params.libraryId;
+      if (!libraryId) {
+        return res.status(400).json({ error: "Missing library ID" });
+      }
+
+      const books = await this.bookRepository.listLibraryBooks(libraryId);
+      res.json(books);
+    } catch (error) {
+      console.error("Failed to fetch library by ID:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
 }

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { ensureUserExists } from "../../infrastructure/repositories/ensure-user-exists";
 import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 
 export class UserController {
@@ -12,7 +11,7 @@ export class UserController {
       const auth0Id = req.auth?.payload?.sub;
       if (!auth0Id) return res.status(401).json({ error: "Unauthorized" });
 
-      const user = await ensureUserExists(auth0Id);
+      const user = await this.usersRepository.ensureUserWithLibrary(auth0Id);
       if (!user) return res.status(404).json({ error: "User not found" });
 
       return res.json({

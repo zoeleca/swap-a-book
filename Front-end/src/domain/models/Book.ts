@@ -5,4 +5,5 @@ export interface Book {
   authors?: string[];
   coverImage?: string;
   categories?: string[];
+  description?: string;
 }
