@@ -14,7 +14,8 @@
     "test:setup": "dotenv -e .env.test -- npx prisma migrate reset --force --skip-seed && npx prisma migrate dev",
     "test:integration": "yarn test:setup && vitest --run",
     "start": "prisma migrate dev  && yarn ts-node src/main.ts",
-    "dev:docker": "dotenv -e .env.development nodemon src/main.ts"
+    "dev:docker": "dotenv -e .env.development nodemon src/main.ts",
+    "clean:seed": "ts-node scripts/cleanSeed.ts"
   },
   "author": "",
   "license": "ISC",
@@ -32,7 +33,7 @@
     "dotenv-cli": "^8.0.0",
     "nodemon": "3.1.0",
     "supertest": "7.0.0",
-    "ts-node": "10.9.2",
+    "ts-node": "^10.9.2",
     "typescript": "5.4.5",
     "uuid": "10.0.0",
     "vitest": "^2.1.3"
