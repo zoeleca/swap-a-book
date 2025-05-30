@@ -44,7 +44,6 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/swap_a_book
-      AUTH0_AUDIENCE: http://localhost:8000
       FRONTEND_URL: http://localhost:3000
     depends_on:
       - postgres

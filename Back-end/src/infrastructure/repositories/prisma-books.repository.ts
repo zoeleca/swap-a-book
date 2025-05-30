@@ -42,6 +42,16 @@ export class PrismaBooksRepository implements BooksRepository {
           },
         ],
       },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        categories: true,
+        borrowStatus: true,
+        status: true,
+        languages: true,
+        libraryId: true,
+      },
     });
 
     return books.map((book) => ({
@@ -58,16 +68,29 @@ export class PrismaBooksRepository implements BooksRepository {
 
   async delete(book: BookModel): Promise<void> {
     await prisma.book.delete({
-      where: {id: book.id},
+      where: { id: book.id },
     });
   }
 
   async getById(id: string): Promise<BookModel | undefined> {
     const book = await prisma.book.findUnique({
-      where: {id: id},
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        categories: true,
+        borrowStatus: true,
+        status: true,
+        languages: true,
+        libraryId: true,
+      },
     });
 
-    if (!book) return undefined;
+    if (!book) {
+      console.warn(`Book not found for ID: ${id}`);
+      return undefined;
+    }
 
     return {
       id: book.id,
@@ -83,8 +106,16 @@ export class PrismaBooksRepository implements BooksRepository {
 
   async listLibraryBooks(libraryId: string): Promise<BookModel[]> {
     const books = await prisma.book.findMany({
-      where: {
-        libraryId: libraryId,
+      where: { libraryId },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        categories: true,
+        borrowStatus: true,
+        status: true,
+        languages: true,
+        libraryId: true,
       },
     });
 
@@ -102,8 +133,16 @@ export class PrismaBooksRepository implements BooksRepository {
 
   async listAllBooks(): Promise<BookModel[]> {
     const books = await prisma.book.findMany({
-      where: {
-        status: "Visible"
+      where: { status: "Visible" },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        categories: true,
+        borrowStatus: true,
+        status: true,
+        languages: true,
+        libraryId: true,
       },
     });
 

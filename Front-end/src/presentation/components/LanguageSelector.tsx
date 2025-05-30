@@ -1,5 +1,5 @@
 // LanguageSelector.tsx
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 interface LanguageSelectorProps {
   languages: string[];
@@ -54,7 +54,10 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             <div
               key={language}
               className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => onSelect(language)}
+              onClick={() => {
+                onSelect(language);
+                setLanguageInput(""); // ✅ closes the dropdown
+              }}
             >
               {language}
             </div>
