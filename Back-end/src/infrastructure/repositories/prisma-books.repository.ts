@@ -6,6 +6,7 @@ import { BookStatusModel } from "../../domain/library/models/book-status.model";
 import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
 import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
 import { randomUUID } from "node:crypto";
+import { BorrowRequestModel } from "../../domain/library/models/borrow-request.model";
 
 const prisma = new PrismaClient();
 
@@ -25,6 +26,26 @@ export class PrismaBooksRepository implements BooksRepository {
         description: book.description || null,
       },
     });
+  }
+
+  async createBorrowRequest(request: BorrowRequestModel): Promise<BorrowRequestModel> {
+    const created = await prisma.borrowRequest.create({
+      data: {
+        id: request.id,
+        bookId: request.bookId,
+        requesterId: request.requesterId,
+        status: request.status.toString(),
+        createdAt: request.createdAt,
+      },
+    });
+
+    return new BorrowRequestModel(
+      created.id,
+      created.bookId,
+      created.requesterId,
+      RequestStatusModel.from(created.status),
+      created.createdAt
+    );
   }
 
   async searchBooks(query: string): Promise<BookModel[]> {

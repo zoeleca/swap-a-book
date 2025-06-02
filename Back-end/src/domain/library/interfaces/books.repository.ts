@@ -1,4 +1,5 @@
 import { BookModel } from "../models/book.model";
+import { BorrowRequestModel } from "../models/borrow-request.model";
 
 export interface BooksRepository {
   save(book: BookModel): Promise<void>;
@@ -14,4 +15,7 @@ export interface BooksRepository {
   listAllBooks(): Promise<BookModel[]>;
 
   createFakeUserAndLibrary(auth0Id: string): Promise<{ libraryId: string }>;
+
+  createBorrowRequest(request: BorrowRequestModel): Promise<BorrowRequestModel>;
+
 }

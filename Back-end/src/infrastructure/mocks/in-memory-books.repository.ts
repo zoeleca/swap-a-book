@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from "uuid"; // Using uuidv4 for generating unique IDs
 import { BookModel } from "../../domain/library/models/book.model";
 import { BooksRepository } from "../../domain/library/interfaces/books.repository";
+import { BorrowRequestModel } from "../../domain/library/models/borrow-request.model";
 
 export class InMemoryBooksRepository implements BooksRepository {
   public books = new Map<string, BookModel>();
+  public borrowRequests = new Map<string, BorrowRequestModel>();
   public users = new Map<string, { auth0Id: string; libraryId: string }>();
   public libraries = new Map<string, { id: string; name: string }>();
 
@@ -14,6 +16,12 @@ export class InMemoryBooksRepository implements BooksRepository {
   async delete(book: BookModel): Promise<void> {
     this.books.delete(book.id);
   }
+
+  async createBorrowRequest(request: BorrowRequestModel): Promise<BorrowRequestModel> {
+    this.borrowRequests.set(request.id, request);
+    return request;
+  }
+
 
   async createFakeUserAndLibrary(auth0Id: string): Promise<{ libraryId: string }> {
     const libraryId = uuidv4();

@@ -2,6 +2,7 @@ import { BookCategoriesModel } from "./book-categories.model";
 import { BorrowStatusModel } from "./borrow-status.model";
 import { BookLanguagesModel } from "./book-languages.model";
 import { BookStatusModel } from "./book-status.model";
+import { BorrowRequestModel } from "./borrow-request.model";
 
 export class BookModel {
   //todo : builder
@@ -16,6 +17,7 @@ export class BookModel {
     public readonly status: BookStatusModel,
     public readonly libraryId: string,
     public readonly coverImage?: string,
-    public readonly description?: string
+    public readonly description?: string,
+    public readonly borrowRequests: BorrowRequestModel[] = []
 ) {}
 }
