@@ -3,8 +3,8 @@ import { BookModel } from "../../domain/library/models/book.model";
 import { BooksRepository } from "../../domain/library/interfaces/books.repository";
 
 type BookWithOwner = BookModel & {
-  library?: {
-    user?: {
+  library: {
+    user: {
       name: string;
       auth0Id: string;
     };
@@ -67,17 +67,19 @@ export class InMemoryBooksRepository implements BooksRepository {
     if (!book) return undefined;
 
     const library = this.libraries.get(book.libraryId);
-    const user = Array.from(this.users.values()).find(u => u.libraryId === book.libraryId);
+    const userEntry = Array.from(this.users.values()).find(u => u.libraryId === book.libraryId);
+
+    const user = userEntry
+      ? { name: "Mock User", auth0Id: userEntry.auth0Id }
+      : { name: "Unknown User", auth0Id: "unknown-auth0-id" };
 
     return {
       ...book,
       library: {
-        user: {
-          name: "Mock User",
-          auth0Id: user?.auth0Id || "unknown",
-        },
+        user,
       },
     };
   }
+
 
 }
