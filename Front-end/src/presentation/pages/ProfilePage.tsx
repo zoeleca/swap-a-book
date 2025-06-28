@@ -14,6 +14,7 @@ const ProfilePage: React.FC = () => {
   const { books, fetchBooks, deleteBook } = useBooks();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const { getAccessTokenSilently } = useAuth0();
 
 
   if (isLoading) return <div>Loading...</div>;
@@ -27,9 +28,32 @@ const ProfilePage: React.FC = () => {
         <LibraryBookGrid
           books={books}
           onDelete={deleteBook}
-          onClickBook={(book) => {
-            setSelectedBook(book);
-            setIsModalOpen(true);
+          onClickBook={async (book) => {
+            try {
+              const token = await getAccessTokenSilently();
+              const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${book.id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Fetch error: ${response.status} - ${errorText}`);
+                return;
+              }
+
+              const data = await response.json();
+              const enrichedBook = {
+                ...data.book,
+                isOwnedByUser: data.book.ownerAuth0Id === user?.sub,
+              };
+
+              setSelectedBook(enrichedBook);
+              setIsModalOpen(true);
+            } catch (error) {
+              console.error("Failed to load book details:", error);
+            }
           }}
         />
       <BookDetailModal

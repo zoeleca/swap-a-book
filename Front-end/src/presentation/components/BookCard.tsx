@@ -11,7 +11,7 @@ const BookCard: React.FC<BookCardProps> = ({book, onClick}) => {
     <div className="book-card" onClick={() => onClick(book)}>
       <img src={book.coverImage} alt={book.title}/>
       <h3>{book.title}</h3>
-      <p>{book.author}</p>
+      <p>{book.authors}</p>
     </div>
   );
 };
