@@ -1,15 +1,8 @@
 import React from "react";
 import DefaultBookCoverImage from "../assets/bookCover.png";
 import DeleteBookButton from "./DeleteBookButton.tsx";
+import { Book } from "../../domain/models/Book.ts";
 
-interface Book {
-  id: string;
-  title: string;
-  author?: string;
-  authors?: string[];
-  coverImage?: string;
-  categories?: string[];
-}
 
 interface BookGridProps {
   books: Book[];
@@ -40,7 +33,7 @@ const LibraryBookGrid: React.FC<BookGridProps> = ({books, onDelete, onClickBook}
             <div>
               <h3 className="text-xl font-semibold text-amber-900 mb-2">{book.title}</h3>
               <p className="text-amber-700 mb-2">
-                {book.author || book.authors?.join(', ')}
+                {book.authors?.join(', ')}
               </p>
               {book.categories && (
                 <p className="text-sm text-amber-600 italic">

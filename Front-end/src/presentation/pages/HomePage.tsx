@@ -1,11 +1,11 @@
-import {useState} from "react";
+import { useState } from "react";
 import HomeHeader from "../components/HomeHeader";
 import BookGrid from "../components/BookGrid.tsx";
 import BookDetailModal from "../components/BookDetailModal";
 import CategoryFilter from "../components/CategoryFilters";
 import SearchBar from "../components/SearchBar";
-import {usePublicBooks} from "../hooks/UsePublicBooks.tsx";
-import {Book} from "../../domain/models/Book.ts";
+import { usePublicBooks } from "../hooks/UsePublicBooks.tsx";
+import { Book } from "../../domain/models/Book.ts";
 
 const HomePage = () => {
   const {books, error} = usePublicBooks();
@@ -24,10 +24,17 @@ const HomePage = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const openModal = (book: Book) => {
-    setSelectedBook(book);
-    setIsModalOpen(true);
+  const openModal = async (book: Book) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${book.id}`);
+      const data = await response.json();
+      setSelectedBook(data.book);
+      setIsModalOpen(true);
+    } catch (err) {
+      console.error("Failed to load book details", err);
+    }
   };
+
 
   const closeModal = () => {
     setIsModalOpen(false);

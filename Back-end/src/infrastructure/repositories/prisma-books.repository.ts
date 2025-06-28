@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { BookModel } from "../../domain/library/models/book.model";
 import { BorrowStatusModel } from "../../domain/library/models/borrow-status.model";
-import { BooksRepository } from "../../domain/library/interfaces/books.repository";
+import { BooksRepository, BookWithOwner } from "../../domain/library/interfaces/books.repository";
 import { BookStatusModel } from "../../domain/library/models/book-status.model";
 import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
 import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
@@ -26,6 +26,36 @@ export class PrismaBooksRepository implements BooksRepository {
       },
     });
   }
+
+  async update(id: string, updates: Partial<BookModel>): Promise<BookModel> {
+    const updated = await prisma.book.update({
+      where: { id },
+      data: {
+        title: updates.title,
+        authors: updates.authors,
+        categories: updates.categories,
+        borrowStatus: updates.borrowStatus,
+        status: updates.status,
+        languages: updates.languages,
+        coverImage: updates.coverImage ?? null,
+        description: updates.description ?? null,
+      },
+    });
+
+    return {
+      id: updated.id,
+      title: updated.title,
+      authors: updated.authors,
+      categories: updated.categories as BookCategoriesModel[],
+      borrowStatus: updated.borrowStatus as BorrowStatusModel,
+      status: updated.status as BookStatusModel,
+      languages: updated.languages as BookLanguagesModel[],
+      libraryId: updated.libraryId,
+      coverImage: updated.coverImage ?? undefined,
+      description: updated.description ?? undefined,
+    };
+  }
+
 
   async searchBooks(query: string): Promise<BookModel[]> {
     const books = await prisma.book.findMany({
@@ -78,21 +108,16 @@ export class PrismaBooksRepository implements BooksRepository {
     });
   }
 
-  async getById(id: string): Promise<BookModel | undefined> {
+  async getById(id: string): Promise<BookWithOwner | undefined> {
     const book = await prisma.book.findUnique({
       where: { id },
-      select: {
-        id: true,
-        title: true,
-        authors: true,
-        categories: true,
-        borrowStatus: true,
-        status: true,
-        languages: true,
-        libraryId: true,
-        coverImage: true,
-        description: true,
-      },
+      include: {
+        library: {
+          include: {
+            user: true
+          }
+        }
+      }
     });
 
     if (!book) {
@@ -111,6 +136,12 @@ export class PrismaBooksRepository implements BooksRepository {
       libraryId: book.libraryId,
       coverImage: book.coverImage ?? undefined,
       description: book.description ?? undefined,
+      library: {
+        user: {
+          name: book.library.user.name,
+          auth0Id: book.library.user.auth0Id,
+        },
+      },
     };
   }
 

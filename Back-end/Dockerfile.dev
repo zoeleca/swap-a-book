@@ -15,4 +15,4 @@ RUN yarn prisma generate
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "npx prisma migrate dev --name auto && yarn prisma db seed && yarn dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && yarn prisma db seed && yarn dev"]

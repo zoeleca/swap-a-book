@@ -26,6 +26,7 @@ export class LibraryController {
   public getBooksForAuthenticatedUser = async (req: Request, res: Response) => {
     try {
       const auth0Id = (req as any).auth?.payload?.sub;
+      const name = (req as any).auth?.payload?.name;
 
       if (!auth0Id) {
         return res.status(401).json({ error: "Unauthorized: missing user ID" });
@@ -35,7 +36,7 @@ export class LibraryController {
 
       if (!user) {
         // ✅ Create user and library automatically
-        const created = await this.userRepository.createUserWithLibrary(auth0Id);
+        const created = await this.userRepository.createUserWithLibrary(auth0Id, name);
         user = { libraryId: created.libraryId };
       }
 

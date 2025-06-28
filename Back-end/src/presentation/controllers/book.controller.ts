@@ -7,16 +7,9 @@ import { PrismaBooksRepository } from "../../infrastructure/repositories/prisma-
 import { PrismaUsersRepository } from "../../infrastructure/repositories/prisma-users.respository";
 import { BookLanguagesModel } from "../../domain/library/models/book-languages.model";
 import { BookCategoriesModel } from "../../domain/library/models/book-categories.model";
-import { z } from "zod";
+import z from "zod";
 
-const addBookSchema = z.object({
-  title: z.string().min(1),
-  authors: z.array(z.string().min(1)).nonempty(),
-  categories: z.array(z.nativeEnum(BookCategoriesModel)).nonempty(),
-  languages: z.array(z.nativeEnum(BookLanguagesModel)).nonempty(),
-  coverImage: z.string().url().nullable().optional(),
-  description: z.string().nullable().optional(),
-});
+
 
 
 export class BookController {
@@ -38,12 +31,20 @@ export class BookController {
   public addBook = async (req: Request, res: Response) => {
     try {
       const auth0Id: string = (req as any).auth?.payload?.sub;
-
       if (!auth0Id) {
         return res.status(401).send({ error: "Unauthorized: No Auth0 ID found" });
       }
 
-      const user = await this.getLibraryId(auth0Id);
+      const user = await this.getLibraryId(req, res);
+
+      const addBookSchema = z.object({
+        title: z.string().min(1),
+        authors: z.array(z.string().min(1)).nonempty(),
+        categories: z.array(z.nativeEnum(BookCategoriesModel)).nonempty(),
+        languages: z.array(z.nativeEnum(BookLanguagesModel)).nonempty(),
+        coverImage: z.string().url().nullable().optional(),
+        description: z.string().nullable().optional(),
+      });
 
       const parseResult = addBookSchema.safeParse(req.body);
       if (!parseResult.success) {
@@ -72,38 +73,72 @@ export class BookController {
     }
   };
 
+  public updateBook = async (req: Request, res: Response) => {
+    try {
+      const auth0Id: string = (req as any).auth?.payload?.sub;
+      const name: string = (req as any).auth?.payload?.name;
+      const bookId = req.params.id;
+      const book = await this.bookRepository.getById(bookId);
+
+      if (!book) return res.status(404).send({ error: "Book not found" });
+      if (!auth0Id) {
+        return res.status(401).send({ error: "Unauthorized: No Auth0 ID found" });
+      }
+
+      const user = await this.getLibraryId(req, res);
+
+      if (book.libraryId !== user.library.id)
+        return res.status(403).send({ error: "Forbidden: You do not own this book" });
+
+      const updatedBook = await this.bookRepository.update(bookId, req.body);
+      res.status(200).json(this.toResponse(updatedBook));
+    } catch (err) {
+      res.status(500).send({ error: "Failed to update book" });
+    }
+  };
+
+
 
   public getBookById = async (req: Request, res: Response) => {
     try {
       const bookId = req.params.id;
-      const book = await this.bookRepository.getById(bookId);
+      const authPayload = (req as any).auth?.payload;
+      const requesterAuth0Id = authPayload?.sub;
 
-      if (!book) {
-        return res.status(404).send({error: "BookModel not found"});
+      const bookWithOwner = await this.bookRepository.getById(bookId);
+
+      if (!bookWithOwner) {
+        return res.status(404).send({ error: "BookModel not found" });
       }
 
-      res.status(200).json(this.toResponse(book));
+      const response = this.toResponse(bookWithOwner, requesterAuth0Id);
+      res.status(200).json(response);
     } catch (error) {
-      res.status(500).send({error: "Failed to retrieve book"});
+      res.status(500).send({ error: "Failed to retrieve book" });
     }
   };
+
 
   public searchBooks = async (req: Request, res: Response) => {
     try {
       const query = req.query.q as string;
 
       if (!query) {
-        return res.status(400).send({error: "Missing search query parameter `q`."});
+        return res.status(400).send({ error: "Missing search query parameter `q`." });
       }
+
+      const authPayload = (req as any).auth?.payload;
+      const requesterAuth0Id = authPayload?.sub;
 
       const books = await this.bookRepository.searchBooks(query);
 
-      res.status(200).json(books.map(this.toResponse));
+      res.status(200).json(books.map(book => this.toResponse(book, requesterAuth0Id)));
     } catch (error) {
       console.error("Search book error:", error);
-      res.status(500).send({error: "Failed to search books"});
+      res.status(500).send({ error: "Failed to search books" });
     }
   };
+
 
   public removeBook = async (req: Request, res: Response) => {
     try {
@@ -116,13 +151,22 @@ export class BookController {
     }
   };
 
-  private async getLibraryId(auth0Id: string) {
-    let userData = await this.userRepository.ensureUserWithLibrary(auth0Id);
+  private async getLibraryId(req: Request, res: Response) {
 
-    return userData;
+    const auth0Id: string = (req as any).auth?.payload?.sub;
+    const name: string = (req as any).auth?.payload?.name;
+
+   return await this.userRepository.ensureUserWithLibrary(auth0Id, name);
+
   }
 
-  private toResponse(book: BookModel) {
+  private toResponse(
+    book: BookModel & { library?: { user?: { name?: string, auth0Id?: string } } },
+    requesterAuth0Id?: string
+  ) {
+    const ownerName = book.library?.user?.name;
+    const ownerAuth0Id = book.library?.user?.auth0Id;
+
     return {
       book: {
         id: book.id,
@@ -134,6 +178,9 @@ export class BookController {
         languages: book.languages,
         coverImage: book.coverImage,
         description: book.description,
+        ownerName,
+        ownerAuth0Id,
+        isOwnedByUser: requesterAuth0Id && requesterAuth0Id === ownerAuth0Id,
       },
     };
   }

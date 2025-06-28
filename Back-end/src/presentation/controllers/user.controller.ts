@@ -7,11 +7,14 @@ export class UserController {
 
   public getProfile = async (req: Request, res: Response) => {
     try {
-      console.log("Decoded JWT:", req.auth); // Add this line to inspect the token
+      console.log("Decoded JWT:", req.auth);
+      console.log("Auth payload:", (req as any).auth?.payload);
+
       const auth0Id = req.auth?.payload?.sub;
+      const name: string = (req as any).auth?.payload?.name;
       if (!auth0Id) return res.status(401).json({ error: "Unauthorized" });
 
-      const user = await this.usersRepository.ensureUserWithLibrary(auth0Id);
+      const user = await this.usersRepository.ensureUserWithLibrary(auth0Id,name );
       if (!user) return res.status(404).json({ error: "User not found" });
 
       return res.json({

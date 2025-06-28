@@ -1,9 +1,8 @@
 import React from "react";
 import DefaultBookCoverImage from "../assets/bookCover.png";
-import {Book} from "../../domain/models/Book";
+import { Book } from "../../domain/models/Book";
 
-const getAuthors = (author?: string, authors?: string[]): string => {
-  if (author) return author;
+const getAuthors = ( authors?: string[]): string => {
   if (authors?.length) return authors.join(", ");
   return "Unknown Author";
 };
@@ -22,14 +21,14 @@ interface BookGridProps {
 
 const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
   if (books.length === 0) {
-    return <p className="text-amber-900 text-lg text-center mt-12">No books in your library yet!</p>;
+    return <p className="text-amber-900 text-lg text-center mt-12">No books yet!</p>;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-10 px-4">
       {books.map((book) => {
-        const {id, title, author, authors, coverImage, categories} = book;
-        const bookAuthor = getAuthors(author, authors);
+        const {id, title, authors, coverImage, categories} = book;
+        const bookAuthor = getAuthors(authors);
         const bookCategories = getCategories(categories);
 
         return (
@@ -51,6 +50,9 @@ const BookGrid: React.FC<BookGridProps> = ({books, onClickBook}) => {
                   <p className="text-sm text-amber-600 italic">
                     Categories: {bookCategories}
                   </p>
+                )}
+                {book.ownerName && (
+                  <p className="text-xs text-gray-500 mt-1">Posted by {book.ownerName}</p>
                 )}
               </div>
             </div>
